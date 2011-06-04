@@ -102,6 +102,55 @@
                (cons (if (identical? x NIL) nil x)
                      (drain))))))))))
 
+(defn startparse-sax [s ch]
+  (.. SAXParserFactory newInstance newSAXParser (parse s ch)))
+
+(defn- fill-from-sax
+  "Uses startparse to create a SAX parser, feeds it the contents of
+  InputSource source, and creates an Event object for each interesting
+  SAX event. As each Event is created, it is passed in a call to
+  fill."
+  [source startparse fill]
+  (startparse source (proxy [DefaultHandler] []
+    (startElement [uri local-name q-name ^Attributes atts]
+      ;(prn :start-element q-name)(flush)
+      (let [attrs (into {} (for [i (range (.getLength atts))]
+                                [(keyword (.getQName atts i))
+                                 (.getValue atts i)]))]
+        (fill (Event. :start-element (keyword q-name) attrs nil))))
+    (endElement [uri local-name q-name]
+      ;(prn :end-element q-name)(flush)
+      (fill (Event. :end-element (keyword q-name) nil nil)))
+    (characters [ch start length]
+      ;(prn :characters)(flush)
+      (let [st (String. ch start length)]
+        (when (seq (.trim st))
+          (fill (Event. :characters nil nil st))))))))
+
+(defn source-vector
+  "Parses the XML InputSource source. Returns a vector of Event
+  records. Other SAX-compatible parsers can be supplied by passing
+  startparse, a fn taking a source and a ContentHandler and returning
+  a parser. See also lazy-source-seq"
+  ([source]            (source-vector source startparse-sax))
+  ([source startparse]
+   (let [a (atom [])]
+     (fill-from-sax source startparse (partial swap! a conj))
+     @a)))
+
+(defn lazy-source-seq
+  "Parses the XML InputSource source. Returns a lazy sequence of Event
+  records. Other SAX-compatible parsers can be supplied by passing
+  startparse, a fn taking a source and a ContentHandler and returning
+  a parser. The parser is run in a separate thread and may get ahead
+  by your consumer by queue-size items, which defaults to maxint. See
+  also source-vector for a non-lazy, single-threaded solution."
+  ([source]            (lazy-source-seq source startparse-sax))
+  ([source startparse] (lazy-source-seq source startparse Integer/MAX_VALUE))
+  ([source startparse queue-size]
+   (fill-queue (partial fill-from-sax source startparse)
+               :queue-size queue-size)))
+
 (defn event-tree
   "Returns a lazy tree of Element objects for the given seq of Event
   objects. See source-seq and parse."
@@ -115,42 +164,25 @@
       (fn [^Event event] (.str event))
       events)))
 
-(defn startparse-sax [s ch]
-  (.. SAXParserFactory newInstance newSAXParser (parse s ch)))
-
-(defn lazy-source-seq
-  "Parses the XML InputSource s. Returns a lazy sequence of Event
-  records. Other SAX-compatible parsers can be supplied by passing
-  startparse, a fn taking a source and a ContentHandler and returning
-  a parser. The parser is run in a separate thread and may get ahead
-  by your consumer by queue-size items, which defaults to maxint."
-  ([s]            (lazy-source-seq s startparse-sax))
-  ([s startparse] (lazy-source-seq s startparse Integer/MAX_VALUE))
-  ([s startparse queue-size]
-   (let [f (fn filler-func [fill]
-             (startparse s (proxy [DefaultHandler] []
-               (startElement [uri local-name q-name ^Attributes atts]
-                 ;(prn :start-element q-name)(flush)
-                 (let [attrs (into {} (for [i (range (.getLength atts))]
-                                           [(keyword (.getQName atts i))
-                                            (.getValue atts i)]))]
-                   (fill (Event. :start-element (keyword q-name) attrs nil))))
-               (endElement [uri local-name q-name]
-                 ;(prn :end-element q-name)(flush)
-                 (fill (Event. :end-element (keyword q-name) nil nil)))
-               (characters [ch start length]
-                 ;(prn :characters)(flush)
-                 (let [st (String. ch start length)]
-                   (when (seq (.trim st))
-                     (fill (Event. :characters nil nil st))))))))]
-     (fill-queue f :queue-size queue-size))))
-
 (defn lazy-parse
-  "Convenience function. Parses the source s, which can be a File,
+  "Convenience function. Parses the source, which can be a File,
   InputStream or String naming a URI, and returns a lazy tree of
   Element records. See lazy-source-seq for finer-grained control."
-  [s]
-  (event-tree (lazy-source-seq (if (instance? Reader s) (InputSource. s) s))))
+  [source]
+  (event-tree (lazy-source-seq
+                (if (instance? Reader source)
+                  (InputSource. source)
+                  source))))
+
+(defn parse
+  "Convenience function. Parses the source, which can be a File,
+  InputStream or String naming a URI, and returns a tree of
+  Element records. See lazy-source-seq for finer-grained control."
+  [source]
+  (event-tree (source-vector
+                (if (instance? Reader source)
+                  (InputSource. source)
+                  source))))
 
 ;=== Emit-related functions ===
 
