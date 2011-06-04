@@ -25,6 +25,9 @@
   (is (thrown? Exception 
                (first (fill-queue (fn [f] (throw (Exception. "fail"))))))))
 
+; If these sleep calls are too short we will get false positives. That
+; is, if these fail there must really be a problem.
+; Is there a way to set up this test without a sleep?
 (deftest producer-blocks
   (is (= false
          (let [done (atom false)]

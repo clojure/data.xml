@@ -10,7 +10,8 @@
       :author "Chris Houser"}
   clojure.data.xml.test-seq-tree
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only []]))
+        [clojure.data.xml :as xml :only []])
+  (:import (java.lang.ref WeakReference)))
 
 (def tt
   (partial #'xml/seq-tree #(when (= %1 :<) (vector %2)) #{:>} str))
@@ -42,3 +43,20 @@
 (deftest lazy-end-of-tree
   (is (= 3 (count (first (limit 1 :< 2 :> 3 :>)))))
   (is (= 3 (count (first (limit 1 :< 2 :> 3 :> 4)))))) 
+
+(deftest release-head-top
+  (let [input (range 10)
+        input-ref (WeakReference. input)
+        output (doall (drop 5 (first (tt input))))]
+    (System/gc)
+    (is (= nil (.get input-ref)))
+    output)) 
+
+(deftest release-head-nested-late
+  (let [input (list 1 2 :< 3 4 5 :>)
+        input-ref (WeakReference. input)
+        output (doall (drop 2 (first (tt input))))]
+    (System/gc)
+    (is (= nil (.get input-ref)))
+    output)) 
+
