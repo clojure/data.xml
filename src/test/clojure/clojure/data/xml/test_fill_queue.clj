@@ -54,3 +54,17 @@
   (is (= (range 0) (take 0 (fill-queue (fn [f] (doseq [i (just 0)] (f i)))))))
   (is (= (range 1) (take 1 (fill-queue (fn [f] (doseq [i (just 1)] (f i)))))))
   (is (= (range 5) (take 5 (fill-queue (fn [f] (doseq [i (just 5)] (f i))))))))
+
+(deftest detect-abandon
+  (let [abandoned (promise)]
+    (fill-queue
+      (fn [fill]
+        (try
+          (fill 1) 
+          (fill 2)
+          (catch Exception e
+            (deliver abandoned (.getMessage e))))
+        (deliver abandoned false))
+      :queue-size 1)
+    (System/gc)
+    (is (= @abandoned "abandoned"))))
