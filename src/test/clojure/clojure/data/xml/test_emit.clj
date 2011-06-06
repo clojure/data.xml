@@ -58,7 +58,7 @@
                     "</a>")
     (xml/parse *in*)))
 
-(deftest indent-2
+(deftest indent
   (let [input-tree
          (with-in-str (str "<a h=\"1\" i=\"2\" j=\"3\">"
                            "<b k=\"4\">t2</b>"
@@ -70,10 +70,29 @@
            (xml/parse *in*))
         expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                     "<a h=\"1\" i=\"2\" j=\"3\">\n"
-                    "  <b k=\"4\">t2</b>\n"
-                    "  <c>t4</c>t5<d>t6</d>\n"
-                    "  <e l=\"5\" m=\"6\">\n"
-                    "    <f>t10</f>t11</e>\n"
-                    "  <g>t13</g>t14</a>\n")]
+                    "   <b k=\"4\">t2</b>\n"
+                    "   <c>t4</c>t5<d>t6</d>\n"
+                    "   <e l=\"5\" m=\"6\">\n"
+                    "      <f>t10</f>t11</e>\n"
+                    "   <g>t13</g>t14</a>\n")]
     (is (= expect (with-out-str
-                    (xml/emit input-tree :indent 2))))))
+                    (xml/emit input-tree :indent 3))))))
+
+(defn char-seq [bytes]
+  (map #(if (pos? %) (char %) %) bytes))
+
+(deftest encoding
+  (let [input-tree
+         (with-in-str "<how-cool>Übercool</how-cool>" (xml/parse *in*))]
+    (is (= (concat "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                   "<how-cool>" [-61 -100] "bercool</how-cool>")
+           (let [stream (java.io.ByteArrayOutputStream.)]
+             (binding [*out* (java.io.OutputStreamWriter. stream "UTF-8")]
+               (xml/emit input-tree :encoding "UTF-8")
+               (char-seq (.toByteArray stream))))))
+    (is (= (concat "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
+                   "<how-cool>" [-36] "bercool</how-cool>")
+           (let [stream (java.io.ByteArrayOutputStream.)]
+             (binding [*out* (java.io.OutputStreamWriter. stream "ISO-8859-1")]
+               (xml/emit input-tree :encoding "ISO-8859-1")
+               (char-seq (.toByteArray stream))))))))

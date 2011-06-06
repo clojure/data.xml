@@ -237,6 +237,16 @@
     (when (:encoding opts)
       (.setOutputProperty trans "encoding" (:encoding opts)))
 
+    ; The same encoding may use different string names, making this
+    ; attempt at safety more annoying than useful:
+    #_(when (instance? java.io.OutputStreamWriter *out*)
+      (let [decl-enc (.getOutputProperty trans "encoding") 
+            stream-enc (.getEncoding *out*)]
+      (if (not= decl-enc stream-enc)
+        (throw (Exception. (str "Output encoding of stream (" stream-enc
+                                ") doesn't match declaration ("
+                                decl-enc ")"))))))
+
     (.transform
       trans
       (javax.xml.transform.sax.SAXSource.
