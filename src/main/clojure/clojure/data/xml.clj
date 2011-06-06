@@ -22,6 +22,9 @@
 ; type is one of :start-element, :end-element, or :characters
 (defrecord Event [type name attrs str])
 
+(defn event [type name & [attrs str]]
+  (Event. type name attrs str))
+
 ; Represents a node of an XML tree
 (defrecord Element [tag attrs content])
 
@@ -128,16 +131,19 @@
         (when (seq (.trim st))
           (fill (Event. :characters nil nil st))))))))
 
-(defn source-vector
-  "Parses the XML InputSource source. Returns a vector of Event
-  records. Other SAX-compatible parsers can be supplied by passing
-  startparse, a fn taking a source and a ContentHandler and returning
-  a parser. See also lazy-source-seq"
-  ([source] (source-vector source startparse-sax))
+(defn source-seq
+  "Parses the XML InputSource source (eagerly, not lazily). Returns
+  a seq of Event records. Other SAX-compatible parsers can be supplied
+  by passing startparse, a fn taking a source and a ContentHandler and
+  returning a parser. See also lazy-source-seq"
+  ([source] (source-seq source startparse-sax))
   ([source startparse]
-   (let [a (atom [])]
-     (fill-from-sax source startparse (partial swap! a conj))
-     @a)))
+   (let [ll (java.util.LinkedList.)]
+     (fill-from-sax source startparse #(.add ll %))
+     ((fn consume []
+        (lazy-seq
+          (when-not (empty? ll)
+            (cons (.removeFirst ll) (consume)))))))))
 
 (defn lazy-source-seq
   "Parses the XML InputSource source. Returns a lazy sequence of Event
@@ -145,7 +151,7 @@
   startparse, a fn taking a source and a ContentHandler and returning
   a parser. The parser is run in a separate thread and may get ahead
   by your consumer by queue-size items, which defaults to maxint. See
-  also source-vector for a non-lazy, single-threaded solution."
+  also source-seq for a non-lazy, single-threaded solution."
   ([source]            (lazy-source-seq source startparse-sax))
   ([source startparse] (lazy-source-seq source startparse Integer/MAX_VALUE))
   ([source startparse queue-size]
@@ -178,9 +184,9 @@
 (defn parse
   "Convenience function. Parses the source, which can be a File,
   InputStream or String naming a URI, and returns a tree of
-  Element records. See lazy-source-seq for finer-grained control."
+  Element records. See source-seq for finer-grained control."
   [source]
-  (event-tree (source-vector
+  (event-tree (source-seq
                 (if (instance? Reader source)
                   (InputSource. source)
                   source))))

@@ -38,3 +38,15 @@
     (is (= expected (with-in-str input (xml/parse *in*))))
     (with-in-str input (is (= expected (xml/lazy-parse *in*))))))
 
+(deftest source-seq-release-head
+  (doseq [func [xml/source-seq xml/lazy-source-seq]]
+    (let [event1 (atom (xml/event :start-element :foo)) 
+          weak (java.lang.ref.WeakReference. @event1)]
+      (with-redefs [xml/fill-from-sax
+                    (fn [src strt fill]
+                      (fill @event1)
+                      (fill (xml/event :end-element :foo)))]
+        (let [more (rest (func nil nil))]
+          (reset! event1 nil)
+          (System/gc)
+          (is (= nil (.get weak))))))))
