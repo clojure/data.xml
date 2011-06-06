@@ -13,7 +13,7 @@
         [clojure.data.xml :as xml :only [element]]))
 
 (def deep-tree
-  (with-in-str (str "<a h=\"1\" i=\"2\" j=\"3\">"
+  (with-in-str (str "<a h=\"1\" i='2' j=\"3\">"
                     "  t1<b k=\"4\">t2</b>"
                     "  t3<c>t4</c>"
                     "  t5<d>t6</d>"
@@ -35,6 +35,15 @@
                     "</a>")]
     (is (= expect (with-out-str (xml/emit deep-tree))))))
 
+(deftest mixed-quotes
+  (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+              "<mixed double=\"&quot;double&quot;quotes&quot;here&quot;\""
+              " single=\"'single'quotes'here\"/>")
+         (with-out-str
+           (xml/emit (element :mixed
+                       {:single "'single'quotes'here"
+                        :double "\"double\"quotes\"here\""}))))))
+
 (deftest without-decl
   (let [expect (str "<a h=\"1\" i=\"2\" j=\"3\">"
                     "  t1<b k=\"4\">t2</b>"
@@ -46,17 +55,6 @@
                     "</a>")]
     (is (= expect (with-out-str (xml/emit deep-tree
                                           :xml-declaration false))))))
-
-(def deep-tree
-  (with-in-str (str "<a h=\"1\" i=\"2\" j=\"3\">"
-                    "  t1<b k=\"4\">t2</b>"
-                    "  t3<c>t4</c>"
-                    "  t5<d>t6</d>"
-                    "  t7<e l=\"5\" m=\"6\">"
-                    "    t8<f>t10</f>t11</e>"
-                    "  t12<g>t13</g>t14"
-                    "</a>")
-    (xml/parse *in*)))
 
 (deftest indent
   (let [input-tree
@@ -78,21 +76,24 @@
     (is (= expect (with-out-str
                     (xml/emit input-tree :indent 3))))))
 
-(defn char-seq [bytes]
-  (map #(if (pos? %) (char %) %) bytes))
+(defn emit-char-seq [xml-tree encoding]
+  (let [stream (java.io.ByteArrayOutputStream.)]
+    (binding [*out* (java.io.OutputStreamWriter. stream encoding)]
+      (xml/emit xml-tree :encoding encoding)
+      (map #(if (pos? %) (char %) %) (.toByteArray stream)))))
 
 (deftest encoding
   (let [input-tree
          (with-in-str "<how-cool>Übercool</how-cool>" (xml/parse *in*))]
     (is (= (concat "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                    "<how-cool>" [-61 -100] "bercool</how-cool>")
-           (let [stream (java.io.ByteArrayOutputStream.)]
-             (binding [*out* (java.io.OutputStreamWriter. stream "UTF-8")]
-               (xml/emit input-tree :encoding "UTF-8")
-               (char-seq (.toByteArray stream))))))
+           (emit-char-seq input-tree "UTF-8")))
     (is (= (concat "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
                    "<how-cool>" [-36] "bercool</how-cool>")
-           (let [stream (java.io.ByteArrayOutputStream.)]
-             (binding [*out* (java.io.OutputStreamWriter. stream "ISO-8859-1")]
-               (xml/emit input-tree :encoding "ISO-8859-1")
-               (char-seq (.toByteArray stream))))))))
+           (emit-char-seq input-tree "ISO-8859-1")))))
+
+(deftest encoding-assertion
+  (is (thrown? Exception
+        (let [stream (java.io.ByteArrayOutputStream.)]
+          (binding [*out* (java.io.OutputStreamWriter. stream "UTF-8")]
+            (xml/emit (element :foo) :encoding "ISO-8859-1"))))))

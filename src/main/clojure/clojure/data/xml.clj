@@ -15,6 +15,7 @@
            (javax.xml.parsers SAXParserFactory)
            (java.util.concurrent LinkedBlockingQueue TimeUnit)
            (java.lang.ref WeakReference)
+           (java.nio.charset Charset)
            (java.io Reader)))
 
 ; Represents a parse event.
@@ -132,7 +133,7 @@
   records. Other SAX-compatible parsers can be supplied by passing
   startparse, a fn taking a source and a ContentHandler and returning
   a parser. See also lazy-source-seq"
-  ([source]            (source-vector source startparse-sax))
+  ([source] (source-vector source startparse-sax))
   ([source startparse]
    (let [a (atom [])]
      (fill-from-sax source startparse (partial swap! a conj))
@@ -237,12 +238,10 @@
     (when (:encoding opts)
       (.setOutputProperty trans "encoding" (:encoding opts)))
 
-    ; The same encoding may use different string names, making this
-    ; attempt at safety more annoying than useful:
-    #_(when (instance? java.io.OutputStreamWriter *out*)
+    (when (instance? java.io.OutputStreamWriter *out*)
       (let [decl-enc (.getOutputProperty trans "encoding") 
             stream-enc (.getEncoding *out*)]
-      (if (not= decl-enc stream-enc)
+      (if (not= (Charset/forName decl-enc) (Charset/forName stream-enc))
         (throw (Exception. (str "Output encoding of stream (" stream-enc
                                 ") doesn't match declaration ("
                                 decl-enc ")"))))))
