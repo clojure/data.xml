@@ -49,8 +49,8 @@
   an enter-sub-tree event.  Any other return value will become
   a sub-tree of the output tree and should normally contain in some
   way the children passed as the second arg.  The node function is
-  called with a single event arg on every node event and its return
-  value will become a node of the output tree.
+  called with a single event arg on every event that is neither parent
+  nor exit, and its return value will become a node of the output tree.
   
   (seq-tree #(when (= %1 :<) (vector %2)) #{:>} str
             [1 2 :< 3 :< 4 :> :> 5 :> 6])
@@ -68,6 +68,8 @@
                       (lazy-seq (rest subtree))))
               (cons (cons (node event) (lazy-seq (first tree)))
                     (lazy-seq (rest tree))))))))))
+
+
 
 ; based on work related to Rich Hickey's seque.
 ; blame Chouser for anything broken or ugly.
