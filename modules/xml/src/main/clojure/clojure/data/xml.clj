@@ -37,11 +37,11 @@
   "Takes a seq of events that logically represents
   a tree by each event being one of: enter-sub-tree event,
   exit-sub-tree event, or node event.
-  
+
   Returns a lazy sequence whose first element is a sequence of
   sub-trees and whose remaining elements are events that are not
   siblings or descendants of the initial event.
-  
+
   The given exit? function must return true for any exit-sub-tree
   event.  parent must be a function of two arguments: the first is an
   event, the second a sequence of nodes or subtrees that are children
@@ -51,7 +51,7 @@
   way the children passed as the second arg.  The node function is
   called with a single event arg on every event that is neither parent
   nor exit, and its return value will become a node of the output tree.
-  
+
   (seq-tree #(when (= %1 :<) (vector %2)) #{:>} str
             [1 2 :< 3 :< 4 :> :> 5 :> 6])
   ;=> ((\"1\" \"2\" [(\"3\" [(\"4\")])] \"5\") 6)"
@@ -282,7 +282,7 @@
       (doseq [c (:content e)]
         (emit-element c ch))
       (.endElement ch (or nspace "") qname qname))))
-  
+
 (defn emit
   "Prints the given Element tree as XML text to *out*. See element-tree.
   Options:
@@ -300,14 +300,14 @@
                           (str (:indent opts))))
 
     (when (contains? opts :xml-declaration)
-      (.setOutputProperty trans "omit-xml-declaration" 
+      (.setOutputProperty trans "omit-xml-declaration"
                           (if (:xml-declaration opts) "no" "yes")))
 
     (when (:encoding opts)
       (.setOutputProperty trans "encoding" (:encoding opts)))
 
     (when (instance? java.io.OutputStreamWriter *out*)
-      (let [decl-enc (.getOutputProperty trans "encoding") 
+      (let [decl-enc (.getOutputProperty trans "encoding")
             stream-enc (.getEncoding *out*)]
       (if (not= (Charset/forName decl-enc) (Charset/forName stream-enc))
         (throw (Exception. (str "Output encoding of stream (" stream-enc
