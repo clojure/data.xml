@@ -292,7 +292,7 @@
   [e & {:as opts}]
   (let [content-handler (atom nil)
         trans (-> (javax.xml.transform.TransformerFactory/newInstance)
-                .newTransformer)]
+                  .newTransformer)]
 
     (when (:indent opts)
       (.setOutputProperty trans "indent" "yes")
@@ -309,10 +309,10 @@
     (when (instance? java.io.OutputStreamWriter *out*)
       (let [decl-enc (.getOutputProperty trans "encoding")
             stream-enc (.getEncoding *out*)]
-      (if (not= (Charset/forName decl-enc) (Charset/forName stream-enc))
-        (throw (Exception. (str "Output encoding of stream (" stream-enc
-                                ") doesn't match declaration ("
-                                decl-enc ")"))))))
+        (if (not= (Charset/forName decl-enc) (Charset/forName stream-enc))
+          (throw (Exception. (str "Output encoding of stream (" stream-enc
+                                  ") doesn't match declaration ("
+                                  decl-enc ")"))))))
 
     (.transform
       trans
