@@ -246,7 +246,7 @@
 (defn sexp-as-element
   "Convert a single sexp into an Element"
   [sexp]
-  (let [[root & more] (sexps-as-fragments sexp)]
+  (let [[root & more] (sexps-as-fragment sexp)]
     (when more
       (throw
        (IllegalArgumentException.
