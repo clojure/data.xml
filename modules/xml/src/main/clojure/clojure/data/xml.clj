@@ -240,8 +240,7 @@
    protocol to them."
   ([] nil)
   ([sexp] (as-elements sexp))
-  ([sexp & sexps] (apply concat (as-elements sexp)
-                         (map as-elements sexps))))
+  ([sexp & sexps] (mapcat as-elements (cons sexp sexps))))
 
 (defn sexp-as-element
   "Convert a single sexp into an Element"
