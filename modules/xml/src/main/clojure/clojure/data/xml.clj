@@ -213,7 +213,7 @@
 
   clojure.lang.Keyword
   (as-elements [k]
-    [(Element. k {} nil)])
+    [(Element. k {} ())])
 
   java.lang.String
   (as-elements [s]
