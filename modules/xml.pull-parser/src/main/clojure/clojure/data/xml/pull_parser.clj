@@ -9,14 +9,20 @@
 (ns ^{:doc ""
   :author "Chris Houser"}
   clojure.data.xml.pull-parser
+  (:require [clojure.string :as str])
   (:use [clojure.data.xml :as xml :only []])
   (:import (javax.xml.stream XMLInputFactory XMLStreamReader
             XMLStreamConstants)
            (java.io Reader)))
 
+(defn- attr-prefix [sreader index]
+  (let [p (.getAttributePrefix sreader index)]
+    (when-not (str/blank? p)
+      p)))
+
 (defn- attr-hash [^XMLStreamReader sreader] (into {}
     (for [i (range (.getAttributeCount sreader))]
-      [(keyword (.getAttributePrefix sreader i) (.getAttributeLocalName sreader i))
+      [(keyword (attr-prefix sreader i) (.getAttributeLocalName sreader i))
        (.getAttributeValue sreader i)])))
 
 ; Note, sreader is mutable and mutated here in pull-seq, but it's

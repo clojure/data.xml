@@ -22,16 +22,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.ws.commons.axiom</groupId>
-      <artifactId>axiom-api</artifactId>
-      <version>1.2.11</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.ws.commons.axiom</groupId>
-      <artifactId>axiom-impl</artifactId>
-      <version>1.2.11</version>
-    </dependency>
-    <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>data.xml</artifactId>
       <version>0.0.1-SNAPSHOT</version>
