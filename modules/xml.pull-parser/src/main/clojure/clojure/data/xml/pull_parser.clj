@@ -11,8 +11,10 @@
   clojure.data.xml.pull-parser
   (:require [clojure.string :as str])
   (:use [clojure.data.xml :as xml :only []])
-  (:import (javax.xml.stream XMLInputFactory XMLStreamReader
-            XMLStreamConstants)
+  (:import (javax.xml.stream XMLInputFactory
+                             XMLStreamReader
+                             XMLStreamConstants)
+           (java.nio.charset Charset)
            (java.io Reader)))
 
 (defn- attr-prefix [sreader index]
@@ -89,14 +91,19 @@
   "Prints the given Element tree as XML text to *out*. See element-tree.
   Options:
     :indent <num>            Amount to increase indent depth each time
-    :xml-declaration <bool>  True to print <?xml...?>
     :encoding <str>          Character encoding to use"
   [e & {:as opts}]
   (let [writer (-> (javax.xml.stream.XMLOutputFactory/newInstance)
-                 (.createXMLStreamWriter *out*))]
-    (when-not (:xml-declaration opts)
-      (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0"))
+                 (.createXMLStreamWriter *out*))
+        encoding (or (:encoding opts) "UTF-8")]
+
+    (when (and (instance? java.io.OutputStreamWriter *out*)
+               (not= (Charset/forName encoding) (Charset/forName (.getEncoding *out*))))
+      (throw (Exception. (str "Output encoding of stream (" encoding
+                              ") doesn't match declaration ("
+                              (.getEncoding *out*) ")"))))
     
+    (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
     (emit-element e writer)
     (.writeEndDocument writer)))
 

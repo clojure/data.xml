@@ -64,6 +64,7 @@
            (xml/emit (element :mixed
                        {:single "'single'quotes'here"
                         :double "\"double\"quotes\"here\""}))))))
+
 (defn emit-char-seq [xml-tree encoding]
   (let [stream (java.io.ByteArrayOutputStream.)]
     (binding [*out* (java.io.OutputStreamWriter. stream encoding)]
