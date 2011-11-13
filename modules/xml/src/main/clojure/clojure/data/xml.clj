@@ -210,6 +210,7 @@
 (defn- emit-element
   "Recursively prints the Element e as XML text."
   [e writer]
+  
   (if (instance? String e)
     (.writeCharacters writer e)
     (let [nspace (namespace (:tag e))
@@ -220,23 +221,25 @@
         (emit-element c writer))
       (.writeEndElement writer))))
 
-(defn emit
+(defn emit-stream
   "Prints the given Element tree as XML text to *out*. See element-tree.
   Options:
     :indent <num>            Amount to increase indent depth each time
     :encoding <str>          Character encoding to use"
-  [e & {:as opts}]
+  [e stream & {:as opts}]
   (let [writer (-> (javax.xml.stream.XMLOutputFactory/newInstance)
-                 (.createXMLStreamWriter *out*))
+                 (.createXMLStreamWriter stream))
         encoding (or (:encoding opts) "UTF-8")]
 
-    (when (and (instance? java.io.OutputStreamWriter *out*)
-               (not= (Charset/forName encoding) (Charset/forName (.getEncoding *out*))))
+    (when (and (instance? java.io.OutputStreamWriter stream)
+               (not= (Charset/forName encoding) (Charset/forName (.getEncoding stream))))
       (throw (Exception. (str "Output encoding of stream (" encoding
                               ") doesn't match declaration ("
-                              (.getEncoding *out*) ")"))))
+                              (.getEncoding stream) ")"))))
     
     (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
     (emit-element e writer)
     (.writeEndDocument writer)))
 
+(defn emit [e & {:as opts}]
+  (apply emit-stream e *out* opts))
