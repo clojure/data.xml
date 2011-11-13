@@ -12,11 +12,15 @@
   (:use [clojure.test :only [deftest is are]]
         [clojure.data.xml :as xml :only [sexp-as-element
                                          sexps-as-fragment element]]))
+(defn test-stream [x]
+  (java.io.ByteArrayInputStream. (.getBytes x)))
+
+(def lazy-parse* (comp xml/lazy-parse test-stream))
 
 (deftest as-element
   (let [xml-input "<tag attr=\"value\"><body /></tag>"
         sexp-input [:tag {:attr "value"} :body]]
-    (is (= (with-in-str xml-input (xml/parse *in*))
+    (is (= (lazy-parse* xml-input)
            (sexp-as-element sexp-input)))))
 
 (deftest as-fragment

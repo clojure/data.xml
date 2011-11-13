@@ -12,16 +12,20 @@
   (:use [clojure.test :only [deftest is are]]
         [clojure.data.xml :as xml :only [element]]))
 
+(defn test-stream [x]
+  (java.io.ByteArrayInputStream. (.getBytes x)))
+
+(def lazy-parse* (comp xml/lazy-parse test-stream))
+
 (def deep-tree
-  (with-in-str (str "<a h=\"1\" i='2' j=\"3\">"
+  (lazy-parse* (str "<a h=\"1\" i='2' j=\"3\">"
                     "  t1<b k=\"4\">t2</b>"
                     "  t3<c>t4</c>"
                     "  t5<d>t6</d>"
                     "  t7<e l=\"5\" m=\"6\">"
                     "    t8<f>t10</f>t11</e>"
                     "  t12<g>t13</g>t14"
-                    "</a>")
-    (xml/parse *in*)))
+                    "</a>")))
 
 (deftest defaults
   (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -58,14 +62,13 @@
 
 (deftest indent
   (let [input-tree
-         (with-in-str (str "<a h=\"1\" i=\"2\" j=\"3\">"
+         (lazy-parse* (str "<a h=\"1\" i=\"2\" j=\"3\">"
                            "<b k=\"4\">t2</b>"
                            "<c>t4</c>t5<d>t6</d>"
                            "<e l=\"5\" m=\"6\">"
                            "          <f>t10</f>t11</e>"
                            "<g>t13</g>t14"
-                           "</a>")
-           (xml/parse *in*))
+                           "</a>"))
         expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                     "<a h=\"1\" i=\"2\" j=\"3\">\n"
                     "   <b k=\"4\">t2</b>\n"
@@ -84,7 +87,7 @@
 
 (deftest encoding
   (let [input-tree
-         (with-in-str "<how-cool>Übercool</how-cool>" (xml/parse *in*))]
+         (lazy-parse* "<how-cool>Übercool</how-cool>")]
     (is (= (concat "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                    "<how-cool>" [-61 -100] "bercool</how-cool>")
            (emit-char-seq input-tree "UTF-8")))

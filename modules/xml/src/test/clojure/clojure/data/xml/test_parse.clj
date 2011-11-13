@@ -12,12 +12,16 @@
   (:use [clojure.test :only [deftest is are]]
         [clojure.data.xml :as xml :only [element]]))
 
+(defn test-stream [x]
+  (java.io.ByteArrayInputStream. (.getBytes x)))
+
+(def lazy-parse* (comp xml/lazy-parse test-stream))
+
 (deftest simple
   (let [input "<html><body bg=\"red\">This is <b>bold</b> test</body></html>"
         expected (element :html {} (element :body {:bg "red"}
                    "This is " (element :b {} "bold") " test"))]
-    (is (= expected (with-in-str input (xml/parse *in*))))
-    (with-in-str input (is (= expected (xml/lazy-parse *in*))))))
+    (is (= expected (lazy-parse* input)))))
 
 (deftest deep
   (let [input (str "<a h='1' i=\"2\" j='3'>"
@@ -35,10 +39,9 @@
                    "  t7" (element :e {:l "5" :m "6"}
                    "    t8" (element :f {} "t10") "t11")
                    "  t12" (element :g {} "t13") "t14")]
-    (is (= expected (with-in-str input (xml/parse *in*))))
-    (with-in-str input (is (= expected (xml/lazy-parse *in*))))))
+    (is (= expected (lazy-parse* input)))))
 
-(deftest source-seq-release-head
+#_(deftest source-seq-release-head
   (doseq [func [xml/source-seq xml/lazy-source-seq]]
     (let [event1 (atom (xml/event :start-element :foo)) 
           weak (java.lang.ref.WeakReference. @event1)]
