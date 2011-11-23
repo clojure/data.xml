@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>data.xml.root</artifactId>
+  <artifactId>data.xml</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>data.xml.root</name>
+  <name>data.xml</name>
   <packaging>pom</packaging>
   <description>Functions to parse XML into lazy sequences and lazy trees and emit these as text</description>
 
@@ -26,11 +26,6 @@
     <developerConnection>scm:git:git@github.com:clojure/data.xml.git</developerConnection>
     <url>git@github.com:clojure/data.xml.git</url>
   </scm>
-
-  <modules>
-    <module>modules/xml</module>
-    <module>modules/xml.pull-parser</module>
-  </modules>
 
   <repositories>
     <repository>
