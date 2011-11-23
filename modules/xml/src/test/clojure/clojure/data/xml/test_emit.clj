@@ -35,6 +35,17 @@
                     "</a>")]
     (is (= expect (with-out-str (xml/emit deep-tree))))))
 
+(deftest namespaced
+  (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+              "<body xmlns:api=\"http://some.uri.com/location\">"
+              "<api:method args=\"\" ret=\"int\" />"
+              "</body>")
+         (with-out-str
+           (xml/emit (element :body
+                       {:xmlns/api "http://some.uri.com/location"}
+                       (element :api/method
+                         {:args "" :ret "int"})))))))
+
 (deftest mixed-quotes
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
               "<mixed double=\"&quot;double&quot;quotes&quot;here&quot;\""
