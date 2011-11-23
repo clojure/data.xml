@@ -10,12 +10,8 @@
       :author "Chris Houser"}
   clojure.data.xml.test-emit
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element]]))
-
-(defn test-stream [x]
-  (java.io.ByteArrayInputStream. (.getBytes x)))
-
-(def lazy-parse* (comp xml/lazy-parse test-stream))
+        [clojure.data.xml :as xml :only [element]]
+        [clojure.data.xml.test-utils :only (test-stream lazy-parse*)]))
 
 (def deep-tree
   (lazy-parse* (str "<a h=\"1\" i='2' j=\"3\">"

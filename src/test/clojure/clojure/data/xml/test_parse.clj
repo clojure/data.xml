@@ -10,12 +10,8 @@
       :author "Chris Houser"}
   clojure.data.xml.test-parse
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element]]))
-
-(defn test-stream [x]
-  (java.io.ByteArrayInputStream. (.getBytes x)))
-
-(def lazy-parse* (comp xml/lazy-parse test-stream))
+        [clojure.data.xml :as xml :only [element]]
+        [clojure.data.xml.test-utils :only [test-stream lazy-parse*]]))
 
 (deftest simple
   (let [input "<html><body bg=\"red\">This is <b>bold</b> test</body></html>"
