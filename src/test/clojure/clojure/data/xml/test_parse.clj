@@ -44,6 +44,13 @@
                                                     "<dont><parse><me>")))]
   (is (= expected (lazy-parse* input))))  )
 
+(deftest test-comment-parse
+(let [input "<comment><is><here><!-- or could be -->there</here></is></comment>"
+      expected (element :comment {} (element :is {}
+                                           (element :here {}
+                                                    "there")))]
+  (is (= expected (lazy-parse* input))))  )
+
 #_(deftest source-seq-release-head
   (doseq [func [xml/source-seq xml/lazy-source-seq]]
     (let [event1 (atom (xml/event :start-element :foo)) 

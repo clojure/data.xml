@@ -10,7 +10,7 @@
       :author "Chris Houser"}
   clojure.data.xml.test-emit
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element cdata]]
+        [clojure.data.xml :as xml :only [element cdata xml-comment]]
         [clojure.data.xml.test-utils :only (test-stream lazy-parse*)]))
 
 (def deep-tree
@@ -111,3 +111,12 @@
          (with-out-str
            (xml/emit (element :cdata-stuff {}
                               (cdata "<goes><here>"))))))  )
+
+(deftest emitting-comment
+  (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+              "<comment-stuff>comment <!-- goes here --> not here</comment-stuff>")
+         (with-out-str
+           (xml/emit (element :comment-stuff {}
+                              "comment "
+                              (xml-comment " goes here ")
+                              " not here")))))  )

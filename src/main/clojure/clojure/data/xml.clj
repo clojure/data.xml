@@ -48,6 +48,11 @@
   (emit-element [e writer]
     (.writeCData writer (:content e))))
 
+(defrecord Comment [content]
+  Emit
+  (emit-element [e writer]
+    (.writeComment writer (:content e))))
+
 (extend-protocol Emit
   String
   (emit-element [e writer]
@@ -58,6 +63,9 @@
 
 (defn cdata [content]
   (CData. content))
+
+(defn xml-comment [content]
+  (Comment. content))
 
 ;=== Parse-related functions ===
 (defn- seq-tree
@@ -205,10 +213,11 @@
                     (keyword (.getLocalName sreader)) nil nil)
              (pull-seq sreader))
        XMLStreamConstants/CHARACTERS
-       (do
-         (let [text (.getText sreader)]
-           (cons (event :characters nil nil text)
-                 (pull-seq sreader))))
+       (let [text (.getText sreader)]
+         (cons (event :characters nil nil text)
+               (pull-seq sreader)))
+       XMLStreamConstants/COMMENT
+       (pull-seq sreader)
 
        XMLStreamConstants/END_DOCUMENT
        nil))))
