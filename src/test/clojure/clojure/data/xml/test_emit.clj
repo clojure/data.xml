@@ -10,7 +10,7 @@
       :author "Chris Houser"}
   clojure.data.xml.test-emit
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element]]
+        [clojure.data.xml :as xml :only [element cdata]]
         [clojure.data.xml.test-utils :only (test-stream lazy-parse*)]))
 
 (def deep-tree
@@ -104,3 +104,10 @@
         (let [stream (java.io.ByteArrayOutputStream.)]
           (binding [*out* (java.io.OutputStreamWriter. stream "UTF-8")]
             (xml/emit (element :foo) :encoding "ISO-8859-1"))))))
+
+(deftest emitting-cdata
+  (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+              "<cdata-stuff><![CDATA[<goes><here>]]></cdata-stuff>")
+         (with-out-str
+           (xml/emit (element :cdata-stuff {}
+                              (cdata "<goes><here>"))))))  )

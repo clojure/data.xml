@@ -10,7 +10,7 @@
       :author "Chris Houser"}
   clojure.data.xml.test-parse
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element]]
+        [clojure.data.xml :as xml :only [element cdata]]
         [clojure.data.xml.test-utils :only [test-stream lazy-parse*]]))
 
 (deftest simple
@@ -36,6 +36,13 @@
                    "    t8" (element :f {} "t10") "t11")
                    "  t12" (element :g {} "t13") "t14")]
     (is (= expected (lazy-parse* input)))))
+
+(deftest test-cdata-parse
+(let [input "<cdata><is><here><![CDATA[<dont><parse><me>]]></here></is></cdata>"
+      expected (element :cdata {} (element :is {}
+                                           (element :here {}
+                                                    "<dont><parse><me>")))]
+  (is (= expected (lazy-parse* input))))  )
 
 #_(deftest source-seq-release-head
   (doseq [func [xml/source-seq xml/lazy-source-seq]]

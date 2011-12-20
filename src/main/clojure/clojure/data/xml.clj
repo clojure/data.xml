@@ -24,11 +24,40 @@
 (defn event [type name & [attrs str]]
   (Event. type name attrs str))
 
+(defprotocol Emit
+  (emit-element [element writer]))
+
+(defn write-attributes [{:keys (attrs)} writer]
+  (doseq [[k v] attrs]
+    (.writeAttribute writer (str (namespace k)) (name k) (str v))))
+
 ; Represents a node of an XML tree
-(defrecord Element [tag attrs content])
+(defrecord Element [tag attrs content]
+  Emit
+  (emit-element [e writer]
+    (let [nspace (namespace (:tag e))
+          qname (name (:tag e))]
+      (.writeStartElement writer ""  qname (or nspace ""))
+      (write-attributes e writer)
+      (doseq [c (:content e)]
+        (emit-element c writer))
+      (.writeEndElement writer))))
+
+(defrecord CData [content]
+  Emit
+  (emit-element [e writer]
+    (.writeCData writer (:content e))))
+
+(extend-protocol Emit
+  String
+  (emit-element [e writer]
+    (.writeCharacters writer e)))
 
 (defn element [tag & [attrs & content]]
   (Element. tag (or attrs {}) content))
+
+(defn cdata [content]
+  (CData. content))
 
 ;=== Parse-related functions ===
 (defn- seq-tree
@@ -164,23 +193,25 @@
 ; protected by a lazy-seq so it's thread-safe.
 (defn- pull-seq [^XMLStreamReader sreader]
   (lazy-seq
-    (loop []
-      (condp == (.next sreader)
-        XMLStreamConstants/START_ELEMENT
-          (cons (event :start-element
-                           (keyword (.getLocalName sreader))
-                           (attr-hash sreader) nil)
-                  (pull-seq sreader)) 
-        XMLStreamConstants/END_ELEMENT
-          (cons (event :end-element
-                           (keyword (.getLocalName sreader)) nil nil)
-                (pull-seq sreader))
-        XMLStreamConstants/CHARACTERS
-          (let [text (.getText sreader)]
-            (cons (event :characters nil nil text)
-                  (pull-seq sreader)))
-        XMLStreamConstants/END_DOCUMENT
-          nil))))
+   (loop []
+     (condp == (.next sreader)
+       XMLStreamConstants/START_ELEMENT
+       (cons (event :start-element
+                    (keyword (.getLocalName sreader))
+                    (attr-hash sreader) nil)
+             (pull-seq sreader)) 
+       XMLStreamConstants/END_ELEMENT
+       (cons (event :end-element
+                    (keyword (.getLocalName sreader)) nil nil)
+             (pull-seq sreader))
+       XMLStreamConstants/CHARACTERS
+       (do
+         (let [text (.getText sreader)]
+           (cons (event :characters nil nil text)
+                 (pull-seq sreader))))
+
+       XMLStreamConstants/END_DOCUMENT
+       nil))))
 
 (defn lazy-source-seq
   "Parses the XML InputSource source using a pull-parser. Returns
@@ -202,24 +233,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; XML Emitting
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defn write-attributes [{:keys (attrs)} writer]
-  (doseq [[k v] attrs]
-    (.writeAttribute writer (str (namespace k)) (name k) (str v))))
-
-(defn- emit-element
-  "Recursively prints the Element e as XML text."
-  [e writer]
-  
-  (if (instance? String e)
-    (.writeCharacters writer e)
-    (let [nspace (namespace (:tag e))
-          qname (name (:tag e))]
-      (.writeStartElement writer ""  qname (or nspace ""))
-      (write-attributes e writer)
-      (doseq [c (:content e)]
-        (emit-element c writer))
-      (.writeEndElement writer))))
 
 (defn emit-stream
   "Prints the given Element tree as XML text to *out*. See element-tree.
