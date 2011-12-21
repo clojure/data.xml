@@ -227,7 +227,9 @@
   a lazy sequence of Event records.  See clojure.data.xml/lazy-source-seq
   for similar results but without requiring an external pull parser."
   [^java.io.InputStream s]
-  (let [sreader (.createXMLStreamReader (XMLInputFactory/newInstance) s)]
+  (let [fac (doto (javax.xml.stream.XMLInputFactory/newInstance)
+              (.setProperty javax.xml.stream.XMLInputFactory/IS_COALESCING true))
+        sreader (.createXMLStreamReader fac s)]
     ;(.setNamespaceAttributesReporting xpp true)
     ;(.setInput xpp s)
     (pull-seq sreader)))
