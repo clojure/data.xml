@@ -56,25 +56,7 @@
     (is (= expect (with-out-str (xml/emit deep-tree
                                           :xml-declaration false))))))
 
-(deftest indent
-  (let [input-tree
-         (with-in-str (str "<a h=\"1\" i=\"2\" j=\"3\">"
-                           "<b k=\"4\">t2</b>"
-                           "<c>t4</c>t5<d>t6</d>"
-                           "<e l=\"5\" m=\"6\">"
-                           "          <f>t10</f>t11</e>"
-                           "<g>t13</g>t14"
-                           "</a>")
-           (xml/parse *in*))
-        expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                    "<a h=\"1\" i=\"2\" j=\"3\">\n"
-                    "   <b k=\"4\">t2</b>\n"
-                    "   <c>t4</c>t5<d>t6</d>\n"
-                    "   <e l=\"5\" m=\"6\">\n"
-                    "      <f>t10</f>t11</e>\n"
-                    "   <g>t13</g>t14</a>\n")]
-    (is (= expect (with-out-str
-                    (xml/emit input-tree :indent 3))))))
+;; TODO add an indentation test once we figure out how to indent portably across JREs
 
 (defn emit-char-seq [xml-tree encoding]
   (let [stream (java.io.ByteArrayOutputStream.)]
