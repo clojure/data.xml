@@ -199,7 +199,10 @@
 
 ; Note, sreader is mutable and mutated here in pull-seq, but it's
 ; protected by a lazy-seq so it's thread-safe.
-(defn- pull-seq [^XMLStreamReader sreader]
+(defn- pull-seq
+  "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to 
+   be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete."
+  [^XMLStreamReader sreader]
   (lazy-seq
    (loop []
      (condp == (.next sreader)
@@ -217,10 +220,11 @@
                           (.getText sreader))]
          (cons (event :characters nil nil text)
                (pull-seq sreader))
-         (pull-seq sreader))
+         (recur))
        XMLStreamConstants/COMMENT
-       (pull-seq sreader)
-
+       (recur)
+       XMLStreamConstants/SPACE
+       (recur)
        XMLStreamConstants/END_DOCUMENT
        nil))))
 
