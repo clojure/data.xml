@@ -37,12 +37,19 @@
                    "  t12" (element :g {} "t13") "t14")]
     (is (= expected (lazy-parse* input)))))
 
+(deftest test-xml-with-whitespace
+    (let [input (str "<a>\n<b with-attr=\"s p a c e\">123</b>\n<c>1 2 3</c>\n\n</a>")
+        expected (element :a {}
+                          (element :b {:with-attr "s p a c e"} "123")
+                          (element :c {}  "1 2 3"))]
+    (is (= expected (lazy-parse* input)))))
+
 (deftest test-cdata-parse
 (let [input "<cdata><is><here><![CDATA[<dont><parse><me>]]></here></is></cdata>"
       expected (element :cdata {} (element :is {}
                                            (element :here {}
                                                     "<dont><parse><me>")))]
-  (is (= expected (lazy-parse* input))))  )
+  (is (= expected (lazy-parse* input)))))
 
 (deftest test-comment-parse
 (let [input "<comment><is><here><!-- or could be -->there</here></is></comment>"
@@ -63,3 +70,4 @@
           (reset! event1 nil)
           (System/gc)
           (is (= nil (.get weak))))))))
+

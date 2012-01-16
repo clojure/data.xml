@@ -3,7 +3,7 @@
   <artifactId>data.xml</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>data.xml</name>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <description>Functions to parse XML into lazy sequences and lazy trees and emit these as text</description>
 
   <developers>

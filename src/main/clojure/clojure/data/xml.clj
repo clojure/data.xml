@@ -213,9 +213,11 @@
                     (keyword (.getLocalName sreader)) nil nil)
              (pull-seq sreader))
        XMLStreamConstants/CHARACTERS
-       (let [text (.getText sreader)]
+       (if-let [text (and (not (.isWhiteSpace sreader))
+                          (.getText sreader))]
          (cons (event :characters nil nil text)
-               (pull-seq sreader)))
+               (pull-seq sreader))
+         (pull-seq sreader))
        XMLStreamConstants/COMMENT
        (pull-seq sreader)
 
