@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>data.xml</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2-SNAPSHOT</version>
   <name>data.xml</name>
   <packaging>jar</packaging>
   <description>Functions to parse XML into lazy sequences and lazy trees and emit these as text</description>
@@ -17,6 +17,11 @@
       <name>Alan Malloy</name>
       <email>amalloy@4clojure.com</email>
       <timezone>-8</timezone>
+    </developer>
+    <developer>
+      <name>Ryan Senior</name>
+      <email>senior.ryan@gmail.com</email>
+      <timezone>-6</timezone>
     </developer>
   </developers>
 
