@@ -16,7 +16,7 @@
                              XMLStreamConstants)
            (java.nio.charset Charset)
            (java.io Reader)))
-
+(set! *warn-on-reflection* true)
 ; Represents a parse event.
 ; type is one of :start-element, :end-element, or :characters
 (defrecord Event [type name attrs str])
@@ -27,7 +27,7 @@
 (defprotocol Emit
   (emit-element [element writer]))
 
-(defn write-attributes [{:keys (attrs)} writer]
+(defn write-attributes [{:keys (attrs)} ^javax.xml.stream.XMLStreamWriter writer]
   (doseq [[k v] attrs]
     (.writeAttribute writer (str (namespace k)) (name k) (str v))))
 
@@ -36,7 +36,8 @@
   Emit
   (emit-element [e writer]
     (let [nspace (namespace (:tag e))
-          qname (name (:tag e))]
+          qname (name (:tag e))
+          ^javax.xml.stream.XMLStreamWriter writer writer]
       (.writeStartElement writer ""  qname (or nspace ""))
       (write-attributes e writer)
       (doseq [c (:content e)]
@@ -46,17 +47,17 @@
 (defrecord CData [content]
   Emit
   (emit-element [e writer]
-    (.writeCData writer (:content e))))
+    (.writeCData ^javax.xml.stream.XMLStreamWriter writer (:content e))))
 
 (defrecord Comment [content]
   Emit
   (emit-element [e writer]
-    (.writeComment writer (:content e))))
+    (.writeComment ^javax.xml.stream.XMLStreamWriter writer (:content e))))
 
 (extend-protocol Emit
   String
   (emit-element [e writer]
-    (.writeCharacters writer e)))
+    (.writeCharacters ^javax.xml.stream.XMLStreamWriter writer e)))
 
 (defn element [tag & [attrs & content]]
   (Element. tag (or attrs {}) content))
@@ -177,7 +178,7 @@
     root))
 
 
-(defn- attr-prefix [sreader index]
+(defn- attr-prefix [^XMLStreamReader sreader index]
   (let [p (.getAttributePrefix sreader index)]
     (when-not (str/blank? p)
       p)))
@@ -239,21 +240,23 @@
 ;;;; XML Emitting
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defn check-stream-encoding [^java.io.OutputStreamWriter stream xml-encoding]
+  (when (not= (Charset/forName xml-encoding) (Charset/forName (.getEncoding stream)))
+    (throw (Exception. (str "Output encoding of stream (" xml-encoding
+                            ") doesn't match declaration ("
+                            (.getEncoding stream) ")")))))
+
 (defn emit-stream
   "Prints the given Element tree as XML text to *out*. See element-tree.
   Options:
     :indent <num>            Amount to increase indent depth each time
     :encoding <str>          Character encoding to use"
-  [e stream & {:as opts}]
-  (let [writer (-> (javax.xml.stream.XMLOutputFactory/newInstance)
-                 (.createXMLStreamWriter stream))
-        encoding (or (:encoding opts) "UTF-8")]
+  [e ^java.io.Writer stream & {:as opts}]
+  (let [^javax.xml.stream.XMLStreamWriter writer (-> (javax.xml.stream.XMLOutputFactory/newInstance)
+                                                     (.createXMLStreamWriter stream))]
 
-    (when (and (instance? java.io.OutputStreamWriter stream)
-               (not= (Charset/forName encoding) (Charset/forName (.getEncoding stream))))
-      (throw (Exception. (str "Output encoding of stream (" encoding
-                              ") doesn't match declaration ("
-                              (.getEncoding stream) ")"))))
+    (when (instance? java.io.OutputStreamWriter stream)
+      (check-stream-encoding stream (or (:encoding opts) "UTF-8")))
     
     (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
     (emit-element e writer)
