@@ -14,6 +14,6 @@
 (defn test-stream [x]
   (java.io.ByteArrayInputStream. (.getBytes x)))
 
-(def lazy-parse* (comp xml/lazy-parse test-stream))
+(def lazy-parse* (comp xml/parse test-stream))
 
 

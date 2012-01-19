@@ -35,9 +35,6 @@
                     "</a>")]
     (is (= expect (with-out-str (xml/emit deep-tree))))))
 
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?><mixed double=\"&quot;double&quot;quotes&quot;here&quot;\" single=\"'single'quotes'here\"/>"
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?><mixed double=\"&quot;double&quot;quotes&quot;here&quot;\" single=\"'single'quotes'here\"></mixed>"
-
 (deftest mixed-quotes
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
               "<mixed double=\"&quot;double&quot;quotes&quot;here&quot;\""

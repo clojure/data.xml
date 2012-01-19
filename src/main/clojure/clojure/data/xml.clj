@@ -117,16 +117,6 @@
       (fn [^Event event] (.str event))
       events)))
 
-#_(defn parse
-  "Convenience function. Parses the source, which can be a File,
-  InputStream or String naming a URI, and returns a tree of
-  Element records. See source-seq for finer-grained control."
-  [source]
-  (event-tree (source-seq
-                (if (instance? Reader source)
-                  (InputSource. source)
-                  source))))
-
 (defprotocol AsElements
   (as-elements [expr] "Return a seq of elements represented by an expression."))
 
@@ -228,7 +218,7 @@
        XMLStreamConstants/END_DOCUMENT
        nil))))
 
-(defn lazy-source-seq
+(defn source-seq
   "Parses the XML InputSource source using a pull-parser. Returns
   a lazy sequence of Event records.  See clojure.data.xml/lazy-source-seq
   for similar results but without requiring an external pull parser."
@@ -236,16 +226,14 @@
   (let [fac (doto (javax.xml.stream.XMLInputFactory/newInstance)
               (.setProperty javax.xml.stream.XMLInputFactory/IS_COALESCING true))
         sreader (.createXMLStreamReader fac s)]
-    ;(.setNamespaceAttributesReporting xpp true)
-    ;(.setInput xpp s)
     (pull-seq sreader)))
 
-(defn lazy-parse
+(defn parse
   "Convenience function. Parses the source, which can be a File,
   InputStream or String naming a URI, and returns a lazy tree of
   Element records. See lazy-source-seq for finer-grained control."
   [source]
-  (event-tree (lazy-source-seq source)))
+  (event-tree (source-seq source)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; XML Emitting
