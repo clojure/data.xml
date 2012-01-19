@@ -16,7 +16,7 @@
                              XMLStreamConstants)
            (java.nio.charset Charset)
            (java.io Reader)))
-(set! *warn-on-reflection* true)
+
 ; Represents a parse event.
 ; type is one of :start-element, :end-element, or :characters
 (defrecord Event [type name attrs str])
@@ -29,7 +29,9 @@
 
 (defn write-attributes [{:keys (attrs)} ^javax.xml.stream.XMLStreamWriter writer]
   (doseq [[k v] attrs]
-    (.writeAttribute writer (str (namespace k)) (name k) (str v))))
+    (if (namespace k)
+      (.writeAttribute writer (str (namespace k)) (name k) (str v))
+      (.writeAttribute writer (name k) (str v)))))
 
 ; Represents a node of an XML tree
 (defrecord Element [tag attrs content]
@@ -60,7 +62,7 @@
     (.writeCharacters ^javax.xml.stream.XMLStreamWriter writer e)))
 
 (defn element [tag & [attrs & content]]
-  (Element. tag (or attrs {}) content))
+  (Element. tag (or attrs {}) (remove nil? content)))
 
 (defn cdata [content]
   (CData. content))
@@ -110,13 +112,13 @@
   objects. See source-seq and parse."
   [events]
   (ffirst
-    (seq-tree
-      (fn [^Event event contents]
-        (when (= :start-element (.type event))
-          (Element. (.name event) (.attrs event) contents)))
-      (fn [^Event event] (= :end-element (.type event)))
-      (fn [^Event event] (.str event))
-      events)))
+   (seq-tree
+    (fn [^Event event contents]
+      (when (= :start-element (.type event))
+        (Element. (.name event) (.attrs event) contents)))
+    (fn [^Event event] (= :end-element (.type event)))
+    (fn [^Event event] (.str event))
+    events)))
 
 (defprotocol AsElements
   (as-elements [expr] "Return a seq of elements represented by an expression."))
@@ -227,7 +229,7 @@
   (let [fac (doto (javax.xml.stream.XMLInputFactory/newInstance)
               (.setProperty javax.xml.stream.XMLInputFactory/IS_COALESCING true))
         sreader (.createXMLStreamReader fac s)]
-    (pull-seq sreader)))
+    (doall (pull-seq sreader))))
 
 (defn parse
   "Convenience function. Parses the source, which can be a File,
