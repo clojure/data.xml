@@ -44,41 +44,6 @@
                        {:single "'single'quotes'here"
                         :double "\"double\"quotes\"here\""}))))))
 
-;; Commenting because it doesn't look to be supported by the XMLStreamWriter
-#_(deftest without-decl
-  (let [expect (str "<a h=\"1\" i=\"2\" j=\"3\">"
-                    "  t1<b k=\"4\">t2</b>"
-                    "  t3<c>t4</c>"
-                    "  t5<d>t6</d>"
-                    "  t7<e l=\"5\" m=\"6\">"
-                    "    t8<f>t10</f>t11</e>"
-                    "  t12<g>t13</g>t14"
-                    "</a>")]
-    (is (= expect (with-out-str (xml/emit deep-tree
-                                          :xml-declaration false))))))
-
-;; Commenting for now because the new data.xml doesn't support
-;; indentation yet
-#_(deftest indent
-  (let [input-tree
-         (lazy-parse* (str "<a h=\"1\" i=\"2\" j=\"3\">"
-                           "<b k=\"4\">t2</b>"
-                           "<c>t4</c>t5<d>t6</d>"
-                           "<e l=\"5\" m=\"6\">"
-                           "          <f>t10</f>t11</e>"
-                           "<g>t13</g>t14"
-                           "</a>"))
-        expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                    "<a h=\"1\" i=\"2\" j=\"3\">\n"
-                    "   <b k=\"4\">t2</b>\n"
-                    "   <c>t4</c>t5<d>t6</d>\n"
-                    "   <e l=\"5\" m=\"6\">\n"
-                    "      <f>t10</f>t11</e>\n"
-                    "   <g>t13</g>t14</a>\n")]
-    (is (= expect (with-out-str
-                    (xml/emit input-tree :indent 3))))))
-
-
 (defn emit-char-seq [xml-tree encoding]
   (with-open [bos (java.io.ByteArrayOutputStream.)
         stream (java.io.OutputStreamWriter. bos encoding)]
