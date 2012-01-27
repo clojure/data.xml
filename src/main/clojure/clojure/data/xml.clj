@@ -262,7 +262,21 @@
     
     (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
     (emit-element e writer)
-    (.writeEndDocument writer)))
+    (.writeEndDocument writer)
+    stream))
 
 (defn emit [e & {:as opts}]
   (apply emit-stream e *out* opts))
+
+(defn indenting-transformer []
+  (doto (-> (javax.xml.transform.TransformerFactory/newInstance) .newTransformer)
+    (.setOutputProperty (javax.xml.transform.OutputKeys/INDENT) "yes")
+    (.setOutputProperty (javax.xml.transform.OutputKeys/METHOD) "xml")
+    (.setOutputProperty "{http://xml.apache.org/xslt}indent-amount" "2")))
+
+(defn indent [e ^java.io.Writer stream & {:as opts}]
+  (let [sw (java.io.StringWriter.)
+        _ (apply emit-stream e sw opts)
+        source (-> sw .toString java.io.StringReader. javax.xml.transform.stream.StreamSource.)
+        result (javax.xml.transform.stream.StreamResult. stream)]
+    (.transform (indenting-transformer) source result)))
