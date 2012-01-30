@@ -248,10 +248,9 @@
                             ") doesn't match declaration ("
                             (.getEncoding stream) ")")))))
 
-(defn emit-stream
+(defn emit
   "Prints the given Element tree as XML text to stream.
    Options:
-    :indent <num>            Amount to increase indent depth each time
     :encoding <str>          Character encoding to use"
   [e ^java.io.Writer stream & {:as opts}]
   (let [^javax.xml.stream.XMLStreamWriter writer (-> (javax.xml.stream.XMLOutputFactory/newInstance)
@@ -265,13 +264,12 @@
     (.writeEndDocument writer)
     stream))
 
-(defn emit
-  "Prints the given Element tree as XML text to *out*.
-   Options:
-    :indent <num>            Amount to increase indent depth each time
-    :encoding <str>          Character encoding to use"
-  [e & {:as opts}]
-  (apply emit-stream e *out* opts))
+(defn emit-str
+  "Emits the Element to String and returns it"
+  [e]
+  (let [^java.io.StringWriter sw (java.io.StringWriter.)]
+    (emit e sw)
+    (.toString sw)))
 
 (defn indenting-transformer []
   (doto (-> (javax.xml.transform.TransformerFactory/newInstance) .newTransformer)
@@ -280,12 +278,13 @@
     (.setOutputProperty "{http://xml.apache.org/xslt}indent-amount" "2")))
 
 (defn indent
-  "Uses emit-stream to emit XML and indents the result.  WARNING: this is slow
+  "Emits the XML and indents the result.  WARNING: this is slow
    it will emit the XML and read it in again to indent it.  Intended for 
    debugging/testing only."
   [e ^java.io.Writer stream & {:as opts}]
   (let [sw (java.io.StringWriter.)
-        _ (apply emit-stream e sw opts)
+        _ (apply emit e sw opts)
         source (-> sw .toString java.io.StringReader. javax.xml.transform.stream.StreamSource.)
         result (javax.xml.transform.stream.StreamResult. stream)]
     (.transform (indenting-transformer) source result)))
+

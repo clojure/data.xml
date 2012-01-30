@@ -33,21 +33,20 @@
                     "    t8<f>t10</f>t11</e>"
                     "  t12<g>t13</g>t14"
                     "</a>")]
-    (is (= expect (with-out-str (xml/emit deep-tree))))))
+    (is (= expect (xml/emit-str deep-tree)))))
 
 (deftest mixed-quotes
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
               "<mixed double=\"&quot;double&quot;quotes&quot;here&quot;\""
               " single=\"'single'quotes'here\"></mixed>")
-         (with-out-str
-           (xml/emit (element :mixed
-                       {:single "'single'quotes'here"
-                        :double "\"double\"quotes\"here\""}))))))
+         (xml/emit-str (element :mixed
+                                {:single "'single'quotes'here"
+                                 :double "\"double\"quotes\"here\""})))))
 
 (defn emit-char-seq [xml-tree encoding]
   (with-open [bos (java.io.ByteArrayOutputStream.)
         stream (java.io.OutputStreamWriter. bos encoding)]
-    (xml/emit-stream xml-tree stream :encoding encoding)
+    (xml/emit xml-tree stream :encoding encoding)
     (.flush stream)
     (map #(if (pos? %) (char %) %) (.toByteArray bos))))
 
@@ -65,23 +64,21 @@
   (is (thrown? Exception
         (let [stream (java.io.ByteArrayOutputStream.)]
           (binding [*out* (java.io.OutputStreamWriter. stream "UTF-8")]
-            (xml/emit (element :foo) :encoding "ISO-8859-1"))))))
+            (xml/emit (element :foo) *out* :encoding "ISO-8859-1"))))))
 
 (deftest emitting-cdata
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
               "<cdata-stuff><![CDATA[<goes><here>]]></cdata-stuff>")
-         (with-out-str
-           (xml/emit (element :cdata-stuff {}
-                              (cdata "<goes><here>"))))))  )
+         (xml/emit-str (element :cdata-stuff {}
+                                (cdata "<goes><here>")))))  )
 
 (deftest emitting-comment
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
               "<comment-stuff>comment <!-- goes here --> not here</comment-stuff>")
-         (with-out-str
-           (xml/emit (element :comment-stuff {}
-                              "comment "
-                              (xml-comment " goes here ")
-                              " not here")))))  )
+         (xml/emit-str (element :comment-stuff {}
+                                "comment "
+                                (xml-comment " goes here ")
+                                " not here"))))  )
 
 (deftest test-indent
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
