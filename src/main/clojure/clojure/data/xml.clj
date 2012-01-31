@@ -223,18 +223,17 @@
 
 (defn source-seq
   "Parses the XML InputSource source using a pull-parser. Returns
-  a lazy sequence of Event records.  See clojure.data.xml/lazy-source-seq
-  for similar results but without requiring an external pull parser."
-  [^java.io.InputStream s]
+  a lazy sequence of Event records."
+  [s]
   (let [fac (doto (javax.xml.stream.XMLInputFactory/newInstance)
               (.setProperty javax.xml.stream.XMLInputFactory/IS_COALESCING true))
         sreader (.createXMLStreamReader fac s)]
-    (doall (pull-seq sreader))))
+    (pull-seq sreader)))
 
 (defn parse
-  "Convenience function. Parses the source, which can be a File,
-  InputStream or String naming a URI, and returns a lazy tree of
-  Element records. See lazy-source-seq for finer-grained control."
+  "Convenience function. Parses the source, which can be an
+  InputStream or Reader, and returns a lazy tree of Element records.
+  See lazy-source-seq for finer-grained control."
   [source]
   (event-tree (source-seq source)))
 
@@ -287,4 +286,11 @@
         source (-> sw .toString java.io.StringReader. javax.xml.transform.stream.StreamSource.)
         result (javax.xml.transform.stream.StreamResult. stream)]
     (.transform (indenting-transformer) source result)))
+
+(defn indent-str
+  "Emits the XML and indents the result.  Writes the results to a String and returns it"
+  [e]
+  (let [^java.io.StringWriter sw (java.io.StringWriter.)]
+    (indent e sw)
+    (.toString sw))  )
 
