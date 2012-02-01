@@ -10,7 +10,7 @@
       :author "Chris Houser"}
   clojure.data.xml.test-parse
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element cdata]]
+        [clojure.data.xml :as xml :only [element cdata parse-str]]
         [clojure.data.xml.test-utils :only [test-stream lazy-parse*]]))
 
 (deftest simple
@@ -35,7 +35,8 @@
                    "  t7" (element :e {:l "5" :m "6"}
                    "    t8" (element :f {} "t10") "t11")
                    "  t12" (element :g {} "t13") "t14")]
-    (is (= expected (lazy-parse* input)))))
+    (is (= expected (lazy-parse* input)))
+    (is (= expected (parse-str input)))))
 
 (deftest test-xml-with-whitespace
     (let [input (str "<a>\n<b with-attr=\"s p a c e\">123</b>\n<c>1 2 3</c>\n\n</a>")

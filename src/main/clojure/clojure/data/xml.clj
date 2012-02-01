@@ -237,6 +237,12 @@
   [source]
   (event-tree (source-seq source)))
 
+(defn parse-str
+  "Parses the passed in string to Clojure data structures"
+  [s]
+  (let [sr (java.io.StringReader. s)]
+    (parse sr)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; XML Emitting
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
