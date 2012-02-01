@@ -10,14 +10,14 @@
       :author "Chris Houser"}
   clojure.data.xml.test-parse
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element]]))
+        [clojure.data.xml :as xml :only [element cdata parse-str]]
+        [clojure.data.xml.test-utils :only [test-stream lazy-parse*]]))
 
 (deftest simple
   (let [input "<html><body bg=\"red\">This is <b>bold</b> test</body></html>"
         expected (element :html {} (element :body {:bg "red"}
                    "This is " (element :b {} "bold") " test"))]
-    (is (= expected (with-in-str input (xml/parse *in*))))
-    (with-in-str input (is (= expected (xml/lazy-parse *in*))))))
+    (is (= expected (lazy-parse* input)))))
 
 (deftest deep
   (let [input (str "<a h='1' i=\"2\" j='3'>"
@@ -35,5 +35,27 @@
                    "  t7" (element :e {:l "5" :m "6"}
                    "    t8" (element :f {} "t10") "t11")
                    "  t12" (element :g {} "t13") "t14")]
-    (is (= expected (with-in-str input (xml/parse *in*))))
-    (with-in-str input (is (= expected (xml/lazy-parse *in*))))))
+    (is (= expected (lazy-parse* input)))
+    (is (= expected (parse-str input)))))
+
+(deftest test-xml-with-whitespace
+    (let [input (str "<a>\n<b with-attr=\"s p a c e\">123</b>\n<c>1 2 3</c>\n\n</a>")
+        expected (element :a {}
+                          (element :b {:with-attr "s p a c e"} "123")
+                          (element :c {}  "1 2 3"))]
+    (is (= expected (lazy-parse* input)))))
+
+(deftest test-cdata-parse
+(let [input "<cdata><is><here><![CDATA[<dont><parse><me>]]></here></is></cdata>"
+      expected (element :cdata {} (element :is {}
+                                           (element :here {}
+                                                    "<dont><parse><me>")))]
+  (is (= expected (lazy-parse* input)))))
+
+(deftest test-comment-parse
+(let [input "<comment><is><here><!-- or could be -->there</here></is></comment>"
+      expected (element :comment {} (element :is {}
+                                           (element :here {}
+                                                    "there")))]
+  (is (= expected (lazy-parse* input)))))
+

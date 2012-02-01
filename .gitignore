@@ -1,1 +1,3 @@
 /target/
+modules/xml/target/
+modules/xml.pull-parser/target/
