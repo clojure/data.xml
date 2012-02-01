@@ -1,6 +1,6 @@
 # data.xml
 
-'data.xml' is a Clojure library for reading and writing XML data. This
+[data.xml](https://github.com/clojure/data.xml) is a Clojure library for reading and writing XML data. This
 library is the successor to
 [lazy-xml](http://clojure.github.com/clojure-contrib/lazy-xml-api.html).
 data.xml has the following features:
@@ -11,9 +11,15 @@ data.xml has the following features:
 * Uses StAX internally
 * lazy - should allow parsing and emitting of large XML documents
 
+## JDK 1.5
+
+This library uses the pull parser that ships with JDK 1.6.  If you running on JDK 1.6+, you do not need any 
+additional dependencies.  If you are using JDK 1.5, you will need to include a dependency on StAX.  More 
+information on this is available [here](https://github.com/clojure/data.xml/blob/jdk16-pull-parser/jdk_15_readme.txt)
+
 ## Bugs
 
-Please [data.xml JIRA](http://dev.clojure.org/jira/browse/DXML) for bug reports.
+Please report bugs using JIRA [here](http://dev.clojure.org/jira/browse/DXML).
 
 ## Contributing
 
@@ -72,7 +78,7 @@ functions or the element function used below, and written using a
 
           ;;-> Writes XML to /tmp/foo.xml
 
-XML can be round tripped through he library with code like:
+XML can be "round tripped" through the library:
 
         (let [tags (element :foo {:foo-attr "foo value"}
                             (element :bar {:bar-attr "bar value"}
@@ -97,50 +103,51 @@ debugging.
 Indentation is supported, but should be treated as a debugging feature
 as it's likely to be pretty slow:
 
-   (print (indent-str (element :foo {:foo-attr "foo value"}
-                               (element :bar {:bar-attr "bar value"}
-                                        (element :baz {} "The baz value1")
-                                        (element :baz {} "The baz value2")
-                                        (element :baz {} "The baz value3")))))
+	(print (indent-str (element :foo {:foo-attr "foo value"}
+        	                    (element :bar {:bar-attr "bar value"}
+                	                     (element :baz {} "The baz value1")
+                        	             (element :baz {} "The baz value2")
+                                	     (element :baz {} "The baz value3")))))
                             
-    <?xml version="1.0" encoding="UTF-8"?>
-    <foo foo-attr="foo value">
-         <bar bar-attr="bar value">
-              <baz>The baz value1</baz>
-              <baz>The baz value2</baz>
-              <baz>The baz value3</baz>
-         </bar>
-    </foo>
+    	<?xml version="1.0" encoding="UTF-8"?>
+    	<foo foo-attr="foo value">
+        	<bar bar-attr="bar value">
+              		<baz>The baz value1</baz>
+              		<baz>The baz value2</baz>
+              		<baz>The baz value3</baz>
+         	</bar>
+    	</foo>
 
 CDATA can be emitted:
 
-      (emit-str (element :foo {}
-                         (cdata "<non><escaped><info><here>")))
-      "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><![CDATA[<non><escaped><info><here>]]></foo>"
+	(emit-str (element :foo {}
+                           (cdata "<non><escaped><info><here>")))
+      	"<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><![CDATA[<non><escaped><info><here>]]></foo>"
 
 But will be read as regular character data:
 
-    (parse-str (emit-str (element :foo {}
-                                  (cdata "<non><escaped><info><here>"))))
-    #clojure.data.xml.Element{:tag :foo, :attrs {}, :content ("<non><escaped><info><here>")}
+    	(parse-str (emit-str (element :foo {}
+                                      (cdata "<non><escaped><info><here>"))))
+    	#clojure.data.xml.Element{:tag :foo, :attrs {}, :content ("<non><escaped><info><here>")}
 
 Comments can also be emitted:
 
-         (emit-str (element :foo {}
-                            (xml-comment "Just a <comment> goes here")
-                            (element :bar {} "and another element")))
+      	(emit-str (element :foo {}
+                           (xml-comment "Just a <comment> goes here")
+                           (element :bar {} "and another element")))
 
-         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><!--Just a
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><!--Just a
          <comment> goes here--><bar>and another element</bar></foo>"
 
 But are ignored when read:
-    (emit-str
-      (parse-str
-        (emit-str (element :foo {}
-                           (xml-comment "Just a <comment> goes here")
-                           (element :bar {} "and another element")))))
 
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><bar>and another element</bar></foo>"    
+	(emit-str
+      	  (parse-str
+            (emit-str (element :foo {}
+                               (xml-comment "Just a <comment> goes here")
+                               (element :bar {} "and another element")))))
+
+	"<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><bar>and another element</bar></foo>"    
 
 ## License
 
