@@ -46,6 +46,10 @@ Add the following to the `project.clj` dependencies:
 
 ## Examples
 
+The examples below assume you have added a `use` for data.xml:
+
+	(use 'clojure.data.xml)
+
 data.xml supports parsing and emitting XML. The parsing functions will
 read XML from a
 [Reader](http://docs.oracle.com/javase/6/docs/api/java/io/Reader.html)
