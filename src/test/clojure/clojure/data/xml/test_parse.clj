@@ -59,3 +59,17 @@
                                                     "there")))]
   (is (= expected (lazy-parse* input)))))
 
+(deftest test-parsing-processing-instructions
+  (let [input "<?xml version=\"1.0\" encoding=\"utf-8\"?>
+                <?xml-stylesheet type='text/xsl' href='someFile.xsl'?>
+                <ATag>With Stuff</ATag>"
+        expected (element :ATag {} "With Stuff")]
+    (is (= expected (parse-str input)))))
+
+(deftest test-parsing-doctypes
+  (let [input "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"
+               \"foo://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
+               <html><h1>Heading Stuff</h1></html>"
+        expected (element :html {}
+                          (element :h1 {} "Heading Stuff"))]
+    (is (= expected (parse-str input)))))

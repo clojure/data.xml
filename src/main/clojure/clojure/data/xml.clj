@@ -214,12 +214,10 @@
          (cons (event :characters nil nil text)
                (pull-seq sreader))
          (recur))
-       XMLStreamConstants/COMMENT
-       (recur)
-       XMLStreamConstants/SPACE
-       (recur)
        XMLStreamConstants/END_DOCUMENT
-       nil))))
+       nil
+       (recur);; Consume and ignore comments, spaces, processing instructions etc
+       ))))
 
 (defn source-seq
   "Parses the XML InputSource source using a pull-parser. Returns
