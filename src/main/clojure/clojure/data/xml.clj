@@ -219,12 +219,29 @@
        (recur);; Consume and ignore comments, spaces, processing instructions etc
        ))))
 
+(def ^{:private true} xml-input-factory-props
+  {:allocator javax.xml.stream.XMLInputFactory/ALLOCATOR
+   :coalescing javax.xml.stream.XMLInputFactory/IS_COALESCING
+   :namespace-aware javax.xml.stream.XMLInputFactory/IS_NAMESPACE_AWARE
+   :replacing-entity-references javax.xml.stream.XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
+   :supporting-external-entities javax.xml.stream.XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
+   :validating javax.xml.stream.XMLInputFactory/IS_VALIDATING
+   :reporter javax.xml.stream.XMLInputFactory/REPORTER
+   :resolver javax.xml.stream.XMLInputFactory/RESOLVER
+   :support-dtd javax.xml.stream.XMLInputFactory/SUPPORT_DTD})
+
+(defn- new-xml-input-factory [props]
+  (let [fac (javax.xml.stream.XMLInputFactory/newInstance)]
+    (doseq [[k v] props
+            :let [prop (xml-input-factory-props k)]]
+      (.setProperty fac prop v))
+    fac))
+
 (defn source-seq
   "Parses the XML InputSource source using a pull-parser. Returns
   a lazy sequence of Event records."
-  [s]
-  (let [fac (doto (javax.xml.stream.XMLInputFactory/newInstance)
-              (.setProperty javax.xml.stream.XMLInputFactory/IS_COALESCING true))
+  [s & {:as props}]
+  (let [fac (new-xml-input-factory (merge {:coalescing true} props))
         sreader (.createXMLStreamReader fac s)]
     (pull-seq sreader)))
 
@@ -232,14 +249,14 @@
   "Convenience function. Parses the source, which can be an
   InputStream or Reader, and returns a lazy tree of Element records.
   See lazy-source-seq for finer-grained control."
-  [source]
-  (event-tree (source-seq source)))
+  [source & props]
+  (event-tree (apply source-seq source props)))
 
 (defn parse-str
   "Parses the passed in string to Clojure data structures"
-  [s]
+  [s & props]
   (let [sr (java.io.StringReader. s)]
-    (parse sr)))
+    (apply parse sr props)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; XML Emitting

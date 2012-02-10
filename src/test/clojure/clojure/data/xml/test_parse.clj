@@ -73,3 +73,9 @@
         expected (element :html {}
                           (element :h1 {} "Heading Stuff"))]
     (is (= expected (parse-str input)))))
+
+(deftest test-coalescing
+  (let [input "<a><![CDATA[\nfoo bar\n]]><![CDATA[\nbaz\n]]></a>"]
+    (is (= ["\nfoo bar\n\nbaz\n"] (:content (parse-str input))))
+    (is (= ["\nfoo bar\n" "\nbaz\n"] (:content
+                                      (parse-str input :coalescing false))))))
