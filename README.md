@@ -69,8 +69,12 @@ or
                                                                                                       :content ("The baz value")})})}
 
 The data is returned as defrecords and can be manipulated using the
-normal clojure data structure functions.
+normal clojure data structure functions. Additional parsing options 
+can be passed via key pairs:
 
+    (parse-str "<a><![CDATA[\nfoo bar\n]]><![CDATA[\nbaz\n]]></a>" :coalescing false)
+    #clojure.data.xml.Element{:tag :a, :attrs {}, :content ("\nfoo bar\n" "\nbaz\n")}
+    
 XML elements can be created using the typical defrecord constructor
 functions or the element function used below, and written using a
 [java.io.Writer](http://docs.oracle.com/javase/6/docs/api/java/io/Writer.html).:
