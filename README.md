@@ -36,13 +36,13 @@ For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` s
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>data.xml</artifactId>
-      <version>0.0.2-SNAPSHOT</version>
+      <version>0.0.3</version>
      </dependency>
 
 ### Leiningen
 Add the following to the `project.clj` dependencies:
 
-    [org.clojure/data.xml "0.0.2-SNAPSHOT"]
+    [org.clojure/data.xml "0.0.3"]
 
 ## Examples
 
