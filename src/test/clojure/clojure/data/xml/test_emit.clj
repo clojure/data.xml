@@ -36,12 +36,14 @@
     (is (= expect (emit-str deep-tree)))))
 
 (deftest mixed-quotes
-  (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-              "<mixed double=\"&quot;double&quot;quotes&quot;here&quot;\""
-              " single=\"'single'quotes'here\"></mixed>")
-         (emit-str (element :mixed
-                                {:single "'single'quotes'here"
-                                 :double "\"double\"quotes\"here\""})))))
+  (is (= (lazy-parse*
+          (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+               "<mixed double=\"&quot;double&quot;quotes&quot;here&quot;\""
+               " single=\"'single'quotes'here\"></mixed>"))
+         (lazy-parse*
+          (emit-str (element :mixed
+                             {:single "'single'quotes'here"
+                              :double "\"double\"quotes\"here\""}))))))
 
 ;; TODO add an indentation test once we figure out how to indent portably across JREs
 
