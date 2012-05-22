@@ -92,6 +92,9 @@ namespace.
       <a class="toc-entry-anchor" href="#clojure.data.xml/parse-str">parse-str</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml/seq-tree">seq-tree</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
       <a class="toc-entry-anchor" href="#clojure.data.xml/sexp-as-element">sexp-as-element</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
@@ -141,7 +144,7 @@ emit these as text.</pre>
     </div>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L123" id="proto-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L125" id="proto-source">Source</a>
   </div>
 </div>
 <div id="type-section">
@@ -172,7 +175,7 @@ emit these as text.</pre>
     <span id="type-type">record</span><br />
     <pre id="type-docstr"></pre>
     Fields: <span id="type-fields">[tag attrs content]</span><br />
-    Protocols: <span id="type-protocols"><a href="#clojure.data.xml/Emit">Emit</a></span><br />
+    Protocols: <span id="type-protocols"></span><br />
     Interfaces: <span id="type-interfaces">clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
   </div><div id="type-entry">
     <br />
@@ -200,7 +203,7 @@ Options:
  :encoding &lt;str&gt;          Character encoding to use</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L276" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L278" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -211,7 +214,7 @@ Options:
     <pre id="var-docstr">Emits the Element to String and returns it</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L292" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L294" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -223,7 +226,7 @@ Options:
 objects. See source-seq and parse.</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L110" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L112" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -236,7 +239,7 @@ it will emit the XML and read it in again to indent it.  Intended for
 debugging/testing only.</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L305" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L307" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -247,7 +250,7 @@ debugging/testing only.</pre>
     <pre id="var-docstr">Emits the XML and indents the result.  Writes the results to a String and returns it</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L316" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L318" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -261,7 +264,7 @@ with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/
 and xml-input-factory-props for more information. Defaults coalescing true.</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L250" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L252" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -274,7 +277,38 @@ with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/
 and xml-input-factory-props for more information. Defaults coalescing true.</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L258" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L260" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/seq-tree">seq-tree</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (seq-tree parent exit? node coll)
+</pre>
+    <pre id="var-docstr">Takes a seq of events that logically represents
+a tree by each event being one of: enter-sub-tree event,
+exit-sub-tree event, or node event.
+
+Returns a lazy sequence whose first element is a sequence of
+sub-trees and whose remaining elements are events that are not
+siblings or descendants of the initial event.
+
+The given exit? function must return true for any exit-sub-tree
+event.  parent must be a function of two arguments: the first is an
+event, the second a sequence of nodes or subtrees that are children
+of the event.  parent must return nil or false if the event is not
+an enter-sub-tree event.  Any other return value will become
+a sub-tree of the output tree and should normally contain in some
+way the children passed as the second arg.  The node function is
+called with a single event arg on every event that is neither parent
+nor exit, and its return value will become a node of the output tree.
+
+(seq-tree #(when (= %1 :&lt;) (vector %2)) #{:&gt;} str
+          [1 2 :&lt; 3 :&lt; 4 :&gt; :&gt; 5 :&gt; 6])
+;=&gt; (("1" "2" [("3" [("4")])] "5") 6)</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L76" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -285,7 +319,7 @@ and xml-input-factory-props for more information. Defaults coalescing true.</pre
     <pre id="var-docstr">Convert a single sexp into an Element</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L172" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L174" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -308,7 +342,7 @@ To provide XML conversion for your own data types, extend the AsElements
 protocol to them.</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L156" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L158" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -322,7 +356,7 @@ with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/
 and xml-input-factory-props for more information. Defaults coalescing true.</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/5671774c5013f13fea3410be6e461a5f4956a7f5/src/main/clojure/clojure/data/xml.clj#L240" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/10c8f4952cf119493ca85409276b09dedf16a91a/src/main/clojure/clojure/data/xml.clj#L242" id="var-source">Source</a>
   </div>
 </div>
 
