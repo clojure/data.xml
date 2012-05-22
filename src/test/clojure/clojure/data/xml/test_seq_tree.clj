@@ -9,12 +9,12 @@
 (ns ^{:doc "Tests for seq-tree, building a lazy tree from lazy seq."
       :author "Chris Houser"}
   clojure.data.xml.test-seq-tree
-  (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only []])
+  (:use clojure.test
+        clojure.data.xml)
   (:import (java.lang.ref WeakReference)))
 
 (def tt
-  (partial #'xml/seq-tree #(when (= %1 :<) (vector %2)) #{:>} str))
+  (partial #'seq-tree #(when (= %1 :<) (vector %2)) #{:>} str))
 
 (deftest example
   (is (= '(("1" "2" [("3" [("4")])] "5") 6)

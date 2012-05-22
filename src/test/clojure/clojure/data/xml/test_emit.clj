@@ -8,9 +8,9 @@
 
 (ns ^{:doc "Tests for emit to print XML text."
       :author "Chris Houser"}
-  clojure.data.xml.test-emit
-  (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element cdata xml-comment]]
+  clojure.data.xml.test-emit  
+  (:use clojure.test
+        clojure.data.xml
         [clojure.data.xml.test-utils :only (test-stream lazy-parse*)]))
 
 (def deep-tree
@@ -33,13 +33,13 @@
                     "    t8<f>t10</f>t11</e>"
                     "  t12<g>t13</g>t14"
                     "</a>")]
-    (is (= expect (xml/emit-str deep-tree)))))
+    (is (= expect (emit-str deep-tree)))))
 
 (deftest mixed-quotes
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
               "<mixed double=\"&quot;double&quot;quotes&quot;here&quot;\""
               " single=\"'single'quotes'here\"></mixed>")
-         (xml/emit-str (element :mixed
+         (emit-str (element :mixed
                                 {:single "'single'quotes'here"
                                  :double "\"double\"quotes\"here\""})))))
 
@@ -49,7 +49,7 @@
 (defn emit-char-seq [xml-tree encoding]
   (with-open [bos (java.io.ByteArrayOutputStream.)
         stream (java.io.OutputStreamWriter. bos encoding)]
-    (xml/emit xml-tree stream :encoding encoding)
+    (emit xml-tree stream :encoding encoding)
     (.flush stream)
     (map #(if (pos? %) (char %) %) (.toByteArray bos))))
 
@@ -67,18 +67,18 @@
   (is (thrown? Exception
         (let [stream (java.io.ByteArrayOutputStream.)]
           (binding [*out* (java.io.OutputStreamWriter. stream "UTF-8")]
-            (xml/emit (element :foo) *out* :encoding "ISO-8859-1"))))))
+            (emit (element :foo) *out* :encoding "ISO-8859-1"))))))
 
 (deftest emitting-cdata
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
               "<cdata-stuff><![CDATA[<goes><here>]]></cdata-stuff>")
-         (xml/emit-str (element :cdata-stuff {}
+         (emit-str (element :cdata-stuff {}
                                 (cdata "<goes><here>")))))  )
 
 (deftest emitting-comment
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
               "<comment-stuff>comment <!-- goes here --> not here</comment-stuff>")
-         (xml/emit-str (element :comment-stuff {}
+         (emit-str (element :comment-stuff {}
                                 "comment "
                                 (xml-comment " goes here ")
                                 " not here"))))  )
@@ -88,11 +88,11 @@
         expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
                     "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
         sw (java.io.StringWriter.)]
-     (xml/indent nested-xml sw)
+     (indent nested-xml sw)
     (is (= expect (.toString sw)))))
 
 (deftest test-indent-str
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
         expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
                     "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")]
-    (is (= expect (xml/indent-str nested-xml)))))
+    (is (= expect (indent-str nested-xml)))))

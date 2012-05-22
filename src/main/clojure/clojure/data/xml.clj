@@ -73,7 +73,7 @@
   (Comment. content))
 
 ;=== Parse-related functions ===
-(defn- seq-tree
+(defn seq-tree
   "Takes a seq of events that logically represents
   a tree by each event being one of: enter-sub-tree event,
   exit-sub-tree event, or node event.
@@ -320,5 +320,5 @@
   [e]
   (let [^java.io.StringWriter sw (java.io.StringWriter.)]
     (indent e sw)
-    (.toString sw))  )
+    (.toString sw)))
 

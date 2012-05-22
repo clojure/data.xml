@@ -9,8 +9,8 @@
 (ns ^{:doc "Tests for XML parsing functions."
       :author "Chris Houser"}
   clojure.data.xml.test-parse
-  (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element cdata parse-str]]
+  (:use clojure.test
+        clojure.data.xml
         [clojure.data.xml.test-utils :only [test-stream lazy-parse*]]))
 
 (deftest simple

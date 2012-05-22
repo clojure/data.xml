@@ -9,10 +9,10 @@
 (ns ^{:doc "Tests for reading [:tag {:attr 'value} body*] as XML."
       :author "Alan Malloy"}
   clojure.data.xml.test-sexp
-  (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [sexp-as-element
-                                         sexps-as-fragment element]]
+  (:use clojure.test
+        clojure.data.xml
         [clojure.data.xml.test-utils :only (test-stream lazy-parse*)]))
+
 (deftest as-element
   (let [xml-input "<tag attr=\"value\"><body /></tag>"
         sexp-input [:tag {:attr "value"} :body]]
