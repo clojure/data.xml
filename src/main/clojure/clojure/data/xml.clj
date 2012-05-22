@@ -34,8 +34,10 @@
       (.writeAttribute writer (name k) (str v)))))
 
 ; Represents a node of an XML tree
-(defrecord Element [tag attrs content]
-  Emit
+(defrecord Element [tag attrs content])
+
+(extend-protocol Emit
+  Element
   (emit-element [e writer]
     (let [nspace (namespace (:tag e))
           qname (name (:tag e))
