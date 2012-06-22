@@ -24,10 +24,7 @@
 (defn event [type name & [attrs str]]
   (Event. type name attrs str))
 
-(defprotocol Emit
-  (emit-element [element writer]))
-
-(defn write-attributes [{:keys (attrs)} ^javax.xml.stream.XMLStreamWriter writer]
+(defn write-attributes [attrs ^javax.xml.stream.XMLStreamWriter writer]
   (doseq [[k v] attrs]
     (if (namespace k)
       (.writeAttribute writer (str (namespace k)) (name k) (str v))
@@ -35,33 +32,71 @@
 
 ; Represents a node of an XML tree
 (defrecord Element [tag attrs content])
+(defrecord CData [content])
+(defrecord Comment [content])
 
-(extend-protocol Emit
+(defn emit-start-tag [event writer]
+  (let [nspace (namespace (:name event))
+        qname (name (:name event))]
+    (.writeStartElement writer "" qname (or nspace ""))
+    (write-attributes (:attrs event) writer)))
+
+(defn emit-event [event writer]
+  (case (:type event)
+    :start-element (emit-start-tag event writer)
+    :end-element (.writeEndElement writer)
+    :chars (.writeCharacters writer (:str event))
+    :cdata (.writeCData writer (:str event))
+    :comment (.writeComment writer (:str event))))
+
+(defprotocol Flatten
+  (gen-event [e])
+  (next-events [e next]))
+
+(extend-protocol Flatten
   Element
-  (emit-element [e writer]
-    (let [nspace (namespace (:tag e))
-          qname (name (:tag e))
-          ^javax.xml.stream.XMLStreamWriter writer writer]
-      (.writeStartElement writer ""  qname (or nspace ""))
-      (write-attributes e writer)
-      (doseq [c (:content e)]
-        (emit-element c writer))
-      (.writeEndElement writer))))
+  (gen-event [e]
+    (Event. :start-element (:tag e) (:attrs e) nil))
+  (next-events [e next]
+    (cons (:content e)
+          (cons (Event. :end-element (:tag e) nil nil) next)))
+  Event
+  (gen-event [e] e)
+  (next-events [e next] next)
 
-(defrecord CData [content]
-  Emit
-  (emit-element [e writer]
-    (.writeCData ^javax.xml.stream.XMLStreamWriter writer (:content e))))
-
-(defrecord Comment [content]
-  Emit
-  (emit-element [e writer]
-    (.writeComment ^javax.xml.stream.XMLStreamWriter writer (:content e))))
-
-(extend-protocol Emit
+  clojure.lang.Sequential
+  (gen-event [e]
+    (gen-event (first e)))
+  (next-events [e next]
+    (if-let [r (seq (rest e))]
+      (lazy-seq (cons (next-events (first e) (rest e))
+                      next))
+      (next-events (first e) next)))
   String
-  (emit-element [e writer]
-    (.writeCharacters ^javax.xml.stream.XMLStreamWriter writer e)))
+  (gen-event [e]
+    (Event. :chars nil nil e))
+  (next-events [e next] next)
+  
+  CData
+  (gen-event [e]
+    (Event. :cdata nil nil (:content e)))
+  (next-events [e next] next)
+  
+  Comment
+  (gen-event [e]
+    (Event. :comment nil nil (:content e)))
+  (next-events [e next] next)
+  
+  nil
+  (gen-event [e] (Event. :chars nil nil ""))
+  (next-events [e next] next))
+
+(defn flatten-tree [elements]
+  (when (seq elements)
+    (lazy-seq
+     (let [e (first elements)]
+       (cons (gen-event e)
+             (flatten-tree (next-events e (rest elements))))))))
 
 (defn element [tag & [attrs & content]]
   (Element. tag (or attrs {}) (remove nil? content)))
@@ -287,7 +322,8 @@
       (check-stream-encoding stream (or (:encoding opts) "UTF-8")))
     
     (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
-    (emit-element e writer)
+    (doseq [event (flatten-tree [e])]
+      (emit-event event writer))
     (.writeEndDocument writer)
     stream))
 
