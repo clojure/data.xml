@@ -35,13 +35,13 @@
 (defrecord CData [content])
 (defrecord Comment [content])
 
-(defn emit-start-tag [event writer]
+(defn emit-start-tag [event ^javax.xml.stream.XMLStreamWriter writer]
   (let [nspace (namespace (:name event))
         qname (name (:name event))]
     (.writeStartElement writer "" qname (or nspace ""))
     (write-attributes (:attrs event) writer)))
 
-(defn emit-event [event writer]
+(defn emit-event [event ^javax.xml.stream.XMLStreamWriter writer]
   (case (:type event)
     :start-element (emit-start-tag event writer)
     :end-element (.writeEndElement writer)
