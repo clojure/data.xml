@@ -98,3 +98,118 @@
         expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
                     "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")]
     (is (= expect (indent-str nested-xml)))))
+
+(comment
+
+
+
+
+(import '[clojure.data.xml Element])
+
+  ;;
+  ;; Doesn't work
+  ;;
+  (defn just-elements2 [total]
+    (Element. :sparql {:xmlns "http://www.w3.org/2005/sparql-results#"}
+              (list
+               (Element. :foo {}
+                         (for [x (range 1 total)]
+                           (Element. :result {}
+                                     (list
+                                      (Element. :binding {:name "a"} (list (Element. :literal {} (list (str x)))))
+                                      (Element. :binding {:name "b"} (list (Element. :literal {} (list (str "b" x)))))
+                                      (Element. :binding {:name "c"} (list (Element. :literal {} (list (str "c" x))))))))))))
+
+
+
+
+
+
+
+
+  ;;
+  ;; Works
+  ;;
+  (defn just-elements [total]
+    (Element. :sparql {:xmlns "http://www.w3.org/2005/sparql-results#"}
+              (for [x (range 1 total)]
+                (Element. :result {}
+                          (list
+                           (Element. :binding {:name "a"} (list (Element. :literal {} (list (str x)))))
+                           (Element. :binding {:name "b"} (list (Element. :literal {} (list (str "b" x)))))
+                           (Element. :binding {:name "c"} (list (Element. :literal {} (list (str "c" x))))))))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  (defn just-elements4 [total]
+    (Element. :sparql {:xmlns "http://www.w3.org/2005/sparql-results#"}
+              (list
+               (Element. :foo {}
+                         (for [x (range 1 total)]
+                           (Element. :result {}
+                                     (list
+                                      (Element. :binding {:name "a"} (list ))
+                                      (Element. :binding {:name "b"} (list ))
+                                      (Element. :binding {:name "c"} (list ))))))))
+
+    )
+
+  (defn just-elements-nate [total]
+    (Element. :sparql {:xmlns "http://www.w3.org/2005/sparql-results#"}
+              (lazy-seq
+               (list
+                (Element. :foo {}
+                          (for [x (range 1 total)]
+                            (Element. :result {}
+                                      (list
+                                       (Element. :binding {:name "a"} (list (Element. :literal {} (list (str x)))))
+                                       (Element. :binding {:name "b"} (list (Element. :literal {} (list (str "b" x)))))
+                                       (Element. :binding {:name "c"} (list (Element. :literal {} (list (str "c" x)))))))))))))
+
+  (defn just-elements3 [total]
+    [:sparql {:xmlns "http://www.w3.org/2005/sparql-results#"}
+     [[:foo {}
+       (for [x (range 1 total)]
+         [:result {}
+          [[:binding {:name "a"} [[:literal {} (str x)]]]
+           [:binding {:name "b"} [[:literal {} (str "b" x)]]]
+           [:binding {:name "c"} [[:literal {} (str "c" x)]]]]])]]])
+
+
+  (defn output-big-xml [path doc]
+    (with-open [oo (java.io.FileWriter. path)]
+      (emit doc oo)))
+
+  (defn output-big-xml-event [path doc]
+    (with-open [oo (java.io.FileWriter. path)]
+      (emit-events doc oo)))
+
+  #_(defn output-big-xml2 [path doc]
+      (with-open [oo (java.io.FileWriter. path)]
+        (emit2 doc oo))))
