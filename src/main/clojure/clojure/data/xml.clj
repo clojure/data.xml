@@ -69,8 +69,7 @@
     (gen-event (first e)))
   (next-events [e next]
     (if-let [r (seq (rest e))]
-      (lazy-seq (cons (next-events (first e) (rest e))
-                      next))
+      (cons (next-events (first e) r) next)
       (next-events (first e) next)))
   String
   (gen-event [e]
