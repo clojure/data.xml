@@ -49,53 +49,64 @@
     :cdata (.writeCData writer (:str event))
     :comment (.writeComment writer (:str event))))
 
-(defprotocol Flatten
-  (gen-event [e])
-  (next-events [e next]))
+(defprotocol EventGeneration
+  "Protocol for generating new events based on element type"
+  (gen-event [item]
+    "Function to generate an event for e.")
+  (next-events [item next-items]
+    "Returns the next set of events that should occur after e.  next-events are the
+     events that should be generated after this one is complete."))
 
-(extend-protocol Flatten
+(extend-protocol EventGeneration
   Element
-  (gen-event [e]
-    (Event. :start-element (:tag e) (:attrs e) nil))
-  (next-events [e next]
-    (cons (:content e)
-          (cons (Event. :end-element (:tag e) nil nil) next)))
+  (gen-event [element]
+    (Event. :start-element (:tag element) (:attrs element) nil))
+  (next-events [element next-items]
+    (cons (:content element)
+          (cons (Event. :end-element (:tag element) nil nil) next-items)))
   Event
-  (gen-event [e] e)
-  (next-events [e next] next)
+  (gen-event [event] event)
+  (next-events [_ next-items]
+    next-items)
 
   clojure.lang.Sequential
-  (gen-event [e]
-    (gen-event (first e)))
-  (next-events [e next]
-    (if-let [r (seq (rest e))]
-      (cons (next-events (first e) r) next)
-      (next-events (first e) next)))
+  (gen-event [coll]
+    (gen-event (first coll)))
+  (next-events [coll next-items]
+    (if-let [r (seq (rest coll))]
+      (cons (next-events (first coll) r) next-items)
+      (next-events (first coll) next-items)))
+  
   String
-  (gen-event [e]
-    (Event. :chars nil nil e))
-  (next-events [e next] next)
+  (gen-event [s]
+    (Event. :chars nil nil s))
+  (next-events [_ next-items]
+    next-items)
   
   CData
-  (gen-event [e]
-    (Event. :cdata nil nil (:content e)))
-  (next-events [e next] next)
+  (gen-event [cdata]
+    (Event. :cdata nil nil (:content cdata)))
+  (next-events [_ next-items]
+    next-items)
   
   Comment
-  (gen-event [e]
-    (Event. :comment nil nil (:content e)))
-  (next-events [e next] next)
+  (gen-event [comment]
+    (Event. :comment nil nil (:content comment)))
+  (next-events [_ next-items]
+    next-items)
   
   nil
-  (gen-event [e] (Event. :chars nil nil ""))
-  (next-events [e next] next))
+  (gen-event [_]
+    (Event. :chars nil nil ""))
+  (next-events [_ next-items]
+    next-items))
 
-(defn flatten-tree [elements]
+(defn flatten-elements [elements]
   (when (seq elements)
     (lazy-seq
      (let [e (first elements)]
        (cons (gen-event e)
-             (flatten-tree (next-events e (rest elements))))))))
+             (flatten-elements (next-events e (rest elements))))))))
 
 (defn element [tag & [attrs & content]]
   (Element. tag (or attrs {}) (remove nil? content)))
@@ -321,7 +332,7 @@
       (check-stream-encoding stream (or (:encoding opts) "UTF-8")))
     
     (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
-    (doseq [event (flatten-tree [e])]
+    (doseq [event (flatten-elements [e])]
       (emit-event event writer))
     (.writeEndDocument writer)
     stream))
