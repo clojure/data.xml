@@ -87,6 +87,17 @@ functions or the element function used below, and written using a
 
     ;;-> Writes XML to /tmp/foo.xml
 
+The same can also be expressed using a more Hiccup-like style of defining the elements using sexp-as-element:
+
+    (= (element :foo {:foo-attr "foo value"}
+         (element :bar {:bar-attr "bar value"}
+           (element :baz {} "The baz value")))
+       (sexp-as-element
+          [:foo {:foo-attr "foo value"}
+           [:bar {:bar-attr "bar value"}
+            [:baz {} "The baz value"]]]))
+    ;;-> true
+
 XML can be "round tripped" through the library:
 
     (let [tags (element :foo {:foo-attr "foo value"}
