@@ -21,14 +21,13 @@ information on this is available [here](https://github.com/clojure/data.xml/blob
 
 Please report bugs using JIRA [here](http://dev.clojure.org/jira/browse/DXML).
 
-## Contributing
-
-All contributions need to be made via patches attached to tickets in
-[JIRA](http://dev.clojure.org/jira/browse/DXML). Check the
-[Contributing to Clojure](http://clojure.org/contributing) page for
-more information.
-
 ## Installation
+
+Latest stable release: 0.0.6
+
+* [All Released Versions](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.xml%22)
+
+* [Development Snapshot Versions](https://oss.sonatype.org/index.html#nexus-search;gav~org.clojure~data.xml~~~)
 
 ### Maven
 For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` section:
@@ -170,6 +169,27 @@ But are ignored when read:
 
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><bar>and another element</bar></foo>"    
 
+Generated API docs for data.xml are available [here](http://clojure.github.com/data.xml).
+
 ## License
 
 Licensed under the [Eclipse Public License](http://www.opensource.org/licenses/eclipse-1.0.php).
+
+## Developer Information
+
+* [GitHub project](https://github.com/clojure/data.xml)
+
+* [Bug Tracker](http://dev.clojure.org/jira/browse/DXML)
+
+* [Continuous Integration](http://build.clojure.org/job/data.xml/)
+
+* [Compatibility Test Matrix](http://build.clojure.org/job/data.xml-test-matrix/)
+
+## Contributing
+
+All contributions need to be made via patches attached to tickets in
+[JIRA](http://dev.clojure.org/jira/browse/DXML). Check the
+[Contributing to Clojure](http://clojure.org/contributing) page for
+more information.
+
+
