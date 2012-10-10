@@ -356,7 +356,7 @@
    debugging/testing only."
   [e ^java.io.Writer stream & {:as opts}]
   (let [sw (java.io.StringWriter.)
-        _ (apply emit e sw opts)
+        _ (apply emit e sw (apply concat opts))
         source (-> sw .toString java.io.StringReader. javax.xml.transform.stream.StreamSource.)
         result (javax.xml.transform.stream.StreamResult. stream)]
     (.transform (indenting-transformer) source result)))

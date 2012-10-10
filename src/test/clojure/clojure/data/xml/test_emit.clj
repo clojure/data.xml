@@ -98,3 +98,11 @@
         expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
                     "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")]
     (is (= expect (indent-str nested-xml)))))
+
+(deftest test-indent
+  (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
+        expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
+                    "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
+        sw (java.io.StringWriter.)]
+    (indent nested-xml sw :encoding "UTF-8")
+    (is (= expect (.toString sw)))))
