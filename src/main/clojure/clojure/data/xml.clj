@@ -291,6 +291,10 @@
    and xml-input-factory-props for more information. Defaults coalescing true."
   [s & {:as props}]
   (let [fac (new-xml-input-factory (merge {:coalescing true} props))
+        ;; Reflection on following line cannot be eliminated via a
+        ;; type hint, because s is advertised by fn parse to be an
+        ;; InputStream or Reader, and there are different
+        ;; createXMLStreamReader signatures for each of those types.
         sreader (.createXMLStreamReader fac s)]
     (pull-seq sreader)))
 
@@ -344,7 +348,7 @@
     (emit e sw)
     (.toString sw)))
 
-(defn indenting-transformer []
+(defn ^javax.xml.transform.Transformer indenting-transformer []
   (doto (-> (javax.xml.transform.TransformerFactory/newInstance) .newTransformer)
     (.setOutputProperty (javax.xml.transform.OutputKeys/INDENT) "yes")
     (.setOutputProperty (javax.xml.transform.OutputKeys/METHOD) "xml")
