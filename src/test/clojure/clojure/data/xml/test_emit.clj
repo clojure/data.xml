@@ -11,7 +11,8 @@
   clojure.data.xml.test-emit  
   (:use clojure.test
         clojure.data.xml
-        [clojure.data.xml.test-utils :only (test-stream lazy-parse*)]))
+        [clojure.data.xml.test-utils :only (test-stream lazy-parse*)])
+  (:import [clojure.data.xml Element]))
 
 (def deep-tree
   (lazy-parse* (str "<a h=\"1\" i='2' j=\"3\">"
@@ -106,3 +107,13 @@
         sw (java.io.StringWriter.)]
     (indent nested-xml sw :encoding "UTF-8")
     (is (= expect (.toString sw)))))
+
+(deftest test-namespace-emit
+  (let [expected (lazy-parse* "<clj:foo xmlns:clj='http://clojure.org'>
+                                <clj:bar>baz</clj:bar>
+                            </clj:foo>")]
+    (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><clj:foo xmlns:clj=\"http://clojure.org\"><clj:bar>baz</clj:bar></clj:foo>"
+           (emit-str (Element. :clj/foo
+                               {}
+                               [(element :clj/bar {} ["baz"] nil)]
+                               {"clj" "http://clojure.org"}))))))

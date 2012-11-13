@@ -11,7 +11,8 @@
   clojure.data.xml.test-parse
   (:use clojure.test
         clojure.data.xml
-        [clojure.data.xml.test-utils :only [test-stream lazy-parse*]]))
+        [clojure.data.xml.test-utils :only [test-stream lazy-parse*]])
+  (:import [clojure.data.xml Element]))
 
 (deftest simple
   (let [input "<html><body bg=\"red\">This is <b>bold</b> test</body></html>"
@@ -71,7 +72,7 @@
                \"foo://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
                <html><h1>Heading Stuff</h1></html>"
         expected (element :html {}
-                          (element :h1 {} "Heading Stuff"))]
+                          (element :h1 {} "Heading Stuff" nil) nil)]
     (is (= expected (parse-str input)))))
 
 (deftest test-coalescing
@@ -79,3 +80,12 @@
     (is (= ["\nfoo bar\n\nbaz\n"] (:content (parse-str input))))
     (is (= ["\nfoo bar\n" "\nbaz\n"] (:content
                                       (parse-str input :coalescing false))))))
+(deftest test-namespace-parse
+  (let [input "<clj:foo xmlns:clj='http://clojure.org'>
+                   <clj:bar>baz</clj:bar>
+               </clj:foo>"
+        expected (Element. :clj/foo
+                           {}
+                           [(Element. :clj/bar {} ["baz"] {})]
+                           {"clj" "http://clojure.org"})]
+    (is (= expected (-> input test-stream (parse :namespace-aware true))))))
