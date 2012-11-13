@@ -24,11 +24,20 @@
 (defn event [type name & [attrs str]]
   (Event. type name attrs str))
 
+(defn qualified-name [event-name]
+  (if (instance? clojure.lang.Named event-name)
+   [(namespace event-name) (name event-name)]
+   (let [name-parts (str/split event-name #"/" 2)]
+     (if (= 2 (count name-parts))
+       name-parts
+       [nil (first name-parts)]))))
+
 (defn write-attributes [attrs ^javax.xml.stream.XMLStreamWriter writer]
   (doseq [[k v] attrs]
-    (if (namespace k)
-      (.writeAttribute writer (str (namespace k)) (name k) (str v))
-      (.writeAttribute writer (name k) (str v)))))
+    (let [[attr-ns attr-name] (qualified-name k)]
+      (if attr-ns
+        (.writeAttribute writer attr-ns attr-name (str v))
+        (.writeAttribute writer attr-name (str v))))))
 
 ; Represents a node of an XML tree
 (defrecord Element [tag attrs content])
@@ -36,8 +45,7 @@
 (defrecord Comment [content])
 
 (defn emit-start-tag [event ^javax.xml.stream.XMLStreamWriter writer]
-  (let [nspace (namespace (:name event))
-        qname (name (:name event))]
+  (let [[nspace qname] (qualified-name (:name event))]
     (.writeStartElement writer "" qname (or nspace ""))
     (write-attributes (:attrs event) writer)))
 
