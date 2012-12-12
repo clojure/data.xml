@@ -25,3 +25,21 @@
     (is (= (sexps-as-fragment input)
            (map sexp-as-element input)))
     (is (thrown? Exception (sexp-as-element input)))))
+
+(deftest with-cdata
+  (let [xml-input (element :tag {:attr "value"}
+                           (element :body {} (cdata "not parsed <stuff")))
+        sexp-input [:tag {:attr "value"} [:body {} [:-cdata "not parsed <stuff"]]]]
+    (is (= xml-input
+           (sexp-as-element sexp-input)))))
+
+(deftest with-multiple-cdata
+  (let [xml-input (element :tag {:attr "value"}
+                           (element :body {}
+                                    (cdata "not parsed <stuff")
+                                    (cdata "more not parsed <stuff")))
+        sexp-input [:tag {:attr "value"} [:body {}
+                                          (list [:-cdata "not parsed <stuff"]
+                                                [:-cdata "more not parsed <stuff"])]]]
+    (is (= xml-input
+           (sexp-as-element sexp-input)))))

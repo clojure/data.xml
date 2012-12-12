@@ -178,6 +178,11 @@
 (defprotocol AsElements
   (as-elements [expr] "Return a seq of elements represented by an expression."))
 
+(defn sexp-element [tag attrs child]
+  (cond
+   (= :-cdata tag) (CData. (first child))
+   :else (Element. tag attrs (mapcat as-elements child))))
+
 (extend-protocol AsElements
   clojure.lang.IPersistentVector
   (as-elements [v]
@@ -187,7 +192,7 @@
                                         [k (str v)]))
                              after-attrs]
                             [{} content])]
-      [(Element. tag attrs (mapcat as-elements content))]))
+      [(sexp-element tag attrs content)]))
 
   clojure.lang.ISeq
   (as-elements [s]
