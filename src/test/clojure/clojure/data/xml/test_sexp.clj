@@ -43,3 +43,10 @@
                                                 [:-cdata "more not parsed <stuff"])]]]
     (is (= xml-input
            (sexp-as-element sexp-input)))))
+
+(deftest with-comment
+  (let [xml-input (element :tag {:attr "value"}
+                           (element :body {} (xml-comment "comment <stuff<here<")))
+        sexp-input [:tag {:attr "value"} [:body {} [:-comment "comment <stuff<here<"]]]]
+    (is (= xml-input
+           (sexp-as-element sexp-input)))))
