@@ -13,12 +13,22 @@
   (:require [clojure.string :as str])
   (:import (javax.xml.stream XMLInputFactory
                              XMLStreamReader
+                             XMLStreamWriter
                              XMLStreamConstants)
            (java.nio.charset Charset)
            (java.io Reader)))
 
+(def ^{:dynamic true
+       :doc "Defines whether commentaries should be read from input XML"}
+  *enable-comments* false)
+
+(defmacro with-comments-enabled
+  [& body]
+  `(binding [*enable-comments* true]
+     ~@body))
+
 ; Represents a parse event.
-; type is one of :start-element, :end-element, or :characters
+; type is one of :start-element, :end-element, :characters or :comment
 (defrecord Event [type name attrs str])
 
 (defn event [type name & [attrs str]]
@@ -172,7 +182,12 @@
       (when (= :start-element (.type event))
         (Element. (.name event) (.attrs event) contents)))
     (fn [^Event event] (= :end-element (.type event)))
-    (fn [^Event event] (.str event))
+    (if [*enable-comments*]
+      (fn [^Event event]
+        (case (.type event)
+          :comment (Comment. (.str event))
+          :characters (.str event)))
+      (fn [^Event event] (.str event)))
     events)))
 
 (defprotocol AsElements
@@ -269,9 +284,15 @@
          (cons (event :characters nil nil text)
                (pull-seq sreader))
          (recur))
+       XMLStreamConstants/COMMENT
+       (if *enable-comments*
+         (if-let [text (and (not (.isWhiteSpace sreader)) (.getText sreader))]
+           (cons (event :comment nil nil text) (pull-seq sreader))
+           (recur))
+         (recur))
        XMLStreamConstants/END_DOCUMENT
        nil
-       (recur);; Consume and ignore comments, spaces, processing instructions etc
+       (recur);; Consume and ignore spaces, processing instructions etc
        ))))
 
 (def ^{:private true} xml-input-factory-props
@@ -355,6 +376,53 @@
   (let [^java.io.StringWriter sw (java.io.StringWriter.)]
     (emit e sw)
     (.toString sw)))
+
+(defmacro wrapped-with
+  [what & body]
+  `(do
+     (~(symbol (str "before-" what)) ~'this)
+     ~@body
+     (~(symbol (str "after-" what)) ~'this)))
+
+(deftype IndentingXMLStreamWriter
+  [^{:tag XMLStreamWriter} writer
+   ^{:tag int :unsynchronized-mutable true} indent-size
+   ; This one should be private in fact
+   ^{:tag int :unsynchronized-mutable true} indent-level]
+  XMLStreamWriter
+  (writeStartElement [this s])
+  (writeStartElement [this s s1])
+  (writeStartElement [this s s1 s2])
+  (writeEmptyElement [this s s1])
+  (writeEmptyElement [this s s1 s2])
+  (writeEmptyElement [this s])
+  (writeEndElement [this ])
+  (writeEndDocument [this ])
+  (close [this ])
+  (flush [this ])
+  (writeAttribute [this s s1])
+  (writeAttribute [this s s1 s2 s3])
+  (writeAttribute [this s s1 s2])
+  (writeNamespace [this s s1])
+  (writeDefaultNamespace [this s])
+  (writeComment [this s])
+  (writeProcessingInstruction [this s])
+  (writeProcessingInstruction [this s s1])
+  (writeCData [this s])
+  (writeDTD [this s])
+  (writeEntityRef [this s])
+  (writeStartDocument [this ])
+  (writeStartDocument [this s])
+  (writeStartDocument [this s s1])
+  (writeCharacters [this s])
+  (writeCharacters [this chars i i1])
+  (getPrefix [this s])
+  (setPrefix [this s s1])
+  (setDefaultNamespace [this s])
+  (setNamespaceContext [this namespaceContext])
+  (getNamespaceContext [this ])
+  (getProperty [this s])
+  )
 
 (defn ^javax.xml.transform.Transformer indenting-transformer []
   (doto (-> (javax.xml.transform.TransformerFactory/newInstance) .newTransformer)
