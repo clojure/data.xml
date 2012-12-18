@@ -432,33 +432,39 @@
 ;; by stax-utils IndentingXMLStreamWriter
 
 (definterface IntStack
-  (^int stackPeek [])
-  (^void stackPush [^int value])
-  (^int stackPop [])
-  (^int stackDepth []))
+  (^int peek [])
+  (^void push [^int value])
+  (^int pop [])
+  (^int depth []))
 
 (deftype IntStackImpl
   [^{:tag ints :unsynchronized-mutable true} data
    ^{:tag int :unsynchronized-mutable true} depth]
   IntStack
-  (stackPeek [this]
-    (aget data depth))
-  (stackPush [this value]
+  (peek [this]
+    (if (>= depth 0)
+      (aget data depth)
+      (throw (IllegalStateException. "Stack is empty!"))))
+  (push [this value]
     (when (>= (inc depth) (alength data))
       (let [data-length (alength data)
             new-data (int-array (* data-length 2))]
         (System/arraycopy data 0 new-data 0 data-length)
         (set! data new-data)))
-    (set! depth (inc depth))
+    (set! depth (int (inc depth)))
     (aset data depth value))
-  (stackPop [this]
-    (if (> depth 0)
+  (pop [this]
+    (if (>= depth 0)
       (let [value (aget data depth)]
-        (set! depth (dec depth))
+        (set! depth (int (dec depth)))
         value)
       (throw (IllegalStateException. "Stack is already empty!"))))
-  (stackDepth [this]
-    depth))
+  (depth [this]
+    (inc depth)))
+
+(defn new-int-stack
+  []
+  (IntStackImpl. (int-array 4) -1))
 
 ; We need a protocol because deftype-generated class cannot have own methods (not in protocol nor in interface),
 ; and it is possible to mutate fields only from inside the class methods.
@@ -523,10 +529,10 @@
       ()))
   (after-markup [this])
   (before-start-element [this]
-    (set! indent-level (inc indent-level)))
+    (set! indent-level (int (inc indent-level))))
   (after-start-element [this]
-    (set! indent-level (dec indent-level))
-    (write-newline this))
+    (set! indent-level (int (dec indent-level)))
+    (write-newline this indent-level))
   (before-text [this])
   (after-text [this])
   (write-newline [this level]
