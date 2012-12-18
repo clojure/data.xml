@@ -377,6 +377,8 @@
     (emit e sw)
     (.toString sw)))
 
+;; Indentation emitting implementation
+
 (defmacro wrapped-with
   [what & body]
   `(do
@@ -429,17 +431,57 @@
 ;; The following implementation of indenting XMLStreamWriter is heavily inspired
 ;; by stax-utils IndentingXMLStreamWriter
 
+(definterface IntStack
+  (^int stackPeek [])
+  (^void stackPush [^int value])
+  (^int stackPop [])
+  (^int stackDepth []))
+
+(deftype IntStackImpl
+  [^{:tag ints :unsynchronized-mutable true} data
+   ^{:tag int :unsynchronized-mutable true} depth]
+  IntStack
+  (stackPeek [this]
+    (aget data depth))
+  (stackPush [this value]
+    (when (>= (inc depth) (alength data))
+      (let [data-length (alength data)
+            new-data (int-array (* data-length 2))]
+        (System/arraycopy data 0 new-data 0 data-length)
+        (set! data new-data)))
+    (set! depth (inc depth))
+    (aset data depth value))
+  (stackPop [this]
+    (if (> depth 0)
+      (let [value (aget data depth)]
+        (set! depth (dec depth))
+        value)
+      (throw (IllegalStateException. "Stack is already empty!"))))
+  (stackDepth [this]
+    depth))
+
+; We need a protocol because deftype-generated class cannot have own methods (not in protocol nor in interface),
+; and it is possible to mutate fields only from inside the class methods.
+
 (defprotocol Indenter
-  (before-element [this])
-  (after-element [this])
+  (before-markup [this])
+  (after-markup [this])
   (before-text [this])
-  (after-text [this]))
+  (after-text [this])
+  (before-start-element [this])
+  (after-start-element [this])
+  (before-end-element [this])
+  (after-end-element [this])
+  (write-newline [this level]))
 
 (deftype-with-delegation IndentingXMLStreamWriter
   [^{:tag XMLStreamWriter} writer
+   ^{:tag String} line-separator
+   ^{:tag String} indent-string
    ^{:tag int :unsynchronized-mutable true} indent-size
-   ; This one should be private in fact
-   ^{:tag int :unsynchronized-mutable true} indent-level]
+   ; These fields should be private in fact; leaving them as-is because of fast mutability
+   ^{:tag int :unsynchronized-mutable true} indent-level
+   ^{:tag IntStack :unsynchronized-mutable true} stack]
   XMLStreamWriter
   (delegate-to writer
     close []
@@ -473,7 +515,23 @@
   (writeStartDocument [this])
   (writeStartDocument [this version])
   (writeStartDocument [this encoding version])
-  (writeEndDocument [this]))
+  (writeEndDocument [this])
+  Indenter
+  (before-markup [this]
+    (when (and (:wrote-markup (peek stack)) (> indent-level 0))
+      (write-newline this indent-level)
+      ()))
+  (after-markup [this])
+  (before-start-element [this]
+    (set! indent-level (inc indent-level)))
+  (after-start-element [this]
+    (set! indent-level (dec indent-level))
+    (write-newline this))
+  (before-text [this])
+  (after-text [this])
+  (write-newline [this level]
+    (let [indentation (apply str line-separator (repeat level indent-string))]
+      (.writeCharacters indentation))))
 
 (defn ^javax.xml.transform.Transformer indenting-transformer []
   (doto (-> (javax.xml.transform.TransformerFactory/newInstance) .newTransformer)
