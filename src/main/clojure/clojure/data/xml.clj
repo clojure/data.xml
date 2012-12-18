@@ -384,45 +384,93 @@
      ~@body
      (~(symbol (str "after-" what)) ~'this)))
 
-(deftype IndentingXMLStreamWriter
+(defmacro deftype-with-delegation
+  "Adds delegation feature to deftype. Equivalent to (deftype), but it is also
+  possible to use (delegate-to target method*) form inside it, which will
+  expand to method definitions which will call themselves on target with all
+  corresponding arguments. Example:
+
+  (deftype-with-delegation NewType
+    [val a b]
+    SomeInterface
+    (delegate-to val
+      method1 [x y]
+      method2 [z])
+    (method3 [this u] (println u)))
+
+  expands to
+
+  (deftype NewType
+    [val a b]
+    SomeInterface
+    (method1 [_ x y] (. val method1 x y))
+    (method2 [_ z] (. val method2 z))
+    (method3 [this u] (println u)))
+
+  With this macro it is possible to delegate multiple methods of some
+  interface/protocol to another object. Useful for creating wrappers, e.g. for
+  java.io.OutputStream or java.xml.stream.XMLStreamWriter."
+  [& args]
+  `(deftype
+     ~@(mapcat
+         (fn [arg]
+           (or (when (coll? arg)
+                 (when-let [[name & more] arg]
+                   (when (= name 'delegate-to)
+                     (let [[target & pairs] more]
+                       (for [[name args] (partition 2 pairs)]
+                         `(~name [~'_ ~@args] (. ~target ~name ~@args)))))))
+             [arg]))
+         args)))
+
+;; The following implementation of indenting XMLStreamWriter is heavily inspired
+;; by stax-utils IndentingXMLStreamWriter
+
+(defprotocol Indenter
+  (before-element [this])
+  (after-element [this])
+  (before-text [this])
+  (after-text [this]))
+
+(deftype-with-delegation IndentingXMLStreamWriter
   [^{:tag XMLStreamWriter} writer
    ^{:tag int :unsynchronized-mutable true} indent-size
    ; This one should be private in fact
    ^{:tag int :unsynchronized-mutable true} indent-level]
   XMLStreamWriter
-  (writeStartElement [this s])
-  (writeStartElement [this s s1])
-  (writeStartElement [this s s1 s2])
-  (writeEmptyElement [this s s1])
-  (writeEmptyElement [this s s1 s2])
-  (writeEmptyElement [this s])
-  (writeEndElement [this ])
-  (writeEndDocument [this ])
-  (close [this ])
-  (flush [this ])
-  (writeAttribute [this s s1])
-  (writeAttribute [this s s1 s2 s3])
-  (writeAttribute [this s s1 s2])
-  (writeNamespace [this s s1])
-  (writeDefaultNamespace [this s])
-  (writeComment [this s])
-  (writeProcessingInstruction [this s])
-  (writeProcessingInstruction [this s s1])
-  (writeCData [this s])
-  (writeDTD [this s])
-  (writeEntityRef [this s])
-  (writeStartDocument [this ])
-  (writeStartDocument [this s])
-  (writeStartDocument [this s s1])
-  (writeCharacters [this s])
-  (writeCharacters [this chars i i1])
-  (getPrefix [this s])
-  (setPrefix [this s s1])
-  (setDefaultNamespace [this s])
-  (setNamespaceContext [this namespaceContext])
-  (getNamespaceContext [this ])
-  (getProperty [this s])
-  )
+  (delegate-to writer
+    close []
+    flush []
+    getPrefix [uri]
+    setPrefix [prefix uri]
+    setDefaultNamespace [uri]
+    setNamespaceContext [namespace-context]
+    getNamespaceContext []
+    getProperty [name]
+    writeEntityRef [name]
+    writeNamespace [prefix namespace-uri]
+    writeDefaultNamespace [namespace-uri]
+    writeAttribute [local-name value]
+    writeAttribute [namespace-uri local-name value]
+    writeAttribute [prefix namespace-uri local-name value])
+  (writeStartElement [this local-name])
+  (writeStartElement [this namespace-uri local-name])
+  (writeStartElement [this prefix namespace-uri local-name])
+  (writeEmptyElement [this local-name])
+  (writeEmptyElement [this namespace-uri local-name])
+  (writeEmptyElement [this prefix namespace-uri local-name])
+  (writeEndElement [this])
+  (writeComment [this data])
+  (writeProcessingInstruction [this target])
+  (writeProcessingInstruction [this target data])
+  (writeCData [this data])
+  (writeCharacters [this text start length])
+  (writeCharacters [this text])
+  (writeDTD [this dtd])
+  (writeStartDocument [this])
+  (writeStartDocument [this version])
+  (writeStartDocument [this encoding version])
+  (writeEndDocument [this]))
 
 (defn ^javax.xml.transform.Transformer indenting-transformer []
   (doto (-> (javax.xml.transform.TransformerFactory/newInstance) .newTransformer)
