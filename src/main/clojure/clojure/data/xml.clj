@@ -409,7 +409,10 @@
 
   With this macro it is possible to delegate multiple methods of some
   interface/protocol to another object. Useful for creating wrappers, e.g. for
-  java.io.OutputStream or java.xml.stream.XMLStreamWriter."
+  java.io.OutputStream or java.xml.stream.XMLStreamWriter.
+
+  Side-effect of this macro is that it is not possible to extend protocols which contain 'delegate-to' method
+  with it in other way than delegating."
   [& args]
   `(deftype
      ~@(mapcat
