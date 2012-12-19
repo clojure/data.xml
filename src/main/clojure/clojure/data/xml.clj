@@ -431,6 +431,7 @@
 ;; The following implementation of indenting XMLStreamWriter is heavily inspired
 ;; by stax-utils IndentingXMLStreamWriter
 
+; Performant stack of integers
 (definterface IntStack
   (^int peek [])
   (^void push [^int value])
@@ -466,6 +467,13 @@
   []
   (IntStackImpl. (int-array 4) -1))
 
+; Bit operations returning int instead of long
+(defn ^int ibit-or
+  [^long x ^long y] (int (bit-or x y)))
+
+(defn ^int ibit-and
+  [^long x ^long y] (int (bit-and x y)))
+
 ; We need a protocol because deftype-generated class cannot have own methods (not in protocol nor in interface),
 ; and it is possible to mutate fields only from inside the class methods.
 
@@ -484,8 +492,8 @@
   [^{:tag XMLStreamWriter} writer
    ^{:tag String} line-separator
    ^{:tag String} indent-string
+   ; These fields are automatically private
    ^{:tag int :unsynchronized-mutable true} indent-size
-   ; These fields should be private in fact; leaving them as-is because of fast mutability
    ^{:tag int :unsynchronized-mutable true} indent-level
    ^{:tag IntStack :unsynchronized-mutable true} stack]
   XMLStreamWriter
