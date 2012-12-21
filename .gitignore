@@ -1,3 +1,7 @@
+/.idea/
+.lein-deps-sum
+*.iml
+/project.clj
 /target/
 modules/xml/target/
 modules/xml.pull-parser/target/
