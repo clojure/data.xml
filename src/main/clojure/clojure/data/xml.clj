@@ -18,15 +18,6 @@
            (java.nio.charset Charset)
            (java.io Reader)))
 
-(def ^{:dynamic true
-       :doc "Defines whether commentaries should be read from input XML"}
-  *enable-comments* false)
-
-(defmacro with-comments-enabled
-  [& body]
-  `(binding [*enable-comments* true]
-     ~@body))
-
 ; Represents a parse event.
 ; type is one of :start-element, :end-element, :characters or :comment
 (defrecord Event [type name attrs str])
@@ -172,22 +163,26 @@
               (cons (cons (node event) (lazy-seq (first tree)))
                     (lazy-seq (rest tree))))))))))
 
+(defn copy-location-meta
+  [src dst]
+  (if-let [loc (:location (meta src))]
+    (with-meta dst {:location loc})
+    dst))
+
 (defn event-tree
   "Returns a lazy tree of Element objects for the given seq of Event
   objects. See source-seq and parse."
   [events]
   (ffirst
-   (seq-tree
-    (fn [^Event event contents]
-      (when (= :start-element (.type event))
-        (Element. (.name event) (.attrs event) contents)))
-    (fn [^Event event] (= :end-element (.type event)))
-    (if [*enable-comments*]
+    (seq-tree
+      (fn [^Event event contents]
+        (when (= :start-element (.type event))
+          (copy-location-meta event (Element. (.name event) (.attrs event) contents))))
+      (fn [^Event event] (= :end-element (.type event)))
       (fn [^Event event]
         (case (.type event)
-          :comment (Comment. (.str event))
+          :comment (copy-location-meta event (Comment. (.str event)))
           :characters (.str event)))
-      (fn [^Event event] (.str event)))
     events)))
 
 (defprotocol AsElements
@@ -260,34 +255,55 @@
       [(keyword (attr-prefix sreader i) (.getAttributeLocalName sreader i))
        (.getAttributeValue sreader i)])))
 
+(defn get-location
+  [^XMLStreamReader sreader]
+  (let [^javax.xml.stream.Location loc (.getLocation sreader)]
+    {:line (.getLineNumber loc)
+     :column (.getColumnNumber loc)
+     :character-offset (.getCharacterOffset loc)
+     :public-id (.getPublicId loc)
+     :system-id (.getSystemId loc)}))
+
+(defn with-location
+  [store-location sreader value]
+  (if store-location
+    (with-meta value {:location (get-location sreader)})
+    value))
+
 ; Note, sreader is mutable and mutated here in pull-seq, but it's
 ; protected by a lazy-seq so it's thread-safe.
 (defn- pull-seq
   "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to 
-   be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete."
-  [^XMLStreamReader sreader]
+   be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete.
+   Options:
+     :comments <boolean>        whether to load comments
+     :store-location <boolean>  whether to store starting elements file location in metadata"
+  [^XMLStreamReader sreader {:keys [comments store-location] :as props}]
   (lazy-seq
    (loop []
      (condp == (.next sreader)
        XMLStreamConstants/START_ELEMENT
-       (cons (event :start-element
-                    (keyword (.getLocalName sreader))
-                    (attr-hash sreader) nil)
-             (pull-seq sreader)) 
+       (cons
+         (with-location store-location sreader
+           (event :start-element (keyword (.getLocalName sreader)) (attr-hash sreader) nil))
+         (pull-seq sreader props))
        XMLStreamConstants/END_ELEMENT
-       (cons (event :end-element
-                    (keyword (.getLocalName sreader)) nil nil)
-             (pull-seq sreader))
+       (cons
+         (event :end-element (keyword (.getLocalName sreader)) nil nil)
+         (pull-seq sreader props))
        XMLStreamConstants/CHARACTERS
        (if-let [text (and (not (.isWhiteSpace sreader))
                           (.getText sreader))]
-         (cons (event :characters nil nil text)
-               (pull-seq sreader))
+         (cons
+           (event :characters nil nil text)
+           (pull-seq sreader props))
          (recur))
        XMLStreamConstants/COMMENT
-       (if *enable-comments*
+       (if comments
          (if-let [text (and (not (.isWhiteSpace sreader)) (.getText sreader))]
-           (cons (event :comment nil nil text) (pull-seq sreader))
+           (cons
+             (with-location store-location sreader (event :comment nil nil text))
+             (pull-seq sreader props))
            (recur))
          (recur))
        XMLStreamConstants/END_DOCUMENT
@@ -317,28 +333,39 @@
   "Parses the XML InputSource source using a pull-parser. Returns
    a lazy sequence of Event records.  Accepts key pairs
    with XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
-   and xml-input-factory-props for more information. Defaults coalescing true."
-  [s & {:as props}]
-  (let [fac (new-xml-input-factory (merge {:coalescing true} props))
+   and xml-input-factory-props for more information. Defaults coalescing true.
+   Options:
+    :comments <boolean>        whether to load comments
+    :store-location <boolean>  whether to store starting elements file location in metadata"
+  [s & {:keys [comments store-location] :as props}]
+  (let [fac (new-xml-input-factory (merge {:coalescing true} (dissoc props :comments :store-location)))
         ;; Reflection on following line cannot be eliminated via a
         ;; type hint, because s is advertised by fn parse to be an
         ;; InputStream or Reader, and there are different
         ;; createXMLStreamReader signatures for each of those types.
         sreader (.createXMLStreamReader fac s)]
-    (pull-seq sreader)))
+    (pull-seq sreader
+      {:comments comments
+       :store-location store-location})))
 
 (defn parse
   "Parses the source, which can be an
    InputStream or Reader, and returns a lazy tree of Element records. Accepts key pairs
    with XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
-   and xml-input-factory-props for more information. Defaults coalescing true."
+   and xml-input-factory-props for more information. Defaults coalescing true.
+   Options:
+    :comments <boolean>        whether to load comments
+    :store-location <boolean>  whether to store starting elements file location in metadata"
   [source & props]
   (event-tree (apply source-seq source props)))
 
 (defn parse-str
   "Parses the passed in string to Clojure data structures.  Accepts key pairs
    with XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
-   and xml-input-factory-props for more information. Defaults coalescing true."
+   and xml-input-factory-props for more information. Defaults coalescing true.
+   Options:
+    :comments <boolean>        whether to load comments
+    :store-location <boolean>  whether to store starting elements file location in metadata"
   [s & props]
   (let [sr (java.io.StringReader. s)]
     (apply parse sr props)))
@@ -372,17 +399,19 @@
 
 (defn emit-str
   "Emits the Element to String and returns it"
-  [e]
+  [e & opts]
   (let [^java.io.StringWriter sw (java.io.StringWriter.)]
-    (emit e sw)
+    (apply emit e sw opts)
     (.toString sw)))
 
-;; Indentation emitting implementation
-;; This implementation of indenting XMLStreamWriter is heavily inspired
-;; by stax-utils IndentingXMLStreamWriter
-;; http://java.net/projects/stax-utils/sources/svn/content/trunk/src/javanet/staxutils/IndentingXMLStreamWriter.java?rev=238
+;; ==============================================================
+;; Indenting XMLStreamWriter implementation
+;; This implementation of indenting XMLStreamWriter
+;; is heavily inspired by stax-utils IndentingXMLStreamWriter:
+;; http://java.net/projects/stax-utils/
+;; ==============================================================
 
-; A stack over integer array
+;; A stack over integer array
 
 ; An interface required for the following deftype
 (definterface IntStack
@@ -393,7 +422,7 @@
   (^int depth []))
 
 ; Actual implementation of the stack
-; Completely not thread-safe
+; Completely not thread-safe, for performance reasons
 (deftype IntStackImpl
   [^{:tag ints :unsynchronized-mutable true} data
    ^{:tag int :unsynchronized-mutable true} depth]
@@ -404,7 +433,7 @@
       (throw (IllegalStateException. "Stack is empty!"))))
   (replace [this f arg]
     (if (>= depth 0)
-      (aset data depth (f (aget data depth) arg))
+      (aset data depth (int (f (aget data depth) arg)))
       (throw (IllegalStateException. "Stack is empty!"))))
   (push [this value]
     (when (>= (inc depth) (alength data))
@@ -423,8 +452,8 @@
   (depth [this]
     (inc depth)))
 
-; Creates new stack
 (defn new-int-stack
+  "Creates new stack for integers."
   ([] (new-int-stack -1))
   ([start] (IntStackImpl. (int-array 4) start)))
 
@@ -492,28 +521,6 @@
   [field]
   `(set! ~field (dec ~field)))
 
-(defn ^int ibit-or
-  "Same as bit-or, but returns int instead of long."
-  [x y]
-  (int (bit-or x y)))
-
-(defn ^int ibit-and
-  "Same as bit-and, but returns int instead of long."
-  [x y]
-  (int (bit-and x y)))
-
-; A protocol with additional methods used for indenting
-(defprotocol Indenter
-  (before-markup [this])
-  (after-markup [this])
-  (before-text [this])
-  (after-text [this])
-  (before-start-element [this])
-  (after-start-element [this])
-  (before-end-element [this])
-  (after-end-element [this])
-  (write-newline [this level]))
-
 ; Bit masks which will be held in the stack
 (def +wrote-markup+ 1)
 (def +wrote-text+ 2)
@@ -542,8 +549,20 @@
   [^IntStack stack]
   (.replace stack (constantly 0) 0))
 
+; A protocol with additional methods used for indenting, implemented by IndentingXMLStreamWriter
+(defprotocol Indenter
+  (before-markup [this])
+  (after-markup [this])
+  (before-text [this])
+  (after-text [this])
+  (before-start-element [this])
+  (after-start-element [this])
+  (before-end-element [this])
+  (after-end-element [this])
+  (write-newline [this level]))
+
 ; Actual implementation of indenting XMLStreamWriter
-; The algorithm here is similar to the one in IndentingXMLStreamWriter from stax-utils; however, there are
+; The algorithm here is very similar to the one in IndentingXMLStreamWriter from stax-utils; however, there are
 ; some changes
 ; Requires thorough testing; it is highly possible that there are bugs here
 (deftype-with-delegation IndentingXMLStreamWriter
