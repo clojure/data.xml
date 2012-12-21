@@ -430,10 +430,11 @@
 
 ;; The following implementation of indenting XMLStreamWriter is heavily inspired
 ;; by stax-utils IndentingXMLStreamWriter
+;; http://java.net/projects/stax-utils/sources/svn/content/trunk/src/javanet/staxutils/IndentingXMLStreamWriter.java?rev=238
 
 (definterface IntStack
   (^int peek [])
-  (^void replace [^clojure.lang.IFn f & args])
+  (^void replace [^clojure.lang.IFn f arg])
   (^void push [^int value])
   (^int pop [])
   (^int depth []))
@@ -446,9 +447,9 @@
     (if (>= depth 0)
       (aget data depth)
       (throw (IllegalStateException. "Stack is empty!"))))
-  (replace [this f & args]
+  (replace [this f arg]
     (if (>= depth 0)
-      (aset data depth (apply f (aget data depth) args))
+      (aset data depth (f (aget data depth) arg))
       (throw (IllegalStateException. "Stack is empty!"))))
   (push [this value]
     (when (>= (inc depth) (alength data))
@@ -468,8 +469,8 @@
     (inc depth)))
 
 (defn new-int-stack
-  []
-  (IntStackImpl. (int-array 4) -1))
+  ([] (new-int-stack -1))
+  ([start] (IntStackImpl. (int-array 4) start)))
 
 (defmacro inc!
   [field]
@@ -512,11 +513,33 @@
 (def +wrote-markup+ 1)
 (def +wrote-text+ 2)
 
+(defn const [a b] b)
+
+(defn wrote-text?
+  [^IntStack stack]
+  (> (bit-and (long (.peek stack)) +wrote-text+) 0))
+
+(defn wrote-markup?
+  [^IntStack stack]
+  (> (bit-and (long (.peek stack)) +wrote-markup+) 0))
+
+(defn wrote-text!
+  [^IntStack stack]
+  (.replace stack const +wrote-text+))
+
+(defn wrote-markup!
+  [^IntStack stack]
+  (.replace stack const +wrote-markup+))
+
+(defn reset-state!
+  [^IntStack stack]
+  (.replace stack (constantly 0) 0))
+
+
 (deftype-with-delegation IndentingXMLStreamWriter
   [^{:tag XMLStreamWriter} writer
    ^{:tag String} line-separator
    ^{:tag String} indent-string
-   ^{:tag int :unsynchronized-mutable true} indent-size
    ; These fields should be private in fact; leaving them as-is because of fast mutability
    ^{:tag long :unsynchronized-mutable true} indent-level
    ^{:tag IntStack :unsynchronized-mutable true} stack]
@@ -589,26 +612,42 @@
       (.writeStartDocument writer encoding version)))
   (writeEndDocument [this]
     (while (> indent-level 0)
-      (.writeEndElement this)))
+      (.writeEndElement this)
+      (.pop stack))
+    (.writeEndDocument writer)
+    (set! indent-level 0)
+    (when (and (wrote-markup? stack) (not (wrote-text? stack)))
+      (write-newline this 0))
+    (reset-state! stack))
 
   Indenter
   (before-markup [this]
-    (when (> indent-level 0)
-      (write-newline this indent-level)))
-  (after-markup [this])
+    (when (and (not (wrote-text? stack)) (or (> indent-level 0) (wrote-markup? stack)))
+      (write-newline this indent-level)
+      (when (and (> indent-level 0) (> (.length indent-string) 0))
+        (after-markup this))))
+  (after-markup [this]
+    (wrote-markup! stack))
   (before-start-element [this]
-    (before-markup this))
+    (before-markup this)
+    (.push stack 0))
   (after-start-element [this]
+    (after-markup this)
     (inc! indent-level))
   (before-end-element [this]
-    (dec! indent-level))
+    (when (and (> indent-level 0) (wrote-markup? stack) (not (wrote-text? stack)))
+      (write-newline this (dec indent-level))))
   (after-end-element [this]
-    (after-markup this))
+    (when (> indent-level 0)
+      (dec! indent-level)
+      (.pop stack))
+    (wrote-markup! stack))
   (before-text [this])
-  (after-text [this])
+  (after-text [this]
+    (wrote-text! stack))
   (write-newline [this level]
     (let [indentation (apply str line-separator (repeat level indent-string))]
-      (.writeCharacters indentation))))
+      (.writeCharacters writer indentation))))
 
 (defn ^javax.xml.transform.Transformer indenting-transformer []
   (doto (-> (javax.xml.transform.TransformerFactory/newInstance) .newTransformer)
@@ -617,18 +656,22 @@
     (.setOutputProperty "{http://xml.apache.org/xslt}indent-amount" "2")))
 
 (defn indent
-  "Emits the XML and indents the result.  WARNING: this is slow
-   it will emit the XML and read it in again to indent it.  Intended for 
-   debugging/testing only."
   [e ^java.io.Writer stream & {:as opts}]
-  (let [sw (java.io.StringWriter.)
-        _ (apply emit e sw (apply concat opts))
-        source (-> sw .toString java.io.StringReader. javax.xml.transform.stream.StreamSource.)
-        result (javax.xml.transform.stream.StreamResult. stream)]
-    (.transform (indenting-transformer) source result)))
+  (let [^javax.xml.stream.XMLStreamWriter writer
+        (-> (javax.xml.stream.XMLOutputFactory/newInstance)
+          (.createXMLStreamWriter stream)
+          (IndentingXMLStreamWriter. "\n" "  " 0 (new-int-stack 0)))]
+
+    (when (instance? java.io.OutputStreamWriter stream)
+      (check-stream-encoding stream (or (:encoding opts) "UTF-8")))
+
+    (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
+    (doseq [event (flatten-elements [e])]
+      (emit-event event writer))
+    (.writeEndDocument writer)
+    stream))
 
 (defn indent-str
-  "Emits the XML and indents the result.  Writes the results to a String and returns it"
   [e]
   (let [^java.io.StringWriter sw (java.io.StringWriter.)]
     (indent e sw)
