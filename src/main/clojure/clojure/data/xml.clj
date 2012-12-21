@@ -431,9 +431,9 @@
 ;; The following implementation of indenting XMLStreamWriter is heavily inspired
 ;; by stax-utils IndentingXMLStreamWriter
 
-; Performant stack of integers
 (definterface IntStack
   (^int peek [])
+  (^void replace [^clojure.lang.IFn f & args])
   (^void push [^int value])
   (^int pop [])
   (^int depth []))
@@ -445,6 +445,10 @@
   (peek [this]
     (if (>= depth 0)
       (aget data depth)
+      (throw (IllegalStateException. "Stack is empty!"))))
+  (replace [this f & args]
+    (if (>= depth 0)
+      (aset data depth (apply f (aget data depth) args))
       (throw (IllegalStateException. "Stack is empty!"))))
   (push [this value]
     (when (>= (inc depth) (alength data))
@@ -459,7 +463,7 @@
       (let [value (aget data depth)]
         (set! depth (int (dec depth)))
         value)
-      (throw (IllegalStateException. "Stack is already empty!"))))
+      (throw (IllegalStateException. "Stack is empty!"))))
   (depth [this]
     (inc depth)))
 
@@ -467,12 +471,29 @@
   []
   (IntStackImpl. (int-array 4) -1))
 
-; Bit operations returning int instead of long
+(defmacro inc!
+  [field]
+  `(set! ~field (inc ~field)))
+
+(defmacro dec!
+  [field]
+  `(set! ~field (dec ~field)))
+
 (defn ^int ibit-or
-  [^long x ^long y] (int (bit-or x y)))
+  [x y]
+  (int (bit-or x y)))
 
 (defn ^int ibit-and
-  [^long x ^long y] (int (bit-and x y)))
+  [x y]
+  (int (bit-and x y)))
+
+(defmacro ibit-or!
+  [field x]
+  `(set! ~field (ibit-or ~field x)))
+
+(defmacro ibit-and!
+  [field x]
+  `(set! ~field (ibit-and ~field x)))
 
 ; We need a protocol because deftype-generated class cannot have own methods (not in protocol nor in interface),
 ; and it is possible to mutate fields only from inside the class methods.
@@ -488,13 +509,16 @@
   (after-end-element [this])
   (write-newline [this level]))
 
+(def +wrote-markup+ 1)
+(def +wrote-text+ 2)
+
 (deftype-with-delegation IndentingXMLStreamWriter
   [^{:tag XMLStreamWriter} writer
    ^{:tag String} line-separator
    ^{:tag String} indent-string
-   ; These fields are automatically private
    ^{:tag int :unsynchronized-mutable true} indent-size
-   ^{:tag int :unsynchronized-mutable true} indent-level
+   ; These fields should be private in fact; leaving them as-is because of fast mutability
+   ^{:tag long :unsynchronized-mutable true} indent-level
    ^{:tag IntStack :unsynchronized-mutable true} stack]
   XMLStreamWriter
   (delegate-to writer
@@ -512,35 +536,74 @@
     writeAttribute [local-name value]
     writeAttribute [namespace-uri local-name value]
     writeAttribute [prefix namespace-uri local-name value])
-  (writeStartElement [this local-name])
-  (writeStartElement [this namespace-uri local-name])
-  (writeStartElement [this prefix namespace-uri local-name])
-  (writeEmptyElement [this local-name])
-  (writeEmptyElement [this namespace-uri local-name])
-  (writeEmptyElement [this prefix namespace-uri local-name])
-  (writeEndElement [this])
-  (writeComment [this data])
-  (writeProcessingInstruction [this target])
-  (writeProcessingInstruction [this target data])
-  (writeCData [this data])
-  (writeCharacters [this text start length])
-  (writeCharacters [this text])
-  (writeDTD [this dtd])
-  (writeStartDocument [this])
-  (writeStartDocument [this version])
-  (writeStartDocument [this encoding version])
-  (writeEndDocument [this])
+  (writeStartElement [this local-name]
+    (wrapped-with start-element
+      (.writeStartElement writer local-name)))
+  (writeStartElement [this namespace-uri local-name]
+    (wrapped-with start-element
+      (.writeStartElement writer namespace-uri)))
+  (writeStartElement [this prefix namespace-uri local-name]
+    (wrapped-with start-element
+      (.writeStartElement writer prefix namespace-uri local-name)))
+  (writeEmptyElement [this local-name]
+    (wrapped-with markup
+      (.writeEmptyElement writer local-name)))
+  (writeEmptyElement [this namespace-uri local-name]
+    (wrapped-with markup
+      (.writeEmptyElement writer namespace-uri local-name)))
+  (writeEmptyElement [this prefix namespace-uri local-name]
+    (wrapped-with markup
+      (.writeEmptyElement writer prefix namespace-uri local-name)))
+  (writeEndElement [this]
+    (wrapped-with end-element
+      (.writeEndElement writer)))
+  (writeComment [this data]
+    (wrapped-with markup
+      (.writeComment writer data)))
+  (writeProcessingInstruction [this target]
+    (wrapped-with markup
+      (.writeProcessingInstruction writer target)))
+  (writeProcessingInstruction [this target data]
+    (wrapped-with markup
+      (.writeProcessingInstruction writer target data)))
+  (writeCData [this data]
+    (wrapped-with text
+      (.writeCData writer data)))
+  (writeCharacters [this text start length]
+    (wrapped-with text
+      (.writeCharacters writer text start length)))
+  (writeCharacters [this text]
+    (wrapped-with text
+      (.writeCharacters writer text)))
+  (writeDTD [this dtd]
+    (wrapped-with markup
+      (.writeDTD writer dtd)))
+  (writeStartDocument [this]
+    (wrapped-with markup
+      (.writeStartDocument writer)))
+  (writeStartDocument [this version]
+    (wrapped-with markup
+      (.writeStartDocument writer version)))
+  (writeStartDocument [this encoding version]
+    (wrapped-with markup
+      (.writeStartDocument writer encoding version)))
+  (writeEndDocument [this]
+    (while (> indent-level 0)
+      (.writeEndElement this)))
+
   Indenter
   (before-markup [this]
-    (when (and (:wrote-markup (peek stack)) (> indent-level 0))
-      (write-newline this indent-level)
-      ()))
+    (when (> indent-level 0)
+      (write-newline this indent-level)))
   (after-markup [this])
   (before-start-element [this]
-    (set! indent-level (int (inc indent-level))))
+    (before-markup this))
   (after-start-element [this]
-    (set! indent-level (int (dec indent-level)))
-    (write-newline this indent-level))
+    (inc! indent-level))
+  (before-end-element [this]
+    (dec! indent-level))
+  (after-end-element [this]
+    (after-markup this))
   (before-text [this])
   (after-text [this])
   (write-newline [this level]
