@@ -378,8 +378,61 @@
     (.toString sw)))
 
 ;; Indentation emitting implementation
+;; This implementation of indenting XMLStreamWriter is heavily inspired
+;; by stax-utils IndentingXMLStreamWriter
+;; http://java.net/projects/stax-utils/sources/svn/content/trunk/src/javanet/staxutils/IndentingXMLStreamWriter.java?rev=238
+
+; A stack over integer array
+
+; An interface required for the following deftype
+(definterface IntStack
+  (^int peek [])
+  (^void replace [^clojure.lang.IFn f arg])
+  (^void push [^int value])
+  (^int pop [])
+  (^int depth []))
+
+; Actual implementation of the stack
+; Completely not thread-safe
+(deftype IntStackImpl
+  [^{:tag ints :unsynchronized-mutable true} data
+   ^{:tag int :unsynchronized-mutable true} depth]
+  IntStack
+  (peek [this]
+    (if (>= depth 0)
+      (aget data depth)
+      (throw (IllegalStateException. "Stack is empty!"))))
+  (replace [this f arg]
+    (if (>= depth 0)
+      (aset data depth (f (aget data depth) arg))
+      (throw (IllegalStateException. "Stack is empty!"))))
+  (push [this value]
+    (when (>= (inc depth) (alength data))
+      (let [data-length (alength data)
+            new-data (int-array (* data-length 2))]
+        (System/arraycopy data 0 new-data 0 data-length)
+        (set! data new-data)))
+    (set! depth (int (inc depth)))
+    (aset data depth value))
+  (pop [this]
+    (if (>= depth 0)
+      (let [value (aget data depth)]
+        (set! depth (int (dec depth)))
+        value)
+      (throw (IllegalStateException. "Stack is empty!"))))
+  (depth [this]
+    (inc depth)))
+
+; Creates new stack
+(defn new-int-stack
+  ([] (new-int-stack -1))
+  ([start] (IntStackImpl. (int-array 4) start)))
+
+; Additional supporting macros and functions
 
 (defmacro wrapped-with
+  "Surrounds the body with (before-<what> this) and (after-<what> this) calls. 'this' symbol is captured
+  from the environment."
   [what & body]
   `(do
      (~(symbol (str "before-" what)) ~'this)
@@ -428,77 +481,28 @@
              [arg]))
          args)))
 
-;; The following implementation of indenting XMLStreamWriter is heavily inspired
-;; by stax-utils IndentingXMLStreamWriter
-;; http://java.net/projects/stax-utils/sources/svn/content/trunk/src/javanet/staxutils/IndentingXMLStreamWriter.java?rev=238
-
-(definterface IntStack
-  (^int peek [])
-  (^void replace [^clojure.lang.IFn f arg])
-  (^void push [^int value])
-  (^int pop [])
-  (^int depth []))
-
-(deftype IntStackImpl
-  [^{:tag ints :unsynchronized-mutable true} data
-   ^{:tag int :unsynchronized-mutable true} depth]
-  IntStack
-  (peek [this]
-    (if (>= depth 0)
-      (aget data depth)
-      (throw (IllegalStateException. "Stack is empty!"))))
-  (replace [this f arg]
-    (if (>= depth 0)
-      (aset data depth (f (aget data depth) arg))
-      (throw (IllegalStateException. "Stack is empty!"))))
-  (push [this value]
-    (when (>= (inc depth) (alength data))
-      (let [data-length (alength data)
-            new-data (int-array (* data-length 2))]
-        (System/arraycopy data 0 new-data 0 data-length)
-        (set! data new-data)))
-    (set! depth (int (inc depth)))
-    (aset data depth value))
-  (pop [this]
-    (if (>= depth 0)
-      (let [value (aget data depth)]
-        (set! depth (int (dec depth)))
-        value)
-      (throw (IllegalStateException. "Stack is empty!"))))
-  (depth [this]
-    (inc depth)))
-
-(defn new-int-stack
-  ([] (new-int-stack -1))
-  ([start] (IntStackImpl. (int-array 4) start)))
 
 (defmacro inc!
+  "Applies (inc) function to mutable field of the class."
   [field]
   `(set! ~field (inc ~field)))
 
 (defmacro dec!
+  "Applies (dec) function to mutable field of the class."
   [field]
   `(set! ~field (dec ~field)))
 
 (defn ^int ibit-or
+  "Same as bit-or, but returns int instead of long."
   [x y]
   (int (bit-or x y)))
 
 (defn ^int ibit-and
+  "Same as bit-and, but returns int instead of long."
   [x y]
   (int (bit-and x y)))
 
-(defmacro ibit-or!
-  [field x]
-  `(set! ~field (ibit-or ~field x)))
-
-(defmacro ibit-and!
-  [field x]
-  `(set! ~field (ibit-and ~field x)))
-
-; We need a protocol because deftype-generated class cannot have own methods (not in protocol nor in interface),
-; and it is possible to mutate fields only from inside the class methods.
-
+; A protocol with additional methods used for indenting
 (defprotocol Indenter
   (before-markup [this])
   (after-markup [this])
@@ -510,10 +514,13 @@
   (after-end-element [this])
   (write-newline [this level]))
 
+; Bit masks which will be held in the stack
 (def +wrote-markup+ 1)
 (def +wrote-text+ 2)
 
 (defn const [a b] b)
+
+; Convenience functions to query and update the stack
 
 (defn wrote-text?
   [^IntStack stack]
@@ -535,12 +542,14 @@
   [^IntStack stack]
   (.replace stack (constantly 0) 0))
 
-
+; Actual implementation of indenting XMLStreamWriter
+; The algorithm here is similar to the one in IndentingXMLStreamWriter from stax-utils; however, there are
+; some changes
+; Requires thorough testing; it is highly possible that there are bugs here
 (deftype-with-delegation IndentingXMLStreamWriter
   [^{:tag XMLStreamWriter} writer
    ^{:tag String} line-separator
    ^{:tag String} indent-string
-   ; These fields should be private in fact; leaving them as-is because of fast mutability
    ^{:tag long :unsynchronized-mutable true} indent-level
    ^{:tag IntStack :unsynchronized-mutable true} stack]
   XMLStreamWriter
@@ -649,31 +658,34 @@
     (let [indentation (apply str line-separator (repeat level indent-string))]
       (.writeCharacters writer indentation))))
 
-(defn ^javax.xml.transform.Transformer indenting-transformer []
-  (doto (-> (javax.xml.transform.TransformerFactory/newInstance) .newTransformer)
-    (.setOutputProperty (javax.xml.transform.OutputKeys/INDENT) "yes")
-    (.setOutputProperty (javax.xml.transform.OutputKeys/METHOD) "xml")
-    (.setOutputProperty "{http://xml.apache.org/xslt}indent-amount" "2")))
-
 (defn indent
-  [e ^java.io.Writer stream & {:as opts}]
+  "Prints the given Element tree as an indented XML text to stream.
+   Options:
+    :encoding <str>          Character encoding to use, defaults to \"UTF-8\"
+    :line-separator <str>    Line separator to use for indenting, defaults to \"\\n\"
+    :indent-string <str>     A string used for single level of indentation, defaults to \"  \" (two spaces)"
+  [e ^java.io.Writer stream & {:keys [encoding line-separator indent-string]
+                               :or {encoding "UTF-8" line-separator "\n" indent-string "  "}}]
   (let [^javax.xml.stream.XMLStreamWriter writer
         (-> (javax.xml.stream.XMLOutputFactory/newInstance)
           (.createXMLStreamWriter stream)
-          (IndentingXMLStreamWriter. "\n" "  " 0 (new-int-stack 0)))]
+          (IndentingXMLStreamWriter. line-separator indent-string 0 (new-int-stack 0)))]
 
     (when (instance? java.io.OutputStreamWriter stream)
-      (check-stream-encoding stream (or (:encoding opts) "UTF-8")))
+      (check-stream-encoding stream encoding))
 
-    (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
+    (.writeStartDocument writer encoding "1.0")
     (doseq [event (flatten-elements [e])]
       (emit-event event writer))
     (.writeEndDocument writer)
+
     stream))
 
 (defn indent-str
-  [e]
+  "Prints the given Element tree as an indented XML text to a string and returns it. Options are the same as
+  for (indent)."
+  [e & opts]
   (let [^java.io.StringWriter sw (java.io.StringWriter.)]
-    (indent e sw)
+    (apply indent e sw opts)
     (.toString sw)))
 
