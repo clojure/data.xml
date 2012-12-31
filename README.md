@@ -97,6 +97,13 @@ The same can also be expressed using a more Hiccup-like style of defining the el
             [:baz {} "The baz value"]]]))
     ;;-> true
 
+Comments and CData can also be emitted as an S-expression with the special tag names :-cdata and :-comment:
+
+    (= (element :tag {:attr "value"}
+         (element :body {} (cdata "not parsed <stuff")))
+       (sexp-as-element [:tag {:attr "value"} [:body {} [:-cdata "not parsed <stuff"]]]
+    ;;-> true       
+
 XML can be "round tripped" through the library:
 
     (let [tags (element :foo {:foo-attr "foo value"}
