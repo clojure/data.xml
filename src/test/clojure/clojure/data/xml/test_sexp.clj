@@ -34,15 +34,26 @@
            (sexp-as-element sexp-input)))))
 
 (deftest with-multiple-cdata
-  (let [xml-input (element :tag {:attr "value"}
-                           (element :body {}
-                                    (cdata "not parsed <stuff")
-                                    (cdata "more not parsed <stuff")))
-        sexp-input [:tag {:attr "value"} [:body {}
-                                          (list [:-cdata "not parsed <stuff"]
-                                                [:-cdata "more not parsed <stuff"])]]]
-    (is (= xml-input
-           (sexp-as-element sexp-input)))))
+  (testing "separate cdata"
+    (let [xml-input (element :tag {:attr "value"}
+                             (element :body {}
+                                      (cdata "not parsed <stuff")
+                                      (cdata "more not parsed <stuff")))
+          sexp-input [:tag {:attr "value"} [:body {}
+                                            (list [:-cdata "not parsed <stuff"]
+                                                  [:-cdata "more not parsed <stuff"])]]]
+      (is (= xml-input
+             (sexp-as-element sexp-input)))))
+  (testing "cdata with embedded ]]>"
+    (let [xml-input (element :tag {:attr "value"}
+                             (element :body {}
+                                      (cdata "not parsed <stuff")
+                                      (cdata "more not parsed <stuff")))
+          sexp-input [:tag {:attr "value"}
+                      [:body {}
+                       [:-cdata "not parsed <stuff]]>more not parsed <stuff"]]]]
+      (is (= (emit-str xml-input)
+             (emit-str (sexp-as-element sexp-input)))))))
 
 (deftest with-comment
   (let [xml-input (element :tag {:attr "value"}
