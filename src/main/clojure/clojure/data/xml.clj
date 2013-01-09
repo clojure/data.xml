@@ -49,12 +49,25 @@
     (.writeStartElement writer "" qname (or nspace ""))
     (write-attributes (:attrs event) writer)))
 
+(defn str-empty? [s]
+  (or (nil? s)
+      (= s "")))
+
+(defn emit-cdata [^String cdata-str writer]
+  (when-not (str-empty? cdata-str) 
+    (let [idx (.indexOf cdata-str "]]>")]
+      (if (= idx -1)
+        (.writeCData writer cdata-str )
+        (do
+          (.writeCData writer (subs cdata-str 0 idx))
+          (recur (subs cdata-str (+ idx 3)) writer))))))
+
 (defn emit-event [event ^javax.xml.stream.XMLStreamWriter writer]
   (case (:type event)
     :start-element (emit-start-tag event writer)
     :end-element (.writeEndElement writer)
     :chars (.writeCharacters writer (:str event))
-    :cdata (.writeCData writer (:str event))
+    :cdata (emit-cdata (:str event) writer)
     :comment (.writeComment writer (:str event))))
 
 (defprotocol EventGeneration

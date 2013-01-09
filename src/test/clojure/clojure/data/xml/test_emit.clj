@@ -78,10 +78,27 @@
             (emit (element :foo) *out* :encoding "ISO-8859-1"))))))
 
 (deftest emitting-cdata
+  (testing "basic cdata"
+    (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                "<cdata-stuff><![CDATA[<goes><here>]]></cdata-stuff>")
+           (emit-str (element :cdata-stuff {}
+                              (cdata "<goes><here>"))))))
+  (testing "cdata with ]]> chars"
+    (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                "<cdata-stuff><![CDATA[<goes><here>]]><![CDATA[<and><here>]]></cdata-stuff>")
+           (emit-str (element :cdata-stuff {}
+                              (cdata "<goes><here>]]><and><here>"))))))
+  (testing "cdata with ]]> chars and newlines"
+    (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                "<cdata-stuff><![CDATA[<goes><here>\n\n\n]]><![CDATA[<and><here>]]></cdata-stuff>")
+           (emit-str (element :cdata-stuff {}
+                              (cdata "<goes><here>\n\n\n]]><and><here>")))))))
+
+(deftest emitting-cdata-with-embedded-end
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-              "<cdata-stuff><![CDATA[<goes><here>]]></cdata-stuff>")
+              "<cdata-stuff><![CDATA[<goes><here>]]><![CDATA[<and><here>]]></cdata-stuff>")
          (emit-str (element :cdata-stuff {}
-                                (cdata "<goes><here>")))))  )
+                                (cdata "<goes><here>]]><and><here>")))))  )
 
 (deftest emitting-comment
   (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
