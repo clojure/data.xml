@@ -53,7 +53,7 @@
   (or (nil? s)
       (= s "")))
 
-(defn emit-cdata [^String cdata-str writer]
+(defn emit-cdata [^String cdata-str ^javax.xml.stream.XMLStreamWriter writer]
   (when-not (str-empty? cdata-str) 
     (let [idx (.indexOf cdata-str "]]>")]
       (if (= idx -1)
