@@ -27,7 +27,11 @@
 (defn write-attributes [attrs ^javax.xml.stream.XMLStreamWriter writer]
   (doseq [[k v] attrs]
     (if (namespace k)
-      (.writeAttribute writer (str (namespace k)) (name k) (str v))
+      (let [prefix (str (namespace k))
+            namespace-uri (.getNamespaceURI
+                           (.getNamespaceContext writer)
+                           prefix)]
+        (.writeAttribute writer prefix namespace-uri (name k) (str v)))
       (.writeAttribute writer (name k) (str v)))))
 
 (defn write-namespaces [namespaces ^javax.xml.stream.XMLStreamWriter writer]
