@@ -109,11 +109,12 @@
     (is (= expect (.toString sw)))))
 
 (deftest test-namespace-emit
-  (let [expected (lazy-parse* "<clj:foo xmlns:clj='http://clojure.org'>
-                                <clj:bar>baz</clj:bar>
-                            </clj:foo>")]
-    (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><clj:foo xmlns:clj=\"http://clojure.org\"><clj:bar>baz</clj:bar></clj:foo>"
-           (emit-str (Element. :clj/foo
-                               {}
-                               [(element :clj/bar {} ["baz"] nil)]
-                               {"clj" "http://clojure.org"}))))))
+  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><clj:foo xmlns:clj=\"http://clojure.org\"><clj:bar clj:foobar=\"foobar\">baz</clj:bar></clj:foo>"
+         (emit-str (Element. :clj/foo
+                             {}
+                             [(element
+                               :clj/bar
+                               {:clj/foobar "foobar"}
+                               ["baz"]
+                               nil)]
+                             {"clj" "http://clojure.org"})))))
