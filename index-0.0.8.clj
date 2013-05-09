@@ -8,63 +8,7 @@
    :doc
    "Functions to parse XML into lazy sequences and lazy trees and\nemit these as text."}),
  :vars
- ({:arglists ([content]),
-   :name "->CData",
-   :namespace "clojure.data.xml",
-   :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L44",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
-   :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/->CData",
-   :doc
-   "Positional factory function for class clojure.data.xml.CData.",
-   :var-type "function",
-   :line 44,
-   :file "src/main/clojure/clojure/data/xml.clj"}
-  {:arglists ([content]),
-   :name "->Comment",
-   :namespace "clojure.data.xml",
-   :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L45",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
-   :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/->Comment",
-   :doc
-   "Positional factory function for class clojure.data.xml.Comment.",
-   :var-type "function",
-   :line 45,
-   :file "src/main/clojure/clojure/data/xml.clj"}
-  {:arglists ([tag attrs content]),
-   :name "->Element",
-   :namespace "clojure.data.xml",
-   :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L43",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
-   :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/->Element",
-   :doc
-   "Positional factory function for class clojure.data.xml.Element.",
-   :var-type "function",
-   :line 43,
-   :file "src/main/clojure/clojure/data/xml.clj"}
-  {:arglists ([type name attrs str]),
-   :name "->Event",
-   :namespace "clojure.data.xml",
-   :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L22",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
-   :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/->Event",
-   :doc
-   "Positional factory function for class clojure.data.xml.Event.",
-   :var-type "function",
-   :line 22,
-   :file "src/main/clojure/clojure/data/xml.clj"}
-  {:arglists ([e stream & {:as opts}]),
+ ({:arglists ([e stream & {:as opts}]),
    :name "emit",
    :namespace "clojure.data.xml",
    :source-url
@@ -132,62 +76,6 @@
    "Emits the XML and indents the result.  Writes the results to a String and returns it",
    :var-type "function",
    :line 395,
-   :file "src/main/clojure/clojure/data/xml.clj"}
-  {:arglists ([m__5828__auto__]),
-   :name "map->CData",
-   :namespace "clojure.data.xml",
-   :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L44",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
-   :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/map->CData",
-   :doc
-   "Factory function for class clojure.data.xml.CData, taking a map of keywords to field values.",
-   :var-type "function",
-   :line 44,
-   :file "src/main/clojure/clojure/data/xml.clj"}
-  {:arglists ([m__5828__auto__]),
-   :name "map->Comment",
-   :namespace "clojure.data.xml",
-   :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L45",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
-   :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/map->Comment",
-   :doc
-   "Factory function for class clojure.data.xml.Comment, taking a map of keywords to field values.",
-   :var-type "function",
-   :line 45,
-   :file "src/main/clojure/clojure/data/xml.clj"}
-  {:arglists ([m__5828__auto__]),
-   :name "map->Element",
-   :namespace "clojure.data.xml",
-   :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L43",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
-   :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/map->Element",
-   :doc
-   "Factory function for class clojure.data.xml.Element, taking a map of keywords to field values.",
-   :var-type "function",
-   :line 43,
-   :file "src/main/clojure/clojure/data/xml.clj"}
-  {:arglists ([m__5828__auto__]),
-   :name "map->Event",
-   :namespace "clojure.data.xml",
-   :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L22",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
-   :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/map->Event",
-   :doc
-   "Factory function for class clojure.data.xml.Event, taking a map of keywords to field values.",
-   :var-type "function",
-   :line 22,
    :file "src/main/clojure/clojure/data/xml.clj"}
   {:arglists ([source & props]),
    :name "parse",
