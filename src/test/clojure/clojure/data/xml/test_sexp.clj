@@ -47,8 +47,8 @@
   (testing "cdata with embedded ]]>"
     (let [xml-input (element :tag {:attr "value"}
                              (element :body {}
-                                      (cdata "not parsed <stuff")
-                                      (cdata "more not parsed <stuff")))
+                                      (cdata "not parsed <stuff]]")
+                                      (cdata ">more not parsed <stuff")))
           sexp-input [:tag {:attr "value"}
                       [:body {}
                        [:-cdata "not parsed <stuff]]>more not parsed <stuff"]]]]

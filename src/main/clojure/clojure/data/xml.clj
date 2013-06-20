@@ -59,8 +59,8 @@
       (if (= idx -1)
         (.writeCData writer cdata-str )
         (do
-          (.writeCData writer (subs cdata-str 0 idx))
-          (recur (subs cdata-str (+ idx 3)) writer))))))
+          (.writeCData writer (subs cdata-str 0 (+ idx 2)))
+          (recur (subs cdata-str (+ idx 2)) writer))))))
 
 (defn emit-event [event ^javax.xml.stream.XMLStreamWriter writer]
   (case (:type event)
