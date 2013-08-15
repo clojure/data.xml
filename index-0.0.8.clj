@@ -1,6 +1,6 @@
 {:namespaces
  ({:source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml/clojure.data.xml-api.html",
    :name "clojure.data.xml",
@@ -12,9 +12,9 @@
    :name "->CData",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L44",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L44",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/->CData",
    :doc
@@ -26,9 +26,9 @@
    :name "->Comment",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L45",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L45",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/->Comment",
    :doc
@@ -40,9 +40,9 @@
    :name "->Element",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L43",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L43",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/->Element",
    :doc
@@ -54,9 +54,9 @@
    :name "->Event",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L22",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L22",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/->Event",
    :doc
@@ -68,9 +68,9 @@
    :name "emit",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L354",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L354",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/emit",
    :doc
@@ -82,9 +82,9 @@
    :name "emit-str",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L371",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L371",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/emit-str",
    :doc "Emits the Element to String and returns it",
@@ -95,9 +95,9 @@
    :name "event-tree",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L178",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L178",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/event-tree",
    :doc
@@ -109,9 +109,9 @@
    :name "indent",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L384",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L384",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/indent",
    :doc
@@ -123,9 +123,9 @@
    :name "indent-str",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L395",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L395",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/indent-str",
    :doc
@@ -137,9 +137,9 @@
    :name "map->CData",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L44",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L44",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/map->CData",
    :doc
@@ -151,9 +151,9 @@
    :name "map->Comment",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L45",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L45",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/map->Comment",
    :doc
@@ -165,9 +165,9 @@
    :name "map->Element",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L43",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L43",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/map->Element",
    :doc
@@ -179,9 +179,9 @@
    :name "map->Event",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L22",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L22",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/map->Event",
    :doc
@@ -193,9 +193,9 @@
    :name "parse",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L328",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L328",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/parse",
    :doc
@@ -207,9 +207,9 @@
    :name "parse-str",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L336",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L336",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/parse-str",
    :doc
@@ -221,9 +221,9 @@
    :name "seq-tree",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L142",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L142",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/seq-tree",
    :doc
@@ -235,9 +235,9 @@
    :name "sexp-as-element",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L246",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L246",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/sexp-as-element",
    :doc "Convert a single sexp into an Element",
@@ -248,9 +248,9 @@
    :name "sexps-as-fragment",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L230",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L230",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/sexps-as-fragment",
    :doc
@@ -262,9 +262,9 @@
    :name "source-seq",
    :namespace "clojure.data.xml",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L314",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L314",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/source-seq",
    :doc
@@ -306,9 +306,9 @@
    :name "Event"}
   {:file "src/main/clojure/clojure/data/xml.clj",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L191",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L191",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/AsElements",
    :namespace "clojure.data.xml",
@@ -318,9 +318,9 @@
    :name "AsElements"}
   {:file "src/main/clojure/clojure/data/xml.clj",
    :raw-source-url
-   "https://github.com/clojure/data.xml/raw/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/cf810dc81857623442fcdf422172efd33af5bf44/src/main/clojure/clojure/data/xml.clj#L73",
+   "https://github.com/clojure/data.xml/blob/94dcb541fae20730635444bc6f7aeeaf1668adf0/src/main/clojure/clojure/data/xml.clj#L73",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/EventGeneration",
    :namespace "clojure.data.xml",
