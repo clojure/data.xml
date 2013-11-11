@@ -129,3 +129,17 @@
         sw (java.io.StringWriter.)]
     (indent nested-xml sw :encoding "UTF-8")
     (is (= expect (.toString sw)))))
+
+(deftest test-boolean
+  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>true</foo>"
+         (emit-str (element :foo {} true)))))
+
+(deftest test-number
+  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>1</foo>"
+         (emit-str (element :foo {} 1))))
+  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>1.2</foo>"
+         (emit-str (element :foo {} 1.2))))
+  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>0</foo>"
+         (emit-str (element :foo {} (int 0)))))
+  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>1.2</foo>"
+         (emit-str (element :foo {} (float 1.2))))))

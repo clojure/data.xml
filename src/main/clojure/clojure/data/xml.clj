@@ -103,7 +103,19 @@
     (Event. :chars nil nil s))
   (next-events [_ next-items]
     next-items)
-  
+
+  Boolean
+  (gen-event [b]
+    (Event. :chars nil nil (str b)))
+  (next-events [_ next-items]
+    next-items)
+
+  Number
+  (gen-event [b]
+    (Event. :chars nil nil (str b)))
+  (next-events [_ next-items]
+    next-items)
+
   CData
   (gen-event [cdata]
     (Event. :cdata nil nil (:content cdata)))
