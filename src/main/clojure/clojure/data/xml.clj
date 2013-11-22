@@ -12,7 +12,9 @@
   clojure.data.xml
   (:require [clojure.string :as str])
   (:import (javax.xml.stream XMLInputFactory
+                             XMLOutputFactory
                              XMLStreamReader
+                             XMLStreamWriter
                              XMLStreamConstants)
            (java.nio.charset Charset)
            (java.io Reader)))
@@ -32,7 +34,7 @@
        name-parts
        [nil (first name-parts)]))))
 
-(defn write-attributes [attrs ^javax.xml.stream.XMLStreamWriter writer]
+(defn write-attributes [attrs ^XMLStreamWriter writer]
   (doseq [[k v] attrs]
     (let [[attr-ns attr-name] (qualified-name k)]
       (if attr-ns
@@ -44,7 +46,7 @@
 (defrecord CData [content])
 (defrecord Comment [content])
 
-(defn emit-start-tag [event ^javax.xml.stream.XMLStreamWriter writer]
+(defn emit-start-tag [event ^XMLStreamWriter writer]
   (let [[nspace qname] (qualified-name (:name event))]
     (.writeStartElement writer "" qname (or nspace ""))
     (write-attributes (:attrs event) writer)))
@@ -53,7 +55,7 @@
   (or (nil? s)
       (= s "")))
 
-(defn emit-cdata [^String cdata-str ^javax.xml.stream.XMLStreamWriter writer]
+(defn emit-cdata [^String cdata-str ^XMLStreamWriter writer]
   (when-not (str-empty? cdata-str) 
     (let [idx (.indexOf cdata-str "]]>")]
       (if (= idx -1)
@@ -62,7 +64,7 @@
           (.writeCData writer (subs cdata-str 0 (+ idx 2)))
           (recur (subs cdata-str (+ idx 2)) writer))))))
 
-(defn emit-event [event ^javax.xml.stream.XMLStreamWriter writer]
+(defn emit-event [event ^XMLStreamWriter writer]
   (case (:type event)
     :start-element (emit-start-tag event writer)
     :end-element (.writeEndElement writer)
@@ -306,18 +308,18 @@
        ))))
 
 (def ^{:private true} xml-input-factory-props
-  {:allocator javax.xml.stream.XMLInputFactory/ALLOCATOR
-   :coalescing javax.xml.stream.XMLInputFactory/IS_COALESCING
-   :namespace-aware javax.xml.stream.XMLInputFactory/IS_NAMESPACE_AWARE
-   :replacing-entity-references javax.xml.stream.XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
-   :supporting-external-entities javax.xml.stream.XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
-   :validating javax.xml.stream.XMLInputFactory/IS_VALIDATING
-   :reporter javax.xml.stream.XMLInputFactory/REPORTER
-   :resolver javax.xml.stream.XMLInputFactory/RESOLVER
-   :support-dtd javax.xml.stream.XMLInputFactory/SUPPORT_DTD})
+  {:allocator XMLInputFactory/ALLOCATOR
+   :coalescing XMLInputFactory/IS_COALESCING
+   :namespace-aware XMLInputFactory/IS_NAMESPACE_AWARE
+   :replacing-entity-references XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
+   :supporting-external-entities XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
+   :validating XMLInputFactory/IS_VALIDATING
+   :reporter XMLInputFactory/REPORTER
+   :resolver XMLInputFactory/RESOLVER
+   :support-dtd XMLInputFactory/SUPPORT_DTD})
 
 (defn- new-xml-input-factory [props]
-  (let [fac (javax.xml.stream.XMLInputFactory/newInstance)]
+  (let [fac (XMLInputFactory/newInstance)]
     (doseq [[k v] props
             :let [prop (xml-input-factory-props k)]]
       (.setProperty fac prop v))
@@ -329,7 +331,7 @@
    with XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
    and xml-input-factory-props for more information. Defaults coalescing true."
   [s & {:as props}]
-  (let [fac (new-xml-input-factory (merge {:coalescing true} props))
+  (let [^XMLInputFactory fac (new-xml-input-factory (merge {:coalescing true} props))
         ;; Reflection on following line cannot be eliminated via a
         ;; type hint, because s is advertised by fn parse to be an
         ;; InputStream or Reader, and there are different
@@ -368,8 +370,7 @@
    Options:
     :encoding <str>          Character encoding to use"
   [e ^java.io.Writer stream & {:as opts}]
-  (let [^javax.xml.stream.XMLStreamWriter writer (-> (javax.xml.stream.XMLOutputFactory/newInstance)
-                                                     (.createXMLStreamWriter stream))]
+  (let [^XMLStreamWriter writer (-> (XMLOutputFactory/newInstance) (.createXMLStreamWriter stream))]
 
     (when (instance? java.io.OutputStreamWriter stream)
       (check-stream-encoding stream (or (:encoding opts) "UTF-8")))
