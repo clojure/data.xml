@@ -35,7 +35,7 @@
                     "</a>")]
     (is (= expect (emit-str deep-tree)))))
 
-(deftest defaults
+(deftest defaults-2
   ;;XML below should be updated when namespace support is in
   (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?><bar item=\"1\"><baz item=\"2\">done</baz></bar>")]
     (is (= expect (emit-str (element "foo/bar" {"foo/item" 1} [(element "foo/baz" {"foo/item" 2} "done")]))))))
@@ -122,7 +122,7 @@
                     "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")]
     (is (= expect (indent-str nested-xml)))))
 
-(deftest test-indent
+(deftest test-indent-2
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
         expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
                     "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
