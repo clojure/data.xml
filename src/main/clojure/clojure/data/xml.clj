@@ -387,6 +387,16 @@
     (emit e sw)
     (.toString sw)))
 
+(defn emit-sexp
+  "Emits the Element to a Hiccup-Style Structure"
+  [e]
+  (cond (= (type e) clojure.data.xml.Element)
+        (vec (concat [(:tag e)]
+                     (if (empty? (:attrs e)) [] [(:attrs e)])
+                     (map emit-sexp (:content e))))
+
+        :else e))
+        
 (defn ^javax.xml.transform.Transformer indenting-transformer []
   (doto (-> (javax.xml.transform.TransformerFactory/newInstance) .newTransformer)
     (.setOutputProperty (javax.xml.transform.OutputKeys/INDENT) "yes")

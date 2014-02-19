@@ -143,3 +143,8 @@
          (emit-str (element :foo {} (int 0)))))
   (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>1.2</foo>"
          (emit-str (element :foo {} (float 1.2))))))
+
+
+(deftest test-hiccup
+   (is (= [:foo true]
+        (emit-sexp (element :foo {} true)))))
