@@ -8,7 +8,7 @@
 
 (ns ^{:doc "Tests for emit to print XML text."
       :author "Chris Houser"}
-  clojure.data.xml.test-emit  
+  clojure.data.xml.test-emit
   (:use clojure.test
         clojure.data.xml
         [clojure.data.xml.test-utils :only (test-stream lazy-parse*)]))
@@ -24,22 +24,21 @@
                     "</a>")))
 
 (deftest defaults
-  (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                    "<a h=\"1\" i=\"2\" j=\"3\">"
-                    "  t1<b k=\"4\">t2</b>"
-                    "  t3<c>t4</c>"
-                    "  t5<d>t6</d>"
-                    "  t7<e l=\"5\" m=\"6\">"
-                    "    t8<f>t10</f>t11</e>"
-                    "  t12<g>t13</g>t14"
-                    "</a>")]
-    (is (= expect (emit-str deep-tree)))))
+  (testing "basic parsing"
+    (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                      "<a h=\"1\" i=\"2\" j=\"3\">"
+                      "  t1<b k=\"4\">t2</b>"
+                      "  t3<c>t4</c>"
+                      "  t5<d>t6</d>"
+                      "  t7<e l=\"5\" m=\"6\">"
+                      "    t8<f>t10</f>t11</e>"
+                      "  t12<g>t13</g>t14"
+                      "</a>")]
+      (is (= expect (emit-str deep-tree)))))
 
-(deftest defaults-2
-  ;;XML below should be updated when namespace support is in
-  (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?><bar item=\"1\"><baz item=\"2\">done</baz></bar>")]
-    (is (= expect (emit-str (element "foo/bar" {"foo/item" 1} [(element "foo/baz" {"foo/item" 2} "done")]))))))
-
+  (testing "namespaced defaults"
+    (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?><bar item=\"1\"><baz item=\"2\">done</baz></bar>")]
+      (is (= expect (emit-str (element "foo/bar" {"foo/item" 1} [(element "foo/baz" {"foo/item" 2} "done")])))))))
 
 (deftest mixed-quotes
   (is (= (lazy-parse*
@@ -121,14 +120,6 @@
         expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
                     "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")]
     (is (= expect (indent-str nested-xml)))))
-
-(deftest test-indent-2
-  (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
-        expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
-                    "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
-        sw (java.io.StringWriter.)]
-    (indent nested-xml sw :encoding "UTF-8")
-    (is (= expect (.toString sw)))))
 
 (deftest test-boolean
   (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>true</foo>"
