@@ -105,21 +105,27 @@
          (emit-str (element :comment-stuff {}
                                 "comment "
                                 (xml-comment " goes here ")
-                                " not here"))))  )
+                                " not here")))))
+
+(def xml-decl-newline?
+  (-> (System/getProperty "java.version")
+      (.startsWith "1.8")
+      not))
 
 (deftest test-indent
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
-        expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
-                    "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
-        sw (java.io.StringWriter.)]
-     (indent nested-xml sw)
-    (is (= expect (.toString sw)))))
+        expect (str "<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
+        sw (java.io.StringWriter.)
+        _ (indent nested-xml sw)
+        result (.toString sw)]
+     (is (= expect
+            (subs result (.indexOf result "<a>"))))))
 
 (deftest test-indent-str
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
-        expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<a>\n  "
-                    "<b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")]
-    (is (= expect (indent-str nested-xml)))))
+        expect (str "<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
+        result (indent-str nested-xml)]
+    (is (= expect (subs result (.indexOf result "<a>"))))))
 
 (deftest test-boolean
   (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>true</foo>"
