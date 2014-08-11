@@ -36,10 +36,4 @@
     <url>git@github.com:clojure/data.xml.git</url>
   </scm>
 
-  <repositories>
-    <repository>
-      <id>sonatype-oss-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </repository>
-  </repositories>
 </project>
