@@ -23,7 +23,7 @@ Please report bugs using JIRA [here](http://dev.clojure.org/jira/browse/DXML).
 
 ## Installation
 
-Latest stable release: 0.0.7
+Latest stable release: 0.0.8
 
 * [All Released Versions](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.xml%22)
 
@@ -35,13 +35,13 @@ For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` s
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>data.xml</artifactId>
-      <version>0.0.7</version>
+      <version>0.0.8</version>
      </dependency>
 
 ### Leiningen
 Add the following to the `project.clj` dependencies:
 
-    [org.clojure/data.xml "0.0.7"]
+    [org.clojure/data.xml "0.0.8"]
 
 ## Examples
 
