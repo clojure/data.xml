@@ -10,19 +10,22 @@
   emit these as text."
   :author "Chris Houser"}
   clojure.data.xml
-  (:require [clojure.string :as str])
+  (:require [clojure.string :as str]
+            (clojure.data.xml
+             ;; re-exported names are not referred here, but by export-api, next
+             [event :as event]
+             [node :as node]
+             [impl :as impl]))
   (:import (javax.xml.stream XMLInputFactory
                              XMLStreamReader
                              XMLStreamConstants)
            (java.nio.charset Charset)
-           (java.io Reader)))
+           (java.io Reader)
+           clojure.data.xml.event.Event
+           (clojure.data.xml.node CData Comment Element)))
 
-; Represents a parse event.
-; type is one of :start-element, :end-element, or :characters
-(defrecord Event [type name attrs str])
-
-(defn event [type name & [attrs str]]
-  (Event. type name attrs str))
+(impl/export-api
+ event/event node/element node/element* node/cdata node/xml-comment)
 
 (defn qualified-name [event-name]
   (if (instance? clojure.lang.Named event-name)
@@ -38,11 +41,6 @@
       (if attr-ns
         (.writeAttribute writer attr-ns attr-name (str v))
         (.writeAttribute writer attr-name (str v))))))
-
-; Represents a node of an XML tree
-(defrecord Element [tag attrs content])
-(defrecord CData [content])
-(defrecord Comment [content])
 
 (defn emit-start-tag [event ^javax.xml.stream.XMLStreamWriter writer]
   (let [[nspace qname] (qualified-name (:name event))]
