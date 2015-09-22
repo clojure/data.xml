@@ -10,14 +10,42 @@
   "Shared private code for data.xml namespaces"
   {:author "Herwig Hochleitner"})
 
+(defn- var-form? [form]
+  (and (seq? form) (= 'var (first form))))
+
 (defn- export-form [var-name]
-  (let [vsym (symbol (name var-name))]
+  (let [is-var (var-form? var-name)
+        vsym (symbol (name (if is-var (second var-name) var-name)))]
     `[(def ~vsym ~var-name)
       (alter-meta! (var ~vsym)
-                   (constantly (assoc (meta (var ~var-name))
-                                 :wrapped-by (var ~vsym))))]))
+                   (constantly (assoc (meta ~(if is-var
+                                               var-name
+                                               `(var ~var-name)))
+                                      :wrapped-by (var ~vsym))))]))
 
 (defmacro export-api
   "This creates vars, that take their (local) name, value and metadata from another var"
   [& names]
   (cons 'do (mapcat export-form names)))
+
+(defmacro static-case
+  "Variant of case where keys are evaluated at compile-time"
+  [val & cases]
+  `(case ~val
+     ~@(mapcat (fn [[field thunk]]
+                 [(eval field) thunk])
+               (partition 2 cases))
+     ~@(when (odd? (count cases))
+         [(last cases)])))
+
+(defmacro extend-protocol-fns
+  "Helper to many types to a protocol with a method map, similar to extend"
+  [proto & types+mmaps]
+  (assert (zero? (mod (count types+mmaps) 2)))
+  (let [gen-extend (fn [type mmap] (list `extend type proto mmap))]
+    `(do ~@(for [[type mmap] (partition 2 types+mmaps)]
+             (if (coll? type)
+               (let [mm (gensym "mm-")]
+                 `(let [~mm ~mmap]
+                    ~@(map gen-extend type (repeat mm))))
+               (gen-extend type mmap))))))

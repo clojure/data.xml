@@ -8,10 +8,10 @@
 
 (ns ^{:doc "Test that external entities are not resolved by default, see https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing"
       :author "Carlo Sciolla"}
-    clojure.data.xml.test-entities
-    (:use clojure.test
-          clojure.data.xml)
-    (:require [clojure.java.io :as io]))
+  clojure.data.xml.test-entities
+  (:require [clojure.java.io :as io]
+            [clojure.test :refer :all]
+            [clojure.data.xml :refer :all]))
 
 (defn vulnerable-input
   "Creates an XML with an external entity referring to the given URL"

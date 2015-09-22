@@ -7,13 +7,21 @@
 ;   You must not remove this notice, or any other, from this software.
 
 (ns ^{:doc "Tests for emit to print XML text."
-      :author "Chris Houser"}
-  clojure.data.xml.test-utils
-  (:require [clojure.data.xml :as xml :refer [parse]]))
+      :author "Herwig Hochleitner"}
+  clojure.data.xml.test-pprint
+  (:require
+   [clojure.test :refer :all]
+   [clojure.data.xml :refer :all]))
 
-(defn test-stream [x]
-  (java.io.ByteArrayInputStream. (.getBytes x "UTF-8")))
+(def xml
+  "<foo><bar/></foo>")
+(def indented-xml
+  ;; FIXME indent first
+  "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>
+  <bar/>
+</foo>
+")
 
-(def lazy-parse* (comp parse test-stream))
-
+(deftest test-indent
+  (is (= indented-xml (indent-str (parse-str xml)))))
 
