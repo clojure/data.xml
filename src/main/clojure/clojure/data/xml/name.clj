@@ -1,0 +1,147 @@
+;   Copyright (c) Rich Hickey. All rights reserved.
+;   The use and distribution terms for this software are covered by the
+;   Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+;   which can be found in the file epl-v10.html at the root of this distribution.
+;   By using this software in any fashion, you are agreeing to be bound by
+;   the terms of this license.
+;   You must not remove this notice, or any other, from this software.
+
+(ns clojure.data.xml.name
+  (:require [clojure.string :as str]
+            [clojure.data.xml.jvm.name :as jvm]
+            (clojure.data.xml
+             [impl :refer [export-api]]
+             [protocols :as protocols :refer [AsQName]]))
+  (:import (clojure.lang Namespace Keyword)))
+
+(export-api
+ jvm/parse-qname jvm/to-qname
+ ;; protocol functions can be redefined by extend-*
+ #'protocols/qname-uri #'protocols/qname-local)
+
+;; The empty string shall be equal to nil for xml names
+(defn namespaced? [qn]
+  (not (str/blank? (qname-uri qn))))
+
+(defn- clj-ns-name [ns]
+  (cond (instance? Namespace ns) (ns-name ns)
+        (keyword? ns) (name ns)
+        :else (str ns)))
+
+;; # Handling of xmlns - cljns bindings
+
+(def ^:private nss (atom {:ns->xs {} :xs->ns {}}))
+
+(defn ns-uri
+  "Look up xmlns uri to keyword namespace"
+  [ns]
+  (get-in @nss [:ns->xs (clj-ns-name ns)]))
+
+(defn uri-ns
+  "Look up keyword namespace to xmlns uri"
+  [uri]
+  (get-in @nss [:xs->ns uri]))
+
+(extend-protocol AsQName
+  clojure.lang.Keyword
+  (qname-local [kw] (name kw))
+  (qname-uri [kw]
+    (if-let [ns (namespace kw)]
+      (or (ns-uri ns)
+          (throw (ex-info (str "Unknown xmlns for clj ns: " ns)
+                          {:qname kw})))
+      ""))
+  String
+  (qname-local [s] (qname-local (parse-qname s)))
+  (qname-uri   [s] (qname-uri (parse-qname s))))
+
+(defn- declare-ns* [{:keys [ns->xs xs->ns] :as acc} [ns xmlns & rst :as nss]]
+  (if (seq nss)
+    (do (assert (>= (count nss) 2))
+        (let [n (clj-ns-name ns)]
+          (if-let [x' (ns->xs n)]
+            (if (= xmlns x')
+              (recur acc rst)
+              (throw (ex-info (str "Redefining " n) {:old x' :new xmlns})))
+            (if-let [n' (xs->ns xmlns)]
+              (throw (ex-info (str xmlns " already bound to " n')
+                              {:old n' :new n}))
+              (recur {:ns->xs (assoc ns->xs n xmlns)
+                      :xs->ns (assoc xs->ns xmlns n)}
+                     rst)))))
+    acc))
+
+(defn declare-ns
+  "Define mappings in the global keyword-ns -> qname-uri mapping table.
+   Arguments are pairs of ns-name - qname-uri
+   ns-name must be a string, symbol, keyword or clojure namespace. The canonical form is string.
+   ns-uri must be a string"
+  {:arglists '([& {:as cljns-xmlnss}])}
+  [& ns-xmlnss]
+  (swap! nss declare-ns* ns-xmlnss))
+
+(declare-ns
+ :xml     "http://www.w3.org/XML/1998/namespace"
+ :xmlns   "http://www.w3.org/2000/xmlns/"
+ :xml.dav "DAV:")
+
+(def ^:const empty-namespace
+  {"xml"   (ns-uri :xml)
+   "xmlns" (ns-uri :xmlns)})
+
+(def ^:const xmlns-uri (ns-uri :xmlns))
+
+(defn alias-ns
+  "Define a clojure namespace alias for shortened keyword and symbol namespaces.
+   Similar to clojure.core/alias, but if namespace doesn't exist, it is created.
+
+   ## Example
+   ;; (declare-ns :xml.dav \"DAV:\") ; already in stdlib
+   (alias-ns :D :xml.dav)
+  {:tag ::D/propfind :content []}"
+  {:arglists '([& {:as alias-nss}])}
+  [& ans]
+  (loop [[a n & rst :as ans] ans]
+    (when (seq ans)
+      (assert (<= 2 (count ans)) (pr-str ans))
+      (let [ns (symbol (clj-ns-name n))
+            al (symbol (clj-ns-name a))]
+        (create-ns ns)
+        (alias al ns)
+        (recur rst)))))
+
+(defn merge-nss
+  "Merge two attribute sets, deleting assignments of empty-string"
+  [nss1 nss2]
+  (persistent!
+   (reduce-kv (fn [a k v]
+                (if (str/blank? v)
+                  (dissoc! a k)
+                  (assoc! a k v)))
+              (transient nss1)
+              nss2)))
+
+(defn xmlns-attr?
+  "Is this qname an xmlns declaration?"
+  [qn]
+  (let [uri (qname-uri qn)
+        local (qname-local qn)]
+    (or (= xmlns-uri uri)
+        (and (str/blank? uri)
+             (= "xmlns" local)))))
+
+(defn separate-xmlns
+  "Call cont with two args: attributes and xmlns attributes"
+  [attrs cont]
+  (loop [attrs* (transient {})
+         xmlns* (transient {})
+         [[qn val] :as attrs'] attrs]
+    (if (seq attrs')
+      (if (xmlns-attr? qn)
+        (recur attrs*
+               (assoc! xmlns* qn val)
+               (next attrs'))
+        (recur (assoc! attrs* qn val)
+               xmlns*
+               (next attrs')))
+      (cont (persistent! attrs*) (persistent! xmlns*)))))

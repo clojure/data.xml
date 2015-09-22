@@ -17,7 +17,7 @@
     [impl :refer [export-api]]
     [node :as node]
     [prxml :as prxml]
-    #_[name :as name])
+    [name :as name])
    (clojure.data.xml.jvm
     [pprint :refer
      [indent-xml]]
@@ -31,8 +31,7 @@
 
 (export-api node/element* node/element node/cdata node/xml-comment node/to-element
             prxml/sexp-as-element prxml/sexps-as-fragment
-            ;name/parse-qname name/qname-uri name/qname-local name/to-qname name/ns-uri name/uri-ns name/declare-ns name/alias-ns
-            )
+            name/parse-qname name/qname-uri name/qname-local name/to-qname name/ns-uri name/uri-ns name/declare-ns name/alias-ns)
 
 (defn event-seq
   "Parses the XML InputSource source using a pull-parser. Returns
