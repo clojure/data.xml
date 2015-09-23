@@ -15,7 +15,7 @@
   (:import (clojure.lang Namespace Keyword)))
 
 (export-api
- jvm/parse-qname jvm/to-qname
+ jvm/parse-qname jvm/make-qname
  ;; protocol functions can be redefined by extend-*
  #'protocols/qname-uri #'protocols/qname-local)
 
@@ -35,12 +35,12 @@
 (defn ns-uri
   "Look up xmlns uri to keyword namespace"
   [ns]
-  (get-in @nss [:ns->xs (clj-ns-name ns)]))
+  (-> @nss :ns->xs (get ns)))
 
 (defn uri-ns
   "Look up keyword namespace to xmlns uri"
   [uri]
-  (get-in @nss [:xs->ns uri]))
+  (-> @nss :xs->ns (get uri)))
 
 (extend-protocol AsQName
   clojure.lang.Keyword
@@ -48,12 +48,21 @@
   (qname-uri [kw]
     (if-let [ns (namespace kw)]
       (or (ns-uri ns)
-          (throw (ex-info (str "Unknown xmlns for clj ns: " ns)
+          (throw (ex-info (str "Unknown xmlns for clj ns: " (pr-str ns))
                           {:qname kw})))
       ""))
   String
   (qname-local [s] (qname-local (parse-qname s)))
   (qname-uri   [s] (qname-uri (parse-qname s))))
+
+(definline canonical-name [uri local prefix]
+  `(let [uri# ~uri local# ~local]
+     (if (str/blank? uri#)
+       (keyword local#)
+       (let [kw-prefix# (uri-ns uri#)]
+         (if (str/blank? kw-prefix#)
+           (make-qname uri# local# ~prefix)
+           (keyword kw-prefix# local#))))))
 
 (defn- declare-ns* [{:keys [ns->xs xs->ns] :as acc} [ns xmlns & rst :as nss]]
   (if (seq nss)
@@ -86,10 +95,10 @@
  :xml.dav "DAV:")
 
 (def ^:const empty-namespace
-  {"xml"   (ns-uri :xml)
-   "xmlns" (ns-uri :xmlns)})
+  {"xml"   (ns-uri "xml")
+   "xmlns" (ns-uri "xmlns")})
 
-(def ^:const xmlns-uri (ns-uri :xmlns))
+(def ^:const xmlns-uri (ns-uri "xmlns"))
 
 (defn alias-ns
   "Define a clojure namespace alias for shortened keyword and symbol namespaces.
@@ -135,13 +144,14 @@
   [attrs cont]
   (loop [attrs* (transient {})
          xmlns* (transient {})
-         [[qn val] :as attrs'] attrs]
+         [qn :as attrs'] (keys attrs)]
     (if (seq attrs')
-      (if (xmlns-attr? qn)
-        (recur attrs*
-               (assoc! xmlns* qn val)
-               (next attrs'))
-        (recur (assoc! attrs* qn val)
-               xmlns*
-               (next attrs')))
+      (let [val (get attrs qn)]
+        (if (xmlns-attr? qn)
+          (recur attrs*
+                 (assoc! xmlns* qn val)
+                 (next attrs'))
+          (recur (assoc! attrs* qn val)
+                 xmlns*
+                 (next attrs'))))
       (cont (persistent! attrs*) (persistent! xmlns*)))))

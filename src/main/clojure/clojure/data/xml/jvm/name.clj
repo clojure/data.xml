@@ -24,11 +24,5 @@
      ;; TODO weakly memoize this?
      (QName/valueOf s))))
 
-(defn to-qname
-  ([o]
-   (cond (instance? QName o) o
-         (string? o) (parse-qname o)
-         (map? o) (to-qname (:uri o) (:local o) (:prefix o))
-         :else (to-qname (qname-uri o) (qname-local o) "")))
-  ([uri name prefix]
-   (QName. uri name prefix)))
+(definline make-qname [uri name prefix]
+  `(QName. ~uri ~name ~prefix))

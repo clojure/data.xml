@@ -24,7 +24,7 @@
                     "  t12<g>t13</g>t14"
                     "</a>")))
 
-(deftest defaults
+(deftest test-defaults
   (testing "basic parsing"
     (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
                       "<a h=\"1\" i=\"2\" j=\"3\">"
@@ -38,8 +38,13 @@
       (is (= expect (emit-str deep-tree)))))
 
   (testing "namespaced defaults"
-    (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?><bar item=\"1\"><baz item=\"2\">done</baz></bar>")]
-      (is (= expect (emit-str (element "foo/bar" {"foo/item" 1} [(element "foo/baz" {"foo/item" 2} "done")])))))))
+    (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?><D:bar xmlns:D=\"DAV:\" D:item=\"1\"><D:baz D:item=\"2\">done</D:baz></D:bar>")]
+      (is (= expect (emit-str
+                     (element "{DAV:}bar" {"{DAV:}item" 1 :xmlns/D "DAV:"}
+                              [(element "{DAV:}baz" {:xml.dav/item 2} "done")]))))
+      (is (= expect (emit-str
+                     {:tag "{DAV:}bar" :attrs {"{DAV:}item" 1 :xmlns/D "DAV:"}
+                      :content [{:tag "{DAV:}baz" :attrs {:xml.dav/item 2} :content "done"}]}))))))
 
 (deftest mixed-quotes
   (is (= (lazy-parse*

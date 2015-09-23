@@ -11,10 +11,19 @@
   {:author "Herwig Hochleitner"}
   (:require [clojure.data.xml.protocols :refer
              [EventGeneration gen-event next-events]]
-            #_[clojure.data.xml.name :refer [merge-nss separate-xmlns]]
+            [clojure.data.xml.name :refer [merge-nss separate-xmlns]]
             [clojure.data.xml.node :refer [element* cdata xml-comment]]
             [clojure.data.xml.impl :refer [extend-protocol-fns]])
   (:import (clojure.data.xml.node Element CData Comment)))
+
+(definline element-nss* [element]
+  (get (meta element) :clojure.data.xml/nss {}))
+
+(defn element-nss
+  "Get xmlns environment from element"
+  [{:keys [attrs] :as element}]
+  (separate-xmlns
+   attrs #(merge-nss (element-nss* element) %2)))
 
 ; Represents a parse event.
 ; type is one of :start-element, :end-element, or :characters
@@ -26,7 +35,14 @@
 
 ;; Event Generation for stuff to show up in generated xml
 
-(let [second-arg #(do %2)]
+(let [second-arg #(do %2)
+      elem-event-generation
+      {:gen-event (fn elem-gen-event [{:keys [tag attrs] :as element}]
+                    (separate-xmlns
+                     attrs #(->StartElementEvent
+                             tag %1 (merge-nss (element-nss* element) %2))))
+       :next-events (fn elem-next-events [{:keys [tag content]} next-items]
+                      (list* content (->EndElementEvent tag) next-items))}]
   (extend-protocol-fns
    EventGeneration
    (StartElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent)
@@ -40,28 +56,11 @@
     :next-events second-arg}
    Comment
    {:gen-event (comp ->CommentEvent :content)
-    :next-events second-arg}))
+    :next-events second-arg}
+   (clojure.lang.IPersistentMap Element) elem-event-generation))
 
 (extend-protocol EventGeneration
-  Element
-  (gen-event   [element]
-    #_(separate-xmlns #(->StartElementEvent
-                        (:tag element)
-                        %1
-                        (merge-nss (get (meta element) :clojure.data.xml/nss {})
-                                   %2)))
-    ;; FIXME namespace awareness
-    (->StartElementEvent
-     (:tag element)
-     (:attrs element)
-     {})
-    ;; /FIXME
-    )
-  (next-events [element next-items]
-    (list* (:content element)
-           (->EndElementEvent (:tag element))
-           next-items))
-
+  
   clojure.lang.Sequential
   (gen-event   [coll]
     (gen-event (first coll)))

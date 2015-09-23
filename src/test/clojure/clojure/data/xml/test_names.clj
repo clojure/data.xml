@@ -12,6 +12,7 @@
  :U :test.xmlns.u
  'V 'test.xmlns.v
  "W" "test.xmlns.w"
+ :D :xml.dav
  :T *ns*)
 
 (deftest test-types
@@ -26,4 +27,14 @@
     ["http://www.w3.org/2000/xmlns/" "name"]        [:xmlns/name]))
 
 
+(deftest test-emit-raw
+  (are [node result] (= (emit-str node) result)
+    {:tag ::D/limit :attrs {:xmlns/D "DAV:"}
+     :content [{:tag ::D/nresults :content ["100"]}]}
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><D:limit xmlns:D=\"DAV:\"><D:nresults>100</D:nresults></D:limit>"))
 
+(deftest test-parse-raw
+  (are [xml result] (= (parse-str xml) result)
+    "<D:limit xmlns:D=\"DAV:\"><D:nresults>100</D:nresults></D:limit>"
+    (element ::D/limit {}
+             (element ::D/nresults nil "100"))))

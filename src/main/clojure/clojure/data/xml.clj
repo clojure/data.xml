@@ -17,7 +17,8 @@
     [impl :refer [export-api]]
     [node :as node]
     [prxml :as prxml]
-    [name :as name])
+    [name :as name]
+    [event :as event])
    (clojure.data.xml.jvm
     [pprint :refer
      [indent-xml]]
@@ -29,9 +30,9 @@
    [clojure.data.xml.tree :refer
     [event-tree flatten-elements]]))
 
-(export-api node/element* node/element node/cdata node/xml-comment node/to-element
-            prxml/sexp-as-element prxml/sexps-as-fragment
-            name/parse-qname name/qname-uri name/qname-local name/to-qname name/ns-uri name/uri-ns name/declare-ns name/alias-ns)
+(export-api node/element* node/element node/cdata node/xml-comment
+            prxml/sexp-as-element prxml/sexps-as-fragment event/element-nss
+            name/parse-qname name/qname-uri name/qname-local name/make-qname name/ns-uri name/uri-ns name/declare-ns name/alias-ns)
 
 (defn event-seq
   "Parses the XML InputSource source using a pull-parser. Returns
@@ -46,7 +47,8 @@
                        :supporting-external-entities false}
                       props)]
     (pull-seq (make-stream-reader props* source)
-              (get props* :include-node?))))
+              (get props* :include-node?)
+              nil)))
 
 (defn parse
   "Parses the source, which can be an
@@ -90,3 +92,6 @@
   (let [sw (string-writer)]
     (indent e sw)
     (str sw)))
+
+;; TODO implement ~normalize to simulate an emit-parse roundtrip
+;;      in terms of xmlns environment and keywords vs qnames

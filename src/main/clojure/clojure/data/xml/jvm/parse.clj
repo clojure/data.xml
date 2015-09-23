@@ -12,7 +12,9 @@
              [->StartElementEvent ->EndElementEvent
               ->CharsEvent ->CDataEvent ->CommentEvent]]
             [clojure.data.xml.impl :refer
-             [static-case]])
+             [static-case]]
+            [clojure.data.xml.name :refer
+             [canonical-name]])
   (:import
    (javax.xml.stream
     XMLInputFactory XMLStreamReader XMLStreamConstants)))
@@ -33,17 +35,32 @@
     (when-not (str/blank? p)
       p)))
 
-(defn- attr-hash [^XMLStreamReader sreader] (into {}
-    (for [i (range (.getAttributeCount sreader))]
-      [(keyword (attr-prefix sreader i) (.getAttributeLocalName sreader i))
-       (.getAttributeValue sreader i)])))
+(defn- attr-hash [^XMLStreamReader sreader]
+  (persistent!
+   (reduce (fn [tr i]
+             (assoc! tr (canonical-name (.getAttributeNamespace sreader i)
+                                        (.getAttributeLocalName sreader i)
+                                        (.getAttributePrefix sreader i))
+                     (.getAttributeValue sreader i)))
+           (transient {})
+           (range (.getAttributeCount sreader)))))
+
+(defn- nss-hash [^XMLStreamReader sreader parent-hash]
+  (persistent!
+   (reduce (fn [tr i]
+             (let [ns-pf (.getNamespacePrefix sreader i)]
+               (assoc! tr (if (str/blank? ns-pf)
+                            :xmlns ns-pf)
+                       (.getNamespaceURI sreader i))))
+           (transient parent-hash)
+           (range (.getNamespaceCount sreader)))))
 
 ; Note, sreader is mutable and mutated here in pull-seq, but it's
 ; protected by a lazy-seq so it's thread-safe.
 (defn pull-seq
   "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to
    be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete."
-  [^XMLStreamReader sreader include-node?]
+  [^XMLStreamReader sreader include-node? ns-envs]
   (lazy-seq
    (loop []
      (static-case
@@ -51,27 +68,31 @@
                                         ; condp == (.next sreader)
       XMLStreamConstants/START_ELEMENT
       (if (include-node? :element)
-        (cons (->StartElementEvent (keyword (.getLocalName sreader))
-                                   (attr-hash sreader)
-                                   (comment xmlns))
-              (pull-seq sreader include-node?))
+        (let [ns-env (nss-hash sreader (or (first ns-envs) {}))]
+          (cons (->StartElementEvent (canonical-name (.getNamespaceURI sreader)
+                                                     (.getLocalName sreader)
+                                                     (.getPrefix sreader))
+                                     (attr-hash sreader)
+                                     ns-env)
+                (pull-seq sreader include-node? (cons ns-env ns-envs))))
         (recur))
       XMLStreamConstants/END_ELEMENT
       (if (include-node? :element)
-        (cons (->EndElementEvent (keyword (.getLocalName sreader)))
-              (pull-seq sreader include-node?))
+        (do (assert (seq ns-envs) "Balanced end")
+            (cons (->EndElementEvent (keyword (.getLocalName sreader)))
+                  (pull-seq sreader include-node? (rest ns-envs))))
         (recur))
       XMLStreamConstants/CHARACTERS
       (if-let [text (and (include-node? :characters)
                          (not (.isWhiteSpace sreader))
                          (.getText sreader))]
         (cons (->CharsEvent text)
-              (pull-seq sreader include-node?))
+              (pull-seq sreader include-node? ns-envs))
         (recur))
       XMLStreamConstants/COMMENT
       (if (include-node? :comment)
         (cons (->CommentEvent (.getText sreader))
-              (pull-seq sreader include-node?))
+              (pull-seq sreader include-node? ns-envs))
         (recur))
       XMLStreamConstants/END_DOCUMENT
       nil

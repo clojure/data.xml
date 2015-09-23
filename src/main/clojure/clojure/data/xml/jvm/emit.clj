@@ -10,7 +10,7 @@
   "JVM implementation of the emitter details"
   {:author "Herwig Hochleitner"}
   (:require (clojure.data.xml
-             #_[name :refer [qname-uri qname-local separate-xmlns]]
+             [name :refer [qname-uri qname-local separate-xmlns]]
              event)
             [clojure.string :as str])
   (:import (java.io OutputStreamWriter Writer StringWriter)
@@ -31,67 +31,43 @@
                             (.getEncoding stream) ")")))))
 
 ;; properly namespace aware version
-#_(defn- emit-attrs [^XMLStreamWriter writer attrs]
-    (doseq [[k v] attrs]
-      (let [uri   (qname-uri k)
-            local (qname-local k)]
-        (if (str/blank? uri)
-          (.writeAttribute writer uri local (str v))
-          (.writeAttribute writer     local (str v))))))
+(defn- emit-attrs [^XMLStreamWriter writer attrs]
+  (doseq [[k v] attrs]
+    (let [uri   (qname-uri k)
+          local (qname-local k)]
+      (if (str/blank? uri)
+        (.writeAttribute writer     local (str v))
+        (.writeAttribute writer uri local (str v))))))
 
 ;; The changes to the xmlns must be set before .writeStartElement
-#_(defn- set-xmlns-attributes [^XMLStreamWriter writer ns-attrs]
-    ;; leave a list of thunks to write the attributes
-    (reduce (fn [left [k v]]
-              (let [local (qname-local k)]
-                (or (if (= "xmlns" local)
-                      (when-not (= v (.. writer getNamespaceContext (getNamespaceURI "")))
-                        (.setDefaultNamespace writer v)
-                        (conj left #(.writeDefaultNamespace writer v)))
-                      (when-let [prefix (and (str/blank? (.getPrefix writer v))
-                                             (if (.. writer getNamespaceContext
-                                                     (getNamespaceURI local))
-                                               ;; rename clashing prefixes
-                                               (str (gensym local))
-                                               local))]
-                        (.setPrefix writer prefix v)
-                        (conj left #(.writeNamespace writer prefix v))))
-                    left)))
-            [] ns-attrs))
+(defn- set-xmlns-attributes [^XMLStreamWriter writer ns-attrs]
+  (let [thunks (reduce-kv (fn [left k v]
+                            (let [local (qname-local k)]
+                              (or (if (= "xmlns" local)
+                                    (when-not (= v (.. writer getNamespaceContext (getNamespaceURI "")))
+                                      (.setDefaultNamespace writer v)
+                                      (cons #(.writeDefaultNamespace writer v) left))
+                                    (when-let [prefix (and (str/blank? (.getPrefix writer v))
+                                                           (if (.. writer getNamespaceContext
+                                                                   (getNamespaceURI local))
+                                                             ;; rename clashing prefixes
+                                                             (str (gensym local))
+                                                             local))]
+                                      (.setPrefix writer prefix v)
+                                      (cons #(.writeNamespace writer prefix v) left)))
+                                  left)))
+                          nil ns-attrs)]
+    #(doseq [f thunks] (f))))
 
-#_(defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer]
-    (let [ns-attrs (set-xmlns-attributes writer nss)
-          uri   (qname-uri tag)
-          local (qname-local tag)]
-      (separate-xmlns
-       attrs (fn [attrs xmlns]
-               (set-xmlns-attributes writer xmlns)
-               (.writeStartElement writer uri local)
-               (emit-attrs writer attrs)))))
-
-;; FIXME replace broken xmlns handling with code namespace aware version
-
-(defn qualified-name [event-name]
-  (if (instance? clojure.lang.Named event-name)
-   [(namespace event-name) (name event-name)]
-   (let [name-parts (str/split event-name #"/" 2)]
-     (if (= 2 (count name-parts))
-       name-parts
-       [nil (first name-parts)]))))
-
-(defn write-attributes [attrs ^javax.xml.stream.XMLStreamWriter writer]
-  (doseq [[k v] attrs]
-    (let [[attr-ns attr-name] (qualified-name k)]
-      (if attr-ns
-        (.writeAttribute writer attr-ns attr-name (str v))
-        (.writeAttribute writer attr-name (str v))))))
-
-(defn emit-start-tag [event ^javax.xml.stream.XMLStreamWriter writer]
-  (let [[nspace qname] (qualified-name (:tag event))]
-    (.writeStartElement writer "" qname (or nspace ""))
-    (write-attributes (:attrs event) writer)))
-
-;; /FIXME
+(defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer]
+  (let [write-ns-attrs (set-xmlns-attributes writer nss)
+        uri   (qname-uri tag)
+        local (qname-local tag)]
+    (if (str/blank? uri)
+      (.writeStartElement writer local)
+      (.writeStartElement writer uri local))
+    (write-ns-attrs)
+    (emit-attrs writer attrs)))
 
 (defn- emit-cdata [^String cdata-str ^XMLStreamWriter writer]
   (when-not (str/blank? cdata-str)
