@@ -32,7 +32,7 @@
 
 (export-api node/element* node/element node/cdata node/xml-comment
             prxml/sexp-as-element prxml/sexps-as-fragment event/element-nss
-            name/parse-qname name/qname-uri name/qname-local name/make-qname name/ns-uri name/uri-ns name/declare-ns name/alias-ns)
+            name/parse-qname name/qname-uri name/qname-local name/make-qname name/ns-uri name/uri-ns name/declare-ns name/alias-ns name/to-qname)
 
 (defn event-seq
   "Parses the XML InputSource source using a pull-parser. Returns

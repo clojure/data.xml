@@ -64,6 +64,9 @@
            (make-qname uri# local# ~prefix)
            (keyword kw-prefix# local#))))))
 
+(definline to-qname [n]
+  `(let [n# ~n] (make-qname (qname-uri n#) (qname-local n#) nil)))
+
 (defn- declare-ns* [{:keys [ns->xs xs->ns] :as acc} [ns xmlns & rst :as nss]]
   (if (seq nss)
     (do (assert (>= (count nss) 2))
