@@ -25,4 +25,4 @@
      (QName/valueOf s))))
 
 (definline make-qname [uri name prefix]
-  `(QName. ~uri ~name ~prefix))
+  `(QName. ~uri ~name (or ~prefix "")))
