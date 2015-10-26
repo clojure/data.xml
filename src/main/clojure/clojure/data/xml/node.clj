@@ -22,7 +22,7 @@
                                    [" " (to-qname n) "=" (pr-str a)])
                                  attrs)
                          (if (seq content)
-                           (concat [">"] content ["<" qname ">"])
+                           (concat [">"] content ["</" qname ">"])
                            ["/>"]))))))
 (defrecord CData [content])
 (defrecord Comment [content])
