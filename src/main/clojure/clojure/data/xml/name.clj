@@ -15,7 +15,7 @@
   (:import (clojure.lang Namespace Keyword)))
 
 (export-api
- jvm/parse-qname jvm/make-qname
+ jvm/parse-qname jvm/make-qname jvm/qname
  ;; protocol functions can be redefined by extend-*
  #'protocols/qname-uri #'protocols/qname-local)
 
@@ -65,7 +65,7 @@
            (keyword kw-prefix# local#))))))
 
 (definline to-qname [n]
-  `(let [n# ~n] (make-qname (qname-uri n#) (qname-local n#) nil)))
+  `(let [n# ~n] (make-qname (or (qname-uri n#) "") (qname-local n#) "")))
 
 (defn- declare-ns* [{:keys [ns->xs xs->ns] :as acc} [ns xmlns & rst :as nss]]
   (if (seq nss)
@@ -157,3 +157,32 @@
                  xmlns*
                  (next attrs'))))
       (cont (persistent! attrs*) (persistent! xmlns*)))))
+
+;(set! *warn-on-reflection* true)
+
+(def ^:private ^"[C" prefix-alphabet
+  (char-array
+   (map char
+        (range (int \a) (inc (int \z))))))
+
+(def ^{:dynamic true
+       :doc "Thread local counter for a single document"}
+  *gen-prefix-counter*)
+
+(defn gen-prefix
+  "Generates an xml prefix.
+   Zero-arity can only be called, when *gen-prefix-counter* is bound and will increment it."
+  ([] (let [c *gen-prefix-counter*]
+        (set! *gen-prefix-counter* (inc c))
+        (gen-prefix c)))
+  ([n]
+   (let [cnt (alength prefix-alphabet)
+         sb (StringBuilder.)]
+     (loop [n* n]
+       (let [ch (mod n* cnt)
+             n** (quot n* cnt)]
+         (.append sb (aget prefix-alphabet ch))
+         (if (pos? n**)
+           (recur n**)
+           (str sb)))))))
+

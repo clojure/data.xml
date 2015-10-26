@@ -38,3 +38,6 @@
     "<D:limit xmlns:D=\"DAV:\"><D:nresults>100</D:nresults></D:limit>"
     (element ::D/limit {}
              (element ::D/nresults nil "100"))))
+
+(deftest qnames
+  (is (= (qname "foo") (to-qname :foo))))
