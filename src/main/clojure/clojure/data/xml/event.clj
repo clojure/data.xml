@@ -17,7 +17,7 @@
   (:import (clojure.data.xml.node Element CData Comment)))
 
 (definline element-nss* [element]
-  (get (meta element) :clojure.data.xml/nss {}))
+  `(get (meta ~element) :clojure.data.xml/nss {}))
 
 (defn element-nss
   "Get xmlns environment from element"
