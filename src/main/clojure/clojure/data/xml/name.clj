@@ -107,7 +107,7 @@
    Similar to clojure.core/alias, but if namespace doesn't exist, it is created.
 
    ## Example
-   ;; (declare-ns :xml.dav \"DAV:\") ; already in stdlib
+   (declare-ns :xml.dav \"DAV:\")
    (alias-ns :D :xml.dav)
   {:tag ::D/propfind :content []}"
   {:arglists '([& {:as alias-nss}])}
