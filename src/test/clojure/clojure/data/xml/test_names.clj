@@ -3,6 +3,7 @@
             [clojure.test :refer :all]))
 
 (declare-ns
+ :xml.dav "DAV:"
  :test.xmlns.u "uri-u:"
  "test.xmlns.v" "uri-v:"
  'test.xmlns.w "uri-w:"
