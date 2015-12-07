@@ -13,4 +13,4 @@
 
 (deftest process
   (is (= (find-xmlns test-data) #{"" "GEE:" "GOO:"}))
-  (is (= (element-nss (aggregate-xmlns test-data)) {:xmlns/a "GEE:" :xmlns/b "GOO:"})))
+  (is (= (set (vals (element-nss (aggregate-xmlns test-data)))) #{"GEE:" "GOO:"})))
