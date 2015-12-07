@@ -22,6 +22,11 @@
       <email>senior.ryan@gmail.com</email>
       <timezone>-6</timezone>
     </developer>
+    <developer>
+      <name>Herwig Hochleitner</name>
+      <email>herwig@bendlas.net</email>
+      <timezone>+1</timezone>
+    </developer>
   </developers>
 
   <parent>
