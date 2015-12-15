@@ -47,3 +47,11 @@
   (are [node] (= (parse-str (emit-str node)) node)
     (element ::D/limit {::V/moo "gee"}
              (element ::D/nresults nil "100"))))
+
+(deftest test-reassign-prefix
+  (are [node reparsed] (= (parse-str (emit-str node)) reparsed)
+    (element ::D/limit {:xmlns/D "DAV:"}
+             ;; because of outer binding, "uri-v:" will be bound to
+             ;; generated xmlns:a instead of xmlns:D
+             (element ::V/other {:xmlns/D "uri-v:"}))
+    (element ::D/limit {} (element ::V/other))))
