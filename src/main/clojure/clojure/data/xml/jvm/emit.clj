@@ -10,7 +10,7 @@
   "JVM implementation of the emitter details"
   {:author "Herwig Hochleitner"}
   (:require (clojure.data.xml
-             [name :refer [qname-uri qname-local separate-xmlns]]
+             [name :refer [qname-uri qname-local separate-xmlns gen-prefix *gen-prefix-counter*]]
              event)
             [clojure.string :as str])
   (:import (java.io OutputStreamWriter Writer StringWriter)
@@ -39,8 +39,13 @@
         (.writeAttribute writer     local (str v))
         (.writeAttribute writer uri local (str v))))))
 
+(defn- make-prefix [^NamespaceContext nc]
+  (let [pf (gen-prefix)]
+    (if (str/blank? (.getNamespaceURI nc pf))
+      pf (recur nc))))
+
 ;; The changes to the xmlns must be set before .writeStartElement
-(defn- set-xmlns-attributes [^XMLStreamWriter writer ns-attrs]
+(defn- set-xmlns-attributes [^XMLStreamWriter writer ns-attrs used-uris]
   (let [thunks (reduce-kv (fn [left k v]
                             (let [local (qname-local k)]
                               (or (if (= "xmlns" local)
@@ -51,18 +56,28 @@
                                                            (if (.. writer getNamespaceContext
                                                                    (getNamespaceURI local))
                                                              ;; rename clashing prefixes
-                                                             (str (gensym local))
+                                                             (make-prefix (.getNamespaceContext writer))
                                                              local))]
                                       (.setPrefix writer prefix v)
                                       (cons #(.writeNamespace writer prefix v) left)))
                                   left)))
-                          nil ns-attrs)]
-    #(doseq [f thunks] (f))))
+                          nil ns-attrs)
+        ;; Check that all uris used in the tag have a prefix
+        thunks' (reduce (fn [left uri]
+                          (if (and (not (str/blank? uri))
+                                   (str/blank? (.. writer getNamespaceContext
+                                                   (getPrefix uri))))
+                            (let [prefix (make-prefix (.getNamespaceContext writer))]
+                              (.setPrefix writer prefix uri)
+                              (cons #(.writeNamespace writer prefix uri) left))
+                            left))
+                        thunks used-uris)]
+    #(doseq [f thunks'] (f))))
 
 (defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer]
-  (let [write-ns-attrs (set-xmlns-attributes writer nss)
-        uri   (qname-uri tag)
-        local (qname-local tag)]
+  (let [uri   (qname-uri tag)
+        local (qname-local tag)
+        write-ns-attrs (set-xmlns-attributes writer nss (cons uri (map qname-uri (keys attrs))))]
     (if (str/blank? uri)
       (.writeStartElement writer local)
       (.writeStartElement writer uri local))
@@ -97,16 +112,17 @@
    Options:
     :encoding <str>          Character encoding to use"
   [^Writer swriter events opts]
-  (let [^XMLStreamWriter writer (-> (XMLOutputFactory/newInstance)
-                                    (.createXMLStreamWriter swriter))]
+  (binding [*gen-prefix-counter* 0]
+    (let [^XMLStreamWriter writer (-> (XMLOutputFactory/newInstance)
+                                      (.createXMLStreamWriter swriter))]
 
-    (when (instance? OutputStreamWriter swriter)
-      (check-stream-encoding swriter (or (:encoding opts) "UTF-8")))
+      (when (instance? OutputStreamWriter swriter)
+        (check-stream-encoding swriter (or (:encoding opts) "UTF-8")))
 
-    (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
-    (doseq [event events] (emit-event event writer))
-    (.writeEndDocument writer)
-    swriter))
+      (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
+      (doseq [event events] (emit-event event writer))
+      (.writeEndDocument writer)
+      swriter)))
 
 (defn string-writer []
   (StringWriter.))

@@ -42,3 +42,8 @@
 
 (deftest qnames
   (is (= (qname "foo") (to-qname :foo))))
+
+(deftest test-gen-prefix
+  (are [node] (= (parse-str (emit-str node)) node)
+    (element ::D/limit {::V/moo "gee"}
+             (element ::D/nresults nil "100"))))
