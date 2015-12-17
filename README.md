@@ -180,8 +180,8 @@ Generated API docs for data.xml are available [here](http://clojure.github.com/d
 
 ## Namespace Support
 
-Parsing and emitting XML namespaces are supported and use JDK built-in
-classes. Below is an example of parsing an XHTML document:
+Parsing and emitting XML namespaces are supported and use the JDK built-in
+QName class. Below is an example of parsing an XHTML document:
 
     (parse-str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                 <foo:html xmlns:foo=\"http://www.w3.org/1999/xhtml\">
@@ -217,10 +217,10 @@ can use the `qname` function:
                 :content ("Example title")}
 
 The emitting code above is similarly verbose. By declaring the
-namespaces that will be parsed or emitted up-front via `delcare-ns`,
+namespaces that will be parsed or emitted up-front via `declare-ns`,
 these representations can be made much more succinct:
 
-    (declare-ns "xh" "http://www.w3.org/1999/xhtml")
+    (declare-ns "xml.html" "http://www.w3.org/1999/xhtml")
     (parse-str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                 <foo:html xmlns:foo=\"http://www.w3.org/1999/xhtml\">
                   <foo:head>
@@ -231,39 +231,49 @@ these representations can be made much more succinct:
                   </foo:body>
                 </foo:html>")
 
-    #...Element{:tag :xh/html, :attrs {}, :content (...)}
+    #...Element{:tag :xml.html/html, :attrs {}, :content (...)}
 
 In the above example, all tags use the namespace
-`http://www.w3.org/1999/xhtml`. That namespace is declared as "xh" in
+`http://www.w3.org/1999/xhtml`. That namespace is declared as "xml.html" in
 Clojure. All the tags parsed from that document will be
-`:xh/the-tag-name`. Note that `xh` is not related to the namespace
-prefix declared in the document (`foo` in this example). `xh` is just
-an easy way to refer to the `http://www.w3.org/1999/xhtml` namespace
-in code.
+`:xml.html/the-tag-name`. Note that `xml.html` is not related to the namespace
+prefix declared in the document (`foo` in this example). `xml.html` is just
+a way to refer to names in the `http://www.w3.org/1999/xhtml` namespace
+with a keyword.
 
-The declared namespace can also be used when constructing XML
-documents:
+The declared namespace can also be used in combination with the
+regular clojure namespace aliasing mechnism. When constructing XML
+documents, this leads pretty succinct representation with alias-aware keywords.
 
-    (emit-str (element :xh/title
+    (alias-ns :xh :xml.html) ;; alias-ns will create the target ns - xml.html - so that it can be aliased into the current ns
+    (emit-str (element ::xh/title
                        {:xmlns/foo "http://www.w3.org/1999/xhtml"}
                        "Example title"))
 
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo:title xmlns:foo=\"http://www.w3.org/1999/xhtml\">Example title</foo:title>"
 
+Take note, that the keyword-namespaces `:xmlns/...` as well as
+`:xml/...` are predefined to refer to `http://www.w3.org/2000/xmlns/`
+and `http://www.w3.org/XML/1998/namespace` respectively.
+
+Because keywords interact with clojure's namespace - aliasing
+mechanism, applications can choose descriptive names in `declare-ns`.
+
 ### Namespace Prefixes
 
-Explicitly declaring namespace prefixes in the code will result in a
-user specified prefix:
+Prefixes mostly an artifact of xml serialisation. They can be
+customized, by explicitly declaring them as attributes in the `xmlns`
+kw-namespace:
 
-    (emit-str (element (qname "http://www.w3.org/1999/xhtml" "title" "foo")
+    (emit-str (element (qname "http://www.w3.org/1999/xhtml" "title")
                        {:xmlns/foo "http://www.w3.org/1999/xhtml"}
                        "Example title"))
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo:title xmlns:foo=\"http://www.w3.org/1999/xhtml\">Example title</foo:title>"
 
 Not specifying a namespace prefix will results in a prefix being generated:
 
-    ;; Assumes (declare-ns "xh" "http://www.w3.org/1999/xhtml")
-    (emit-str (element :xh/title
+    ;; Assumes (declare-ns "xml.html" "http://www.w3.org/1999/xhtml") and (alias-ns :xh :xml.html)
+    (emit-str (element ::xh/title
                        {}
                        "Example title"))
 
@@ -273,11 +283,11 @@ The above example auto assigns prefixes for the namespaces used. In
 this case it was named `a` by the emitter. Emitting several nested
 tags with the same namespace will use one prefix:
 
-    (emit-str (element :xh/html
+    (emit-str (element ::xh/html
                        {}
-                       (element :xh/head
+                       (element ::xh/head
                                 {}
-                                (element :xh/title
+                                (element ::xh/title
                                          {}
                                          "Example title"))))
 
