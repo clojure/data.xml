@@ -261,8 +261,8 @@ mechanism, applications can choose descriptive names in `declare-ns`.
 
 ### Namespace Prefixes
 
-Prefixes mostly an artifact of xml serialisation. They can be
-customized, by explicitly declaring them as attributes in the `xmlns`
+Prefixes are mostly an artifact of xml serialisation. They can be
+customized by explicitly declaring them as attributes in the `xmlns`
 kw-namespace:
 
     (emit-str (element (qname "http://www.w3.org/1999/xhtml" "title")
