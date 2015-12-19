@@ -1,5 +1,15 @@
-From 0.0.6 to 0.0.7
+From 0.0.8 to 0.1.0-beta1
+- Add support for XML namespaces (DXML-4)
+- Fix pull-seq so it produces character events that work with emit-events (DXML-28)
+- Removed docs and references to JDK 1.5, data.xml now requires 1.6+
 
+From 0.0.7 to 0.0.8
+- Remove relection warnings in emit-cdata (DXML-16)
+- Added an EPL license file (DXML-19)
+- Fixed bug in the handling of CData end tags (DXML-17)
+- Added support for emitting booleans and numbers (DXML-14)
+
+From 0.0.6 to 0.0.7
 - Fixed bug with args to the indentation function (DXML-7)
 - Strings now supported as tag names, previously was only kewords (DXML-8)
 - Add CDATA and comments support to sexp-as-element (DXML-11)

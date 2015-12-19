@@ -11,12 +11,6 @@ data.xml has the following features:
 * Uses StAX internally
 * lazy - should allow parsing and emitting of large XML documents
 
-## JDK 1.5
-
-This library uses the pull parser that ships with JDK 1.6.  If you running on JDK 1.6+, you do not need any
-additional dependencies.  If you are using JDK 1.5, you will need to include a dependency on StAX.  More
-information on this is available [here](https://github.com/clojure/data.xml/blob/jdk16-pull-parser/jdk_15_readme.txt)
-
 ## Bugs
 
 Please report bugs using JIRA [here](http://dev.clojure.org/jira/browse/DXML).
@@ -42,6 +36,28 @@ For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` s
 Add the following to the `project.clj` dependencies:
 
     [org.clojure/data.xml "0.0.8"]
+
+## Installation - Beta
+
+Latest beta release: 0.1.0-beta1
+
+* [All Released Versions](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.xml%22)
+
+* [Development Snapshot Versions](https://oss.sonatype.org/index.html#nexus-search;gav~org.clojure~data.xml~~~)
+
+### Maven
+For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` section:
+
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>data.xml</artifactId>
+      <version>0.1.0-beta1</version>
+     </dependency>
+
+### Leiningen
+Add the following to the `project.clj` dependencies:
+
+    [org.clojure/data.xml "0.1.0-beta1"]
 
 ## Examples
 
