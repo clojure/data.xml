@@ -15,12 +15,19 @@
 
 (def xml
   "<foo><bar/></foo>")
+
+(defn jdk8? []
+  (-> (System/getProperty "java.version")
+      (.startsWith "1.8")))
+
 (def indented-xml
-  ;; FIXME indent first
-  "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>
+  (str
+   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+   (when-not (jdk8?) "\n")
+   "<foo>
   <bar/>
 </foo>
-")
+"))
 
 (deftest test-indent
   (is (= indented-xml (indent-str (parse-str xml)))))
