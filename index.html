@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-    <title>clojure.data.xml - Lazy XML parsing 0.0.9 API documentation</title>
+    <title>clojure.data.xml - Lazy XML parsing 0.1.0-beta1 API documentation</title>
     <link href="static/favicon.png" rel="icon" />
     <link href="static/favicon.png" rel="shortcut icon" />
     <link media="all" type="text/css" href="static/clojure.css" rel="stylesheet" />
@@ -25,7 +25,7 @@ namespace.
       <div id="leftcolumn"><div style="text-align: center;"></div>
 <div class="menu">
   <div class="WikiCustomNav WikiElement wiki">
-    <span class="toc-header"><span id="project-name">Lazy XML parsing</span> <span id="version">0.0.9</span> API</span><br />
+    <span class="toc-header"><span id="project-name">Lazy XML parsing</span> <span id="version">0.1.0-beta1</span> API</span><br />
     <ul>
       <li><a class="wiki_link" href="index.html">Overview</a></li>
       <li><a class="wiki_link" href="api-index.html">API Index</a></li>
@@ -46,48 +46,36 @@ namespace.
     <a href="#toc0" style="margin-top: 3px;">Overview</a>
     
   </div><div style="margin-left: 1em;" class="toc-section">
-    <a href="#proto-section" style="margin-top: 3px;">Protocols</a>
-    <div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/AsElements">AsElements</a>
-      <div style="margin-left: 1em;" class="toc-subentry">
-        <a class="toc-subentry-anchor" href="#clojure.data.xml/as-elements">as-elements</a>
-      </div>
-    </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/EventGeneration">EventGeneration</a>
-      <div style="margin-left: 1em;" class="toc-subentry">
-        <a class="toc-subentry-anchor" href="#clojure.data.xml/gen-event">gen-event</a>
-      </div><div style="margin-left: 1em;" class="toc-subentry">
-        <a class="toc-subentry-anchor" href="#clojure.data.xml/next-events">next-events</a>
-      </div>
-    </div>
+    <a href="#" style="margin-top: 3px;"></a>
+    
   </div><div style="margin-left: 1em;" class="toc-section">
-    <a href="#type-section" style="margin-top: 3px;">Types</a>
-    <div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/CData">CData</a>
-      
-    </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/Comment">Comment</a>
-      
-    </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/Element">Element</a>
-      
-    </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/Event">Event</a>
-      
-    </div>
+    <a href="#" style="margin-top: 3px;"></a>
+    
   </div><div style="margin-left: 1em;" class="toc-section">
     <a href="#var-section" style="margin-top: 3px;">Vars and Functions</a>
     <div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/-&gt;CData">-&gt;CData</a>
+      <a class="toc-entry-anchor" href="#clojure.data.xml/aggregate-xmlns">aggregate-xmlns</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/-&gt;Comment">-&gt;Comment</a>
+      <a class="toc-entry-anchor" href="#clojure.data.xml/alias-ns">alias-ns</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/-&gt;Element">-&gt;Element</a>
+      <a class="toc-entry-anchor" href="#clojure.data.xml/canonical-name">canonical-name</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/-&gt;Event">-&gt;Event</a>
+      <a class="toc-entry-anchor" href="#clojure.data.xml/cdata">cdata</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml/declare-ns">declare-ns</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml/element">element</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml/element*">element*</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml/element-nss">element-nss</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a class="toc-entry-anchor" href="#clojure.data.xml/emit">emit</a>
@@ -96,7 +84,10 @@ namespace.
       <a class="toc-entry-anchor" href="#clojure.data.xml/emit-str">emit-str</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/event-tree">event-tree</a>
+      <a class="toc-entry-anchor" href="#clojure.data.xml/event-seq">event-seq</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml/find-xmlns">find-xmlns</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a class="toc-entry-anchor" href="#clojure.data.xml/indent">indent</a>
@@ -105,16 +96,7 @@ namespace.
       <a class="toc-entry-anchor" href="#clojure.data.xml/indent-str">indent-str</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/map-&gt;CData">map-&gt;CData</a>
-      
-    </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/map-&gt;Comment">map-&gt;Comment</a>
-      
-    </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/map-&gt;Element">map-&gt;Element</a>
-      
-    </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/map-&gt;Event">map-&gt;Event</a>
+      <a class="toc-entry-anchor" href="#clojure.data.xml/ns-uri">ns-uri</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a class="toc-entry-anchor" href="#clojure.data.xml/parse">parse</a>
@@ -123,23 +105,222 @@ namespace.
       <a class="toc-entry-anchor" href="#clojure.data.xml/parse-str">parse-str</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/seq-tree">seq-tree</a>
-      
-    </div><div style="margin-left: 1em;" class="toc-entry">
       <a class="toc-entry-anchor" href="#clojure.data.xml/sexp-as-element">sexp-as-element</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
       <a class="toc-entry-anchor" href="#clojure.data.xml/sexps-as-fragment">sexps-as-fragment</a>
       
     </div><div style="margin-left: 1em;" class="toc-entry">
-      <a class="toc-entry-anchor" href="#clojure.data.xml/source-seq">source-seq</a>
+      <a class="toc-entry-anchor" href="#clojure.data.xml/uri-ns">uri-ns</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml/xml-comment">xml-comment</a>
+      
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.event" style="margin-top: 3px;">clojure.data.xml.event</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/CDataEvent">CDataEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/CharsEvent">CharsEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/CommentEvent">CommentEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/EndElementEvent">EndElementEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/StartElementEvent">StartElementEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/-&gt;CDataEvent">-&gt;CDataEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/-&gt;CharsEvent">-&gt;CharsEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/-&gt;CommentEvent">-&gt;CommentEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/-&gt;EndElementEvent">-&gt;EndElementEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/-&gt;StartElementEvent">-&gt;StartElementEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/element-nss">element-nss</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/map-&gt;CDataEvent">map-&gt;CDataEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/map-&gt;CharsEvent">map-&gt;CharsEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/map-&gt;CommentEvent">map-&gt;CommentEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/map-&gt;EndElementEvent">map-&gt;EndElementEvent</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.event/map-&gt;StartElementEvent">map-&gt;StartElementEvent</a>
+      
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.impl" style="margin-top: 3px;">clojure.data.xml.impl</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.impl/export-api">export-api</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.impl/extend-protocol-fns">extend-protocol-fns</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.impl/static-case">static-case</a>
+      
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.jvm.emit" style="margin-top: 3px;">clojure.data.xml.jvm.emit</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.jvm.emit/write-document">write-document</a>
+      
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.jvm.parse" style="margin-top: 3px;">clojure.data.xml.jvm.parse</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.jvm.parse/pull-seq">pull-seq</a>
+      
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.name" style="margin-top: 3px;">clojure.data.xml.name</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.name/*gen-prefix-counter*">*gen-prefix-counter*</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.name/alias-ns">alias-ns</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.name/declare-ns">declare-ns</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.name/gen-prefix">gen-prefix</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.name/merge-nss">merge-nss</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.name/ns-uri">ns-uri</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.name/separate-xmlns">separate-xmlns</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.name/uri-ns">uri-ns</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.name/xmlns-attr?">xmlns-attr?</a>
+      
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.node" style="margin-top: 3px;">clojure.data.xml.node</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/CData">CData</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/Comment">Comment</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/Element">Element</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/-&gt;CData">-&gt;CData</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/-&gt;Comment">-&gt;Comment</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/-&gt;Element">-&gt;Element</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/cdata">cdata</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/element">element</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/element*">element*</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/map-&gt;CData">map-&gt;CData</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/map-&gt;Comment">map-&gt;Comment</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/map-&gt;Element">map-&gt;Element</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.node/xml-comment">xml-comment</a>
+      
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.process" style="margin-top: 3px;">clojure.data.xml.process</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.process/aggregate-xmlns">aggregate-xmlns</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.process/find-xmlns">find-xmlns</a>
+      
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.protocols" style="margin-top: 3px;">clojure.data.xml.protocols</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.protocols/AsElements">AsElements</a>
+      <div style="margin-left: 1em;" class="toc-subentry">
+        <a class="toc-subentry-anchor" href="#clojure.data.xml.protocols/as-elements">as-elements</a>
+      </div>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.protocols/AsQName">AsQName</a>
+      <div style="margin-left: 1em;" class="toc-subentry">
+        <a class="toc-subentry-anchor" href="#clojure.data.xml.protocols/qname-local">qname-local</a>
+      </div><div style="margin-left: 1em;" class="toc-subentry">
+        <a class="toc-subentry-anchor" href="#clojure.data.xml.protocols/qname-uri">qname-uri</a>
+      </div>
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.protocols/EventGeneration">EventGeneration</a>
+      <div style="margin-left: 1em;" class="toc-subentry">
+        <a class="toc-subentry-anchor" href="#clojure.data.xml.protocols/gen-event">gen-event</a>
+      </div><div style="margin-left: 1em;" class="toc-subentry">
+        <a class="toc-subentry-anchor" href="#clojure.data.xml.protocols/next-events">next-events</a>
+      </div>
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.prxml" style="margin-top: 3px;">clojure.data.xml.prxml</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.prxml/sexp-as-element">sexp-as-element</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.prxml/sexps-as-fragment">sexps-as-fragment</a>
+      
+    </div>
+  </div><div style="margin-left: 1em;" class="toc-section">
+    <a href="#clojure.data.xml.tree" style="margin-top: 3px;">clojure.data.xml.tree</a>
+    <div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.tree/event-tree">event-tree</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.tree/flatten-elements">flatten-elements</a>
+      
+    </div><div style="margin-left: 1em;" class="toc-entry">
+      <a class="toc-entry-anchor" href="#clojure.data.xml.tree/seq-tree">seq-tree</a>
       
     </div>
   </div>
 </div>
 </div>
                 <div id="content-tag"><h1 id="overview">API for <span id="clojure.data.xml">clojure.data.xml</span>
-  - <span id="header-project">Lazy XML parsing</span> <span id="header-version">0.0.9</span><span id="header-status-block"> (<span id="header-status">in development</span>)</span>
+  - <span id="header-project">Lazy XML parsing</span> <span id="header-version">0.1.0-beta1</span><span id="header-status-block"> (<span id="header-status">in development</span>)</span>
   </h1>
 <span id="author-line">by <span id="author-name">Chris Houser</span><br /></span>
 <br />Full namespace name: <span id="long-name">clojure.data.xml</span>
@@ -152,19 +333,895 @@ emit these as text.</pre>
 
 <br />
 
+
+
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/aggregate-xmlns">aggregate-xmlns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (aggregate-xmlns xml)
+</pre>
+    <pre id="var-docstr">Put all occurring xmlns into the root</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj#L39" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/alias-ns">alias-ns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (alias-ns &amp; {:as alias-nss})
+</pre>
+    <pre id="var-docstr">Define a clojure namespace alias for shortened keyword and symbol namespaces.
+ Similar to clojure.core/alias, but if namespace doesn't exist, it is created.
+
+ ## Example
+ (declare-ns :xml.dav "DAV:")
+ (alias-ns :D :xml.dav)
+{:tag ::D/propfind :content []}</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L105" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/canonical-name">canonical-name</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (canonical-name n)
+</pre>
+    <pre id="var-docstr">Put (q)name into canonical form as per ns-env</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L40" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/cdata">cdata</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (cdata content)
+</pre>
+    <pre id="var-docstr">Create a CData node</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L51" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/declare-ns">declare-ns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (declare-ns &amp; {:as cljns-xmlnss})
+</pre>
+    <pre id="var-docstr">Define mappings in the global keyword-ns -&gt; qname-uri mapping table.
+Arguments are pairs of ns-name - qname-uri
+ns-name must be a string, symbol, keyword or clojure namespace. The canonical form is string.
+ns-uri must be a string</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L86" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/element">element</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (element tag)
+       (element tag attrs)
+       (element tag attrs &amp; content)
+</pre>
+    <pre id="var-docstr">Create an xml Element from content varargs</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L45" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/element*">element*</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (element* tag attrs content meta)
+       (element* tag attrs content)
+</pre>
+    <pre id="var-docstr">Create an xml element from a content collection and optional metadata</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L30" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/element-nss">element-nss</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (element-nss {:keys [attrs], :as element})
+</pre>
+    <pre id="var-docstr">Get xmlns environment from element</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L22" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/emit">emit</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (emit e writer &amp; {:as opts})
+</pre>
+    <pre id="var-docstr">Prints the given Element tree as XML text to stream.
+Options:
+ :encoding &lt;str&gt;          Character encoding to use</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L76" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/emit-str">emit-str</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (emit-str e &amp; opts)
+</pre>
+    <pre id="var-docstr">Emits the Element to String and returns it</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L83" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/event-seq">event-seq</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (event-seq source {:as props})
+</pre>
+    <pre id="var-docstr">Parses the XML InputSource source using a pull-parser. Returns
+a lazy sequence of Event records.  Accepts key pairs
+with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html">http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html</a>
+and xml-input-factory-props for more information.
+Defaults coalescing true and supporting-external-entities false.
+:include-node? can be a set of #{:start-element :end-element :characters :comment}</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L45" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/find-xmlns">find-xmlns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (find-xmlns xml)
+</pre>
+    <pre id="var-docstr">Find all xmlns occuring in a root</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj#L32" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/indent">indent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (indent e writer &amp; opts)
+</pre>
+    <pre id="var-docstr">Emits the XML and indents the result.  WARNING: this is slow
+it will emit the XML and read it in again to indent it.  Intended for
+debugging/testing only.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L90" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/indent-str">indent-str</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (indent-str e &amp; opts)
+</pre>
+    <pre id="var-docstr">Emits the XML and indents the result.  Writes the results to a String and returns it</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L97" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/ns-uri">ns-uri</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (ns-uri ns)
+</pre>
+    <pre id="var-docstr">Look up xmlns uri to keyword namespace</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L35" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/parse">parse</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (parse source &amp; opts)
+</pre>
+    <pre id="var-docstr">Parses the source, which can be an
+InputStream or Reader, and returns a lazy tree of Element records. Accepts key pairs
+with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html">http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html</a>
+and xml-input-factory-props for more information. Defaults coalescing true.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L61" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/parse-str">parse-str</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (parse-str s &amp; opts)
+</pre>
+    <pre id="var-docstr">Parses the passed in string to Clojure data structures.  Accepts key pairs
+with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html">http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html</a>
+and xml-input-factory-props for more information. Defaults coalescing true.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L69" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/sexp-as-element">sexp-as-element</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (sexp-as-element sexp)
+</pre>
+    <pre id="var-docstr">Convert a single sexp into an Element</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj#L66" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/sexps-as-fragment">sexps-as-fragment</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (sexps-as-fragment)
+       (sexps-as-fragment sexp)
+       (sexps-as-fragment sexp &amp; sexps)
+</pre>
+    <pre id="var-docstr">Convert a compact prxml/hiccup-style data structure into the more formal
+tag/attrs/content format. A seq of elements will be returned, which may
+not be suitable for immediate use as there is no root element. See also
+sexp-as-element.
+
+The format is [:tag-name attr-map? content*]. Each vector opens a new tag;
+seqs do not open new tags, and are just used for inserting groups of elements
+into the parent tag. A bare keyword not in a vector creates an empty element.
+
+To provide XML conversion for your own data types, extend the AsElements
+protocol to them.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj#L50" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/uri-ns">uri-ns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (uri-ns uri)
+</pre>
+    <pre id="var-docstr">Look up keyword namespace to xmlns uri</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L40" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml/xml-comment">xml-comment</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (xml-comment content)
+</pre>
+    <pre id="var-docstr">Create a Comment node</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L56" id="var-source">Source</a>
+  </div>
+</div>
+<br />
+<h2 id="clojure.data.xml.event">clojure.data.xml.event</h2>
+<pre id="namespace-docstr">Data type for xml pull events</pre>
+
+
+<br />
+
+<div id="type-section">
+  <p></p>
+  <h2>Types</h2>
+  <div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/CDataEvent">CDataEvent</h2>
+    <span id="type-type">record</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[str]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
+  </div><div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/CharsEvent">CharsEvent</h2>
+    <span id="type-type">record</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[str]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
+  </div><div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/CommentEvent">CommentEvent</h2>
+    <span id="type-type">record</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[str]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
+  </div><div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/EndElementEvent">EndElementEvent</h2>
+    <span id="type-type">record</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[tag]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
+  </div><div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/StartElementEvent">StartElementEvent</h2>
+    <span id="type-type">record</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[tag attrs nss]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
+  </div>
+</div>
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/-&gt;CDataEvent">-&gt;CDataEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (-&gt;CDataEvent str)
+</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.CDataEvent.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L33" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/-&gt;CharsEvent">-&gt;CharsEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (-&gt;CharsEvent str)
+</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.CharsEvent.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L32" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/-&gt;CommentEvent">-&gt;CommentEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (-&gt;CommentEvent str)
+</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.CommentEvent.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L34" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/-&gt;EndElementEvent">-&gt;EndElementEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (-&gt;EndElementEvent tag)
+</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.EndElementEvent.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L31" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/-&gt;StartElementEvent">-&gt;StartElementEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (-&gt;StartElementEvent tag attrs nss)
+</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.StartElementEvent.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L30" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/element-nss">element-nss</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (element-nss {:keys [attrs], :as element})
+</pre>
+    <pre id="var-docstr">Get xmlns environment from element</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L22" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/map-&gt;CDataEvent">map-&gt;CDataEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (map-&gt;CDataEvent m#)
+</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.event.CDataEvent, taking a map of keywords to field values.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L33" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/map-&gt;CharsEvent">map-&gt;CharsEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (map-&gt;CharsEvent m#)
+</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.event.CharsEvent, taking a map of keywords to field values.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L32" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/map-&gt;CommentEvent">map-&gt;CommentEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (map-&gt;CommentEvent m#)
+</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.event.CommentEvent, taking a map of keywords to field values.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L34" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/map-&gt;EndElementEvent">map-&gt;EndElementEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (map-&gt;EndElementEvent m#)
+</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.event.EndElementEvent, taking a map of keywords to field values.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L31" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/map-&gt;StartElementEvent">map-&gt;StartElementEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (map-&gt;StartElementEvent m#)
+</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.event.StartElementEvent, taking a map of keywords to field values.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L30" id="var-source">Source</a>
+  </div>
+</div>
+<br />
+<h2 id="clojure.data.xml.impl">clojure.data.xml.impl</h2>
+<pre id="namespace-docstr">Shared private code for data.xml namespaces</pre>
+
+
+<br />
+
+
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.impl/export-api">export-api</h2>
+    <span id="var-type">macro</span><br />
+    <pre id="var-usage">Usage: (export-api &amp; names)
+</pre>
+    <pre id="var-docstr">This creates vars, that take their (local) name, value and metadata from another var</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj#L26" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.impl/extend-protocol-fns">extend-protocol-fns</h2>
+    <span id="var-type">macro</span><br />
+    <pre id="var-usage">Usage: (extend-protocol-fns proto &amp; types+mmaps)
+</pre>
+    <pre id="var-docstr">Helper to many types to a protocol with a method map, similar to extend</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj#L41" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.impl/static-case">static-case</h2>
+    <span id="var-type">macro</span><br />
+    <pre id="var-usage">Usage: (static-case val &amp; cases)
+</pre>
+    <pre id="var-docstr">Variant of case where keys are evaluated at compile-time</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj#L31" id="var-source">Source</a>
+  </div>
+</div>
+<br />
+<h2 id="clojure.data.xml.jvm.emit">clojure.data.xml.jvm.emit</h2>
+<pre id="namespace-docstr">JVM implementation of the emitter details</pre>
+
+
+<br />
+
+
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.jvm.emit/write-document">write-document</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (write-document swriter events opts)
+</pre>
+    <pre id="var-docstr">Writes the given event seq as XML text to writer.
+Options:
+ :encoding &lt;str&gt;          Character encoding to use</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8b620747d032d71ae94ecae488aa4647ca54e687/src/main/clojure/clojure/data/xml/jvm/emit.clj#L110" id="var-source">Source</a>
+  </div>
+</div>
+<br />
+<h2 id="clojure.data.xml.jvm.parse">clojure.data.xml.jvm.parse</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+
+
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.jvm.parse/pull-seq">pull-seq</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (pull-seq sreader include-node? ns-envs)
+</pre>
+    <pre id="var-docstr">Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to
+be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/49c8f6e2613c92e9346d54e2542c9700c44ef685/src/main/clojure/clojure/data/xml/jvm/parse.clj#L60" id="var-source">Source</a>
+  </div>
+</div>
+<br />
+<h2 id="clojure.data.xml.name">clojure.data.xml.name</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+
+
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.name/*gen-prefix-counter*">*gen-prefix-counter*</h2>
+    <span id="var-type">dynamic var</span><br />
+    <pre id="var-usage"></pre>
+    <pre id="var-docstr">Thread local counter for a single document</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L168" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.name/alias-ns">alias-ns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (alias-ns &amp; {:as alias-nss})
+</pre>
+    <pre id="var-docstr">Define a clojure namespace alias for shortened keyword and symbol namespaces.
+ Similar to clojure.core/alias, but if namespace doesn't exist, it is created.
+
+ ## Example
+ (declare-ns :xml.dav "DAV:")
+ (alias-ns :D :xml.dav)
+{:tag ::D/propfind :content []}</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L105" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.name/declare-ns">declare-ns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (declare-ns &amp; {:as cljns-xmlnss})
+</pre>
+    <pre id="var-docstr">Define mappings in the global keyword-ns -&gt; qname-uri mapping table.
+Arguments are pairs of ns-name - qname-uri
+ns-name must be a string, symbol, keyword or clojure namespace. The canonical form is string.
+ns-uri must be a string</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L86" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.name/gen-prefix">gen-prefix</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (gen-prefix)
+       (gen-prefix n)
+</pre>
+    <pre id="var-docstr">Generates an xml prefix.
+Zero-arity can only be called, when *gen-prefix-counter* is bound and will increment it.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L172" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.name/merge-nss">merge-nss</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (merge-nss nss1 nss2)
+</pre>
+    <pre id="var-docstr">Merge two attribute sets, deleting assignments of empty-string</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L124" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.name/ns-uri">ns-uri</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (ns-uri ns)
+</pre>
+    <pre id="var-docstr">Look up xmlns uri to keyword namespace</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L35" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.name/separate-xmlns">separate-xmlns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (separate-xmlns attrs cont)
+</pre>
+    <pre id="var-docstr">Call cont with two args: attributes and xmlns attributes</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L144" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.name/uri-ns">uri-ns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (uri-ns uri)
+</pre>
+    <pre id="var-docstr">Look up keyword namespace to xmlns uri</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L40" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.name/xmlns-attr?">xmlns-attr?</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (xmlns-attr? qn)
+</pre>
+    <pre id="var-docstr">Is this qname an xmlns declaration?</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L135" id="var-source">Source</a>
+  </div>
+</div>
+<br />
+<h2 id="clojure.data.xml.node">clojure.data.xml.node</h2>
+<pre id="namespace-docstr">Data types for xml nodes: Element, CData and Comment</pre>
+
+
+<br />
+
+<div id="type-section">
+  <p></p>
+  <h2>Types</h2>
+  <div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/CData">CData</h2>
+    <span id="type-type">record</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[content]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
+  </div><div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/Comment">Comment</h2>
+    <span id="type-type">record</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[content]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
+  </div><div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/Element">Element</h2>
+    <span id="type-type">record</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[tag attrs content]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
+  </div>
+</div>
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/-&gt;CData">-&gt;CData</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (-&gt;CData content)
+</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.node.CData.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L27" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/-&gt;Comment">-&gt;Comment</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (-&gt;Comment content)
+</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.node.Comment.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L28" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/-&gt;Element">-&gt;Element</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (-&gt;Element tag attrs content)
+</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.node.Element.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L16" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/cdata">cdata</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (cdata content)
+</pre>
+    <pre id="var-docstr">Create a CData node</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L51" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/element">element</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (element tag)
+       (element tag attrs)
+       (element tag attrs &amp; content)
+</pre>
+    <pre id="var-docstr">Create an xml Element from content varargs</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L45" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/element*">element*</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (element* tag attrs content meta)
+       (element* tag attrs content)
+</pre>
+    <pre id="var-docstr">Create an xml element from a content collection and optional metadata</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L30" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/map-&gt;CData">map-&gt;CData</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (map-&gt;CData m#)
+</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.node.CData, taking a map of keywords to field values.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L27" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/map-&gt;Comment">map-&gt;Comment</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (map-&gt;Comment m#)
+</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.node.Comment, taking a map of keywords to field values.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L28" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/map-&gt;Element">map-&gt;Element</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (map-&gt;Element m#)
+</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.node.Element, taking a map of keywords to field values.</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L16" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.node/xml-comment">xml-comment</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (xml-comment content)
+</pre>
+    <pre id="var-docstr">Create a Comment node</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L56" id="var-source">Source</a>
+  </div>
+</div>
+<br />
+<h2 id="clojure.data.xml.process">clojure.data.xml.process</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+
+
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.process/aggregate-xmlns">aggregate-xmlns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (aggregate-xmlns xml)
+</pre>
+    <pre id="var-docstr">Put all occurring xmlns into the root</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj#L39" id="var-source">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.process/find-xmlns">find-xmlns</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (find-xmlns xml)
+</pre>
+    <pre id="var-docstr">Find all xmlns occuring in a root</pre>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj#L32" id="var-source">Source</a>
+  </div>
+</div>
+<br />
+<h2 id="clojure.data.xml.protocols">clojure.data.xml.protocols</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
 <div id="proto-section">
   <p></p>
   <h2>Protocols</h2>
   <div id="proto-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml/AsElements">AsElements</h2>
+    <h2 id="clojure.data.xml.protocols/AsElements">AsElements</h2>
     <span id="proto-type">Protocol</span><br />
     <pre id="proto-docstr"></pre>
     Known implementations: <span id="proto-impls">clojure.lang.IPersistentVector, clojure.lang.ISeq, clojure.lang.Keyword, java.lang.String, nil, Object</span>
     <div id="proto-var-entry">
       <br />
-      <h3 id="clojure.data.xml/as-elements">as-elements</h3>
+      <h3 id="clojure.data.xml.protocols/as-elements">as-elements</h3>
       <span id="var-type">function</span><br />
       <pre id="var-usage">Usage: (as-elements expr)
 </pre>
@@ -175,17 +1232,48 @@ emit these as text.</pre>
     </div>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L203" id="proto-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj#L25" id="proto-source">Source</a>
   </div><div id="proto-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml/EventGeneration">EventGeneration</h2>
+    <h2 id="clojure.data.xml.protocols/AsQName">AsQName</h2>
     <span id="proto-type">Protocol</span><br />
-    <pre id="proto-docstr">Protocol for generating new events based on element type</pre>
-    Known implementations: <span id="proto-impls">clojure.data.xml.CData, clojure.data.xml.Comment, clojure.data.xml.Element, clojure.data.xml.Event, clojure.lang.Sequential, java.lang.Boolean, java.lang.Number, java.lang.String, nil</span>
+    <pre id="proto-docstr"></pre>
+    Known implementations: <span id="proto-impls">clojure.lang.Keyword, java.lang.String, javax.xml.namespace.QName</span>
     <div id="proto-var-entry">
       <br />
-      <h3 id="clojure.data.xml/gen-event">gen-event</h3>
+      <h3 id="clojure.data.xml.protocols/qname-local">qname-local</h3>
+      <span id="var-type">function</span><br />
+      <pre id="var-usage">Usage: (qname-local qname)
+</pre>
+      <pre id="var-docstr">Get the name for this qname</pre>
+      
+      
+      
+    </div><div id="proto-var-entry">
+      <br />
+      <h3 id="clojure.data.xml.protocols/qname-uri">qname-uri</h3>
+      <span id="var-type">function</span><br />
+      <pre id="var-usage">Usage: (qname-uri qname)
+</pre>
+      <pre id="var-docstr">Get the namespace uri for this qname</pre>
+      
+      
+      
+    </div>
+    
+    
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj#L13" id="proto-source">Source</a>
+  </div><div id="proto-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.protocols/EventGeneration">EventGeneration</h2>
+    <span id="proto-type">Protocol</span><br />
+    <pre id="proto-docstr">Protocol for generating new events based on element type</pre>
+    Known implementations: <span id="proto-impls">clojure.data.xml.event.CDataEvent, clojure.data.xml.event.CDataEvent, clojure.data.xml.event.CharsEvent, clojure.data.xml.event.CharsEvent, clojure.data.xml.event.CommentEvent, clojure.data.xml.event.CommentEvent, clojure.data.xml.event.EndElementEvent, clojure.data.xml.event.EndElementEvent, clojure.data.xml.event.StartElementEvent, clojure.data.xml.event.StartElementEvent, clojure.data.xml.node.CData, clojure.data.xml.node.Comment, clojure.data.xml.node.Element, clojure.lang.IPersistentMap, clojure.lang.Sequential, java.lang.Boolean, java.lang.Number, java.lang.String, nil</span>
+    <div id="proto-var-entry">
+      <br />
+      <h3 id="clojure.data.xml.protocols/gen-event">gen-event</h3>
       <span id="var-type">function</span><br />
       <pre id="var-usage">Usage: (gen-event item)
 </pre>
@@ -195,7 +1283,7 @@ emit these as text.</pre>
       
     </div><div id="proto-var-entry">
       <br />
-      <h3 id="clojure.data.xml/next-events">next-events</h3>
+      <h3 id="clojure.data.xml.protocols/next-events">next-events</h3>
       <span id="var-type">function</span><br />
       <pre id="var-usage">Usage: (next-events item next-items)
 </pre>
@@ -207,125 +1295,73 @@ events that should be generated after this one is complete.</pre>
     </div>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L73" id="proto-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj#L17" id="proto-source">Source</a>
   </div>
 </div>
-<div id="type-section">
-  <p></p>
-  <h2>Types</h2>
-  <div id="type-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/CData">CData</h2>
-    <span id="type-type">record</span><br />
-    <pre id="type-docstr"></pre>
-    Fields: <span id="type-fields">[content]</span><br />
-    Protocols: <span id="type-protocols"></span><br />
-    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
-  </div><div id="type-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/Comment">Comment</h2>
-    <span id="type-type">record</span><br />
-    <pre id="type-docstr"></pre>
-    Fields: <span id="type-fields">[content]</span><br />
-    Protocols: <span id="type-protocols"></span><br />
-    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
-  </div><div id="type-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/Element">Element</h2>
-    <span id="type-type">record</span><br />
-    <pre id="type-docstr"></pre>
-    Fields: <span id="type-fields">[tag attrs content]</span><br />
-    Protocols: <span id="type-protocols"></span><br />
-    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
-  </div><div id="type-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/Event">Event</h2>
-    <span id="type-type">record</span><br />
-    <pre id="type-docstr"></pre>
-    Fields: <span id="type-fields">[type name attrs str]</span><br />
-    Protocols: <span id="type-protocols"></span><br />
-    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
-  </div>
-</div>
+
+
+<br />
+<h2 id="clojure.data.xml.prxml">clojure.data.xml.prxml</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+
+
 <div id="var-section">
   <p></p>
   <h2>Public Variables and Functions</h2>
   <div id="var-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml/-&gt;CData">-&gt;CData</h2>
+    <h2 id="clojure.data.xml.prxml/sexp-as-element">sexp-as-element</h2>
     <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (-&gt;CData content)
+    <pre id="var-usage">Usage: (sexp-as-element sexp)
 </pre>
-    <pre id="var-docstr">Positional factory function for class clojure.data.xml.CData.</pre>
+    <pre id="var-docstr">Convert a single sexp into an Element</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L44" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj#L66" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml/-&gt;Comment">-&gt;Comment</h2>
+    <h2 id="clojure.data.xml.prxml/sexps-as-fragment">sexps-as-fragment</h2>
     <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (-&gt;Comment content)
+    <pre id="var-usage">Usage: (sexps-as-fragment)
+       (sexps-as-fragment sexp)
+       (sexps-as-fragment sexp &amp; sexps)
 </pre>
-    <pre id="var-docstr">Positional factory function for class clojure.data.xml.Comment.</pre>
+    <pre id="var-docstr">Convert a compact prxml/hiccup-style data structure into the more formal
+tag/attrs/content format. A seq of elements will be returned, which may
+not be suitable for immediate use as there is no root element. See also
+sexp-as-element.
+
+The format is [:tag-name attr-map? content*]. Each vector opens a new tag;
+seqs do not open new tags, and are just used for inserting groups of elements
+into the parent tag. A bare keyword not in a vector creates an empty element.
+
+To provide XML conversion for your own data types, extend the AsElements
+protocol to them.</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L45" id="var-source">Source</a>
-  </div><div id="var-entry">
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj#L50" id="var-source">Source</a>
+  </div>
+</div>
+<br />
+<h2 id="clojure.data.xml.tree">clojure.data.xml.tree</h2>
+<pre id="namespace-docstr"></pre>
+
+
+<br />
+
+
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml/-&gt;Element">-&gt;Element</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (-&gt;Element tag attrs content)
-</pre>
-    <pre id="var-docstr">Positional factory function for class clojure.data.xml.Element.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L43" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/-&gt;Event">-&gt;Event</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (-&gt;Event type name attrs str)
-</pre>
-    <pre id="var-docstr">Positional factory function for class clojure.data.xml.Event.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L22" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/emit">emit</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (emit e stream &amp; {:as opts})
-</pre>
-    <pre id="var-docstr">Prints the given Element tree as XML text to stream.
-Options:
- :encoding &lt;str&gt;          Character encoding to use</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L370" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/emit-str">emit-str</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (emit-str e)
-</pre>
-    <pre id="var-docstr">Emits the Element to String and returns it</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L387" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/event-tree">event-tree</h2>
+    <h2 id="clojure.data.xml.tree/event-tree">event-tree</h2>
     <span id="var-type">function</span><br />
     <pre id="var-usage">Usage: (event-tree events)
 </pre>
@@ -333,106 +1369,22 @@ Options:
 objects. See source-seq and parse.</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L190" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj#L66" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml/indent">indent</h2>
+    <h2 id="clojure.data.xml.tree/flatten-elements">flatten-elements</h2>
     <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (indent e stream &amp; {:as opts})
+    <pre id="var-usage">Usage: (flatten-elements elements)
 </pre>
-    <pre id="var-docstr">Emits the XML and indents the result.  WARNING: this is slow
-it will emit the XML and read it in again to indent it.  Intended for
-debugging/testing only.</pre>
+    <pre id="var-docstr">Flatten a collection of elements to an event seq</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L400" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj#L55" id="var-source">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml/indent-str">indent-str</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (indent-str e)
-</pre>
-    <pre id="var-docstr">Emits the XML and indents the result.  Writes the results to a String and returns it</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L411" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/map-&gt;CData">map-&gt;CData</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (map-&gt;CData m#)
-</pre>
-    <pre id="var-docstr">Factory function for class clojure.data.xml.CData, taking a map of keywords to field values.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L44" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/map-&gt;Comment">map-&gt;Comment</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (map-&gt;Comment m#)
-</pre>
-    <pre id="var-docstr">Factory function for class clojure.data.xml.Comment, taking a map of keywords to field values.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L45" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/map-&gt;Element">map-&gt;Element</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (map-&gt;Element m#)
-</pre>
-    <pre id="var-docstr">Factory function for class clojure.data.xml.Element, taking a map of keywords to field values.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L43" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/map-&gt;Event">map-&gt;Event</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (map-&gt;Event m#)
-</pre>
-    <pre id="var-docstr">Factory function for class clojure.data.xml.Event, taking a map of keywords to field values.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L22" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/parse">parse</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (parse source &amp; props)
-</pre>
-    <pre id="var-docstr">Parses the source, which can be an
-InputStream or Reader, and returns a lazy tree of Element records. Accepts key pairs
-with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html">http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html</a>
-and xml-input-factory-props for more information. Defaults coalescing true.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L344" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/parse-str">parse-str</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (parse-str s &amp; props)
-</pre>
-    <pre id="var-docstr">Parses the passed in string to Clojure data structures.  Accepts key pairs
-with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html">http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html</a>
-and xml-input-factory-props for more information. Defaults coalescing true.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L352" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/seq-tree">seq-tree</h2>
+    <h2 id="clojure.data.xml.tree/seq-tree">seq-tree</h2>
     <span id="var-type">function</span><br />
     <pre id="var-usage">Usage: (seq-tree parent exit? node coll)
 </pre>
@@ -459,56 +1411,7 @@ nor exit, and its return value will become a node of the output tree.
 ;=&gt; (("1" "2" [("3" [("4")])] "5") 6)</pre>
     
     
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L154" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/sexp-as-element">sexp-as-element</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (sexp-as-element sexp)
-</pre>
-    <pre id="var-docstr">Convert a single sexp into an Element</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L258" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/sexps-as-fragment">sexps-as-fragment</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (sexps-as-fragment)
-       (sexps-as-fragment sexp)
-       (sexps-as-fragment sexp &amp; sexps)
-</pre>
-    <pre id="var-docstr">Convert a compact prxml/hiccup-style data structure into the more formal
-tag/attrs/content format. A seq of elements will be returned, which may
-not be suitable for immediate use as there is no root element. See also
-sexp-as-element.
-
-The format is [:tag-name attr-map? content*]. Each vector opens a new tag;
-seqs do not open new tags, and are just used for inserting groups of elements
-into the parent tag. A bare keyword not in a vector creates an empty element.
-
-To provide XML conversion for your own data types, extend the AsElements
-protocol to them.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L242" id="var-source">Source</a>
-  </div><div id="var-entry">
-    <br />
-    <hr />
-    <h2 id="clojure.data.xml/source-seq">source-seq</h2>
-    <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (source-seq s &amp; {:as props})
-</pre>
-    <pre id="var-docstr">Parses the XML InputSource source using a pull-parser. Returns
-a lazy sequence of Event records.  Accepts key pairs
-with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html">http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html</a>
-and xml-input-factory-props for more information.
-Defaults coalescing true and supporting-external-entities false.</pre>
-    
-    
-    <a href="https://github.com/clojure/data.xml/blob/14d0af1cef8c8af497a2602dc710ef65967537b6/src/main/clojure/clojure/data/xml.clj#L326" id="var-source">Source</a>
+    <a href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj#L15" id="var-source">Source</a>
   </div>
 </div>
 
