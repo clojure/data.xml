@@ -446,7 +446,7 @@
    "https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L33",
    :line 33,
    :var-type "function",
-   :arglists ([m__5818__auto__]),
+   :arglists ([m#]),
    :doc
    "Factory function for class clojure.data.xml.event.CDataEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
@@ -460,7 +460,7 @@
    "https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L32",
    :line 32,
    :var-type "function",
-   :arglists ([m__5818__auto__]),
+   :arglists ([m#]),
    :doc
    "Factory function for class clojure.data.xml.event.CharsEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
@@ -474,7 +474,7 @@
    "https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L34",
    :line 34,
    :var-type "function",
-   :arglists ([m__5818__auto__]),
+   :arglists ([m#]),
    :doc
    "Factory function for class clojure.data.xml.event.CommentEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
@@ -488,7 +488,7 @@
    "https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L31",
    :line 31,
    :var-type "function",
-   :arglists ([m__5818__auto__]),
+   :arglists ([m#]),
    :doc
    "Factory function for class clojure.data.xml.event.EndElementEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
@@ -502,7 +502,7 @@
    "https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L30",
    :line 30,
    :var-type "function",
-   :arglists ([m__5818__auto__]),
+   :arglists ([m#]),
    :doc
    "Factory function for class clojure.data.xml.event.StartElementEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
@@ -511,6 +511,7 @@
   {:name "CDataEvent",
    :var-type "record",
    :namespace "clojure.data.xml.event",
+   :arglists nil,
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/CDataEvent",
    :source-url nil,
@@ -519,6 +520,7 @@
   {:name "CharsEvent",
    :var-type "record",
    :namespace "clojure.data.xml.event",
+   :arglists nil,
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/CharsEvent",
    :source-url nil,
@@ -527,6 +529,7 @@
   {:name "CommentEvent",
    :var-type "record",
    :namespace "clojure.data.xml.event",
+   :arglists nil,
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/CommentEvent",
    :source-url nil,
@@ -535,6 +538,7 @@
   {:name "EndElementEvent",
    :var-type "record",
    :namespace "clojure.data.xml.event",
+   :arglists nil,
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/EndElementEvent",
    :source-url nil,
@@ -543,6 +547,7 @@
   {:name "StartElementEvent",
    :var-type "record",
    :namespace "clojure.data.xml.event",
+   :arglists nil,
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/StartElementEvent",
    :source-url nil,
@@ -626,6 +631,7 @@
    :dynamic true,
    :line 168,
    :var-type "var",
+   :arglists nil,
    :doc "Thread local counter for a single document",
    :namespace "clojure.data.xml.name",
    :wiki-url
@@ -828,7 +834,7 @@
    "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L27",
    :line 27,
    :var-type "function",
-   :arglists ([m__5818__auto__]),
+   :arglists ([m#]),
    :doc
    "Factory function for class clojure.data.xml.node.CData, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.node",
@@ -842,7 +848,7 @@
    "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L28",
    :line 28,
    :var-type "function",
-   :arglists ([m__5818__auto__]),
+   :arglists ([m#]),
    :doc
    "Factory function for class clojure.data.xml.node.Comment, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.node",
@@ -856,7 +862,7 @@
    "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L16",
    :line 16,
    :var-type "function",
-   :arglists ([m__5818__auto__]),
+   :arglists ([m#]),
    :doc
    "Factory function for class clojure.data.xml.node.Element, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.node",
@@ -878,6 +884,7 @@
   {:name "CData",
    :var-type "record",
    :namespace "clojure.data.xml.node",
+   :arglists nil,
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/CData",
    :source-url nil,
@@ -886,6 +893,7 @@
   {:name "Comment",
    :var-type "record",
    :namespace "clojure.data.xml.node",
+   :arglists nil,
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/Comment",
    :source-url nil,
@@ -894,6 +902,7 @@
   {:name "Element",
    :var-type "record",
    :namespace "clojure.data.xml.node",
+   :arglists nil,
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/Element",
    :source-url nil,
@@ -925,47 +934,50 @@
    :namespace "clojure.data.xml.process",
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.process/find-xmlns"}
-  {:name "AsElements",
-   :doc nil,
-   :var-type "protocol",
-   :line 25,
-   :namespace "clojure.data.xml.protocols",
-   :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/AsElements",
+  {:raw-source-url
+   "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj",
+   :name "AsElements",
+   :file "src/main/clojure/clojure/data/xml/protocols.clj",
    :source-url
    "https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj#L25",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj",
-   :file "src/main/clojure/clojure/data/xml/protocols.clj"}
-  {:name "AsQName",
-   :doc nil,
+   :line 25,
    :var-type "protocol",
-   :line 13,
+   :arglists nil,
+   :doc nil,
    :namespace "clojure.data.xml.protocols",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/AsQName",
+   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/AsElements"}
+  {:raw-source-url
+   "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj",
+   :name "AsQName",
+   :file "src/main/clojure/clojure/data/xml/protocols.clj",
    :source-url
    "https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj#L13",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj",
-   :file "src/main/clojure/clojure/data/xml/protocols.clj"}
-  {:name "EventGeneration",
-   :doc "Protocol for generating new events based on element type",
+   :line 13,
    :var-type "protocol",
-   :line 17,
+   :arglists nil,
+   :doc nil,
    :namespace "clojure.data.xml.protocols",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/EventGeneration",
+   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/AsQName"}
+  {:raw-source-url
+   "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj",
+   :name "EventGeneration",
+   :file "src/main/clojure/clojure/data/xml/protocols.clj",
    :source-url
    "https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj#L17",
-   :raw-source-url
-   "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj",
-   :file "src/main/clojure/clojure/data/xml/protocols.clj"}
+   :line 17,
+   :var-type "protocol",
+   :arglists nil,
+   :doc "Protocol for generating new events based on element type",
+   :namespace "clojure.data.xml.protocols",
+   :wiki-url
+   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/EventGeneration"}
   {:name "as-elements",
    :doc "Return a seq of elements represented by an expression.",
-   :arglists ([expr]),
    :var-type "function",
    :namespace "clojure.data.xml.protocols",
+   :arglists ([expr]),
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/as-elements",
    :source-url nil,
@@ -973,9 +985,9 @@
    :file nil}
   {:name "qname-local",
    :doc "Get the name for this qname",
-   :arglists ([qname]),
    :var-type "function",
    :namespace "clojure.data.xml.protocols",
+   :arglists ([qname]),
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/qname-local",
    :source-url nil,
@@ -983,9 +995,9 @@
    :file nil}
   {:name "qname-uri",
    :doc "Get the namespace uri for this qname",
-   :arglists ([qname]),
    :var-type "function",
    :namespace "clojure.data.xml.protocols",
+   :arglists ([qname]),
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/qname-uri",
    :source-url nil,
@@ -993,9 +1005,9 @@
    :file nil}
   {:name "gen-event",
    :doc "Function to generate an event for e.",
-   :arglists ([item]),
    :var-type "function",
    :namespace "clojure.data.xml.protocols",
+   :arglists ([item]),
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/gen-event",
    :source-url nil,
@@ -1004,9 +1016,9 @@
   {:name "next-events",
    :doc
    "Returns the next set of events that should occur after e.  next-events are the\nevents that should be generated after this one is complete.",
-   :arglists ([item next-items]),
    :var-type "function",
    :namespace "clojure.data.xml.protocols",
+   :arglists ([item next-items]),
    :wiki-url
    "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/next-events",
    :source-url nil,
