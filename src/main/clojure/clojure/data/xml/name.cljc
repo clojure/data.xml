@@ -7,17 +7,30 @@
 ;   You must not remove this notice, or any other, from this software.
 
 (ns clojure.data.xml.name
-  (:require [clojure.string :as str]
-            [clojure.data.xml.jvm.name :as jvm]
-            (clojure.data.xml
-             [impl :refer [export-api]]
-             [protocols :as protocols :refer [AsQName]]))
-  (:import (clojure.lang Namespace Keyword)))
+  #?@(:clj [(:require [clojure.string :as str]
+                      [clojure.data.xml.jvm.name :as jvm]
+                      (clojure.data.xml
+                       [impl :refer [export-api]]
+                       [protocols :as protocols :refer [AsQName]]))
+            (:import (clojure.lang Namespace Keyword))]
+      :cljs [(:require-macros
+              [clojure.data.xml.impl :refer [export-api]])
+             (:require [clojure.string :as str]
+                       [clojure.data.xml.js.name :as jsn]
+                       [clojure.data.xml.protocols :as protocols :refer [AsQName]])
+             (:import (goog.string StringBuffer))]))
 
 (export-api
- jvm/parse-qname jvm/make-qname jvm/qname
+ #?@(:clj  [jvm/parse-qname jvm/make-qname]
+     :cljs [jsn/parse-qname jsn/make-qname])
+ 
  ;; protocol functions can be redefined by extend-*
- #'protocols/qname-uri #'protocols/qname-local)
+ protocols/qname-uri protocols/qname-local)
+
+(defn qname
+  ([name] (make-qname "" name ""))
+  ([uri name] (make-qname (or uri "") name ""))
+  ([uri name prefix] (make-qname (or uri "") name (or prefix ""))))
 
 ;; The empty string shall be equal to nil for xml names
 (defn namespaced? [qn]
@@ -43,7 +56,7 @@
   (-> @nss :xs->ns (get uri)))
 
 (extend-protocol AsQName
-  clojure.lang.Keyword
+  Keyword
   (qname-local [kw] (name kw))
   (qname-uri [kw]
     (if-let [ns (namespace kw)]
@@ -51,21 +64,20 @@
           (throw (ex-info (str "Unknown xmlns for clj ns: " (pr-str ns))
                           {:qname kw})))
       ""))
-  String
+  #?(:clj String :cljs string)
   (qname-local [s] (qname-local (parse-qname s)))
   (qname-uri   [s] (qname-uri (parse-qname s))))
 
-(definline canonical-name [uri local prefix]
-  `(let [uri# ~uri local# ~local]
-     (if (str/blank? uri#)
-       (keyword local#)
-       (let [kw-prefix# (uri-ns uri#)]
-         (if (str/blank? kw-prefix#)
-           (make-qname uri# local# ~prefix)
-           (keyword kw-prefix# local#))))))
+(defn canonical-name [uri local prefix]
+  (if (str/blank? uri)
+    (keyword local)
+    (let [kw-prefix (uri-ns uri)]
+      (if (str/blank? kw-prefix)
+        (make-qname uri local prefix)
+        (keyword kw-prefix local)))))
 
-(definline to-qname [n]
-  `(let [n# ~n] (make-qname (or (qname-uri n#) "") (qname-local n#) "")))
+(defn to-qname [n]
+  (make-qname (or (qname-uri n) "") (qname-local n) ""))
 
 (defn- declare-ns* [{:keys [ns->xs xs->ns] :as acc} [ns xmlns & rst :as nss]]
   (if (seq nss)
@@ -96,30 +108,33 @@
  :xml     "http://www.w3.org/XML/1998/namespace"
  :xmlns   "http://www.w3.org/2000/xmlns/")
 
-(def ^:const empty-namespace
+(def ;;once ^:const
+  empty-namespace
   {"xml"   (ns-uri "xml")
    "xmlns" (ns-uri "xmlns")})
 
-(def ^:const xmlns-uri (ns-uri "xmlns"))
+(def ;;once ^:const
+  xmlns-uri (ns-uri "xmlns"))
 
-(defn alias-ns
-  "Define a clojure namespace alias for shortened keyword and symbol namespaces.
+#?(:clj
+   (defn alias-ns
+     "Define a clojure namespace alias for shortened keyword and symbol namespaces.
    Similar to clojure.core/alias, but if namespace doesn't exist, it is created.
 
    ## Example
    (declare-ns :xml.dav \"DAV:\")
    (alias-ns :D :xml.dav)
   {:tag ::D/propfind :content []}"
-  {:arglists '([& {:as alias-nss}])}
-  [& ans]
-  (loop [[a n & rst :as ans] ans]
-    (when (seq ans)
-      (assert (<= 2 (count ans)) (pr-str ans))
-      (let [ns (symbol (clj-ns-name n))
-            al (symbol (clj-ns-name a))]
-        (create-ns ns)
-        (alias al ns)
-        (recur rst)))))
+     {:arglists '([& {:as alias-nss}])}
+     [& ans]
+     (loop [[a n & rst :as ans] ans]
+       (when (seq ans)
+         (assert (<= 2 (count ans)) (pr-str ans))
+         (let [ns (symbol (clj-ns-name n))
+               al (symbol (clj-ns-name a))]
+           (create-ns ns)
+           (alias al ns)
+           (recur rst))))))
 
 (defn merge-nss
   "Merge two attribute sets, deleting assignments of empty-string"
@@ -160,10 +175,14 @@
 
 ;(set! *warn-on-reflection* true)
 
-(def ^:private ^"[C" prefix-alphabet
-  (char-array
-   (map char
-        (range (int \a) (inc (int \z))))))
+#?(:clj (def ^:private ^"[C" prefix-alphabet
+          (char-array
+           (map char
+                (range (int \a) (inc (int \z))))))
+   :cljs (def ^:private prefix-alphabet
+           (apply str (map js/String.fromCharCode
+                           (range (.charCodeAt "a" 0)
+                                  (inc (.charCodeAt "z" 0)))))))
 
 (def ^{:dynamic true
        :doc "Thread local counter for a single document"}
@@ -173,11 +192,13 @@
   "Generates an xml prefix.
    Zero-arity can only be called, when *gen-prefix-counter* is bound and will increment it."
   ([] (let [c *gen-prefix-counter*]
+        (when (undefined? c)
+          (throw (ex-info "Not bound: *gen-prefix-counter*" {:v #'*gen-prefix-counter*})))
         (set! *gen-prefix-counter* (inc c))
         (gen-prefix c)))
   ([n]
    (let [cnt (alength prefix-alphabet)
-         sb (StringBuilder.)]
+         sb #?(:clj (StringBuilder.) :cljs (StringBuffer.))]
      (loop [n* n]
        (let [ch (mod n* cnt)
              n** (quot n* cnt)]
