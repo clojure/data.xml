@@ -192,8 +192,8 @@
   "Generates an xml prefix.
    Zero-arity can only be called, when *gen-prefix-counter* is bound and will increment it."
   ([] (let [c *gen-prefix-counter*]
-        (when (undefined? c)
-          (throw (ex-info "Not bound: *gen-prefix-counter*" {:v #'*gen-prefix-counter*})))
+        #?(:cljs (when (undefined? c)
+                   (throw (ex-info "Not bound: *gen-prefix-counter*" {:v #'*gen-prefix-counter*}))))
         (set! *gen-prefix-counter* (inc c))
         (gen-prefix c)))
   ([n]
