@@ -3,11 +3,13 @@
    [clojure.data.xml.impl :refer [export-api]])
   (:require
    [clojure.data.xml.name :as name]
+   [clojure.data.xml.node :as node]
    [clojure.data.xml.protocols :refer [AsQName]]))
 
 (export-api
- name/ns-uri name/uri-ns name/declare-ns name/alias-ns
- name/parse-qname name/qname-uri name/qname-local name/qname name/to-qname)
+ name/ns-uri name/uri-ns name/declare-ns
+ name/parse-qname name/qname-uri name/qname-local name/qname name/to-qname
+ node/element* node/element node/cdata node/xml-comment)
 
 (defn canonical-name
   "Put (q)name into canonical form as per ns-env"
@@ -88,12 +90,15 @@
              res))
          nf)))))
 
-(do                                     ;comment
+(comment
 
   (extend-dom-as-data!)
   (extend-nodes-as-qname!)
 
-  (let [{tag :tag {a1 "{DAV:}a1" a2 "a2" :as attrs} :attrs [c1 c2 c3] :content} xml]
+  (let [{tag :tag {a1 "{DAV:}a1" a2 "a2" :as attrs} :attrs [c1 c2 c3] :content}
+        (parse-str "<xml xmlns:d=\"DAV:\" d:a1=\"dav-a1\" a2=\"normal a2\">
+Fancy Content <br/> More
+</xml>")]
     [tag a1 a2 c1 c2 c3])
   
   )
