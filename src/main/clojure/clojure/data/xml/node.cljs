@@ -25,7 +25,10 @@
   ([tag attrs content]
    (let [el (.createElementNS doc (qname-uri tag) (qname-local tag))]
      (reduce-kv (fn [_ k v]
-                  (.setAttributeNS el (qname-uri k) (qname-local k) v))
+                  (let [uri (qname-uri k)]
+                    (if (= uri "http://www.w3.org/2000/xmlns/")
+                      (.setAttribute el (str "xmlns:" (qname-local k)) v)
+                      (.setAttributeNS el uri (qname-local k) v))))
                 nil attrs)
      (reduce (fn [_ n]
                (.appendChild el (if (string? n)
