@@ -39,7 +39,8 @@
   "Use XMLSerializer to render an xml string"
   [e & {:keys []}]
   (. (js/XMLSerializer.)
-     (serializeToString e)))
+     (serializeToString
+      (node/coerce-to-dom e))))
 
 (defn extend-nodes-as-qname! []
   (extend-protocol AsQName
@@ -49,6 +50,11 @@
     js/Attr
     (qname-local [e] (.-localName e))
     (qname-uri [e] (.-namespaceURI e))))
+
+(defn- as-node [n]
+  (if (instance? js/Text n)
+    (.-wholeText n) ;; .-data
+    n))
 
 (defn extend-dom-as-data! []
   (extend-type js/Element
@@ -74,20 +80,17 @@
          not-found))))
   (extend-type js/NodeList
     ISeqable
-    (-seq [nl] (array-seq nl))
+    (-seq [nl] (map as-node (array-seq nl)))
     ISequential
     ICounted
     (-count [nl] (.-length nl))
     IIndexed
     (-nth
       ([nl n]
-       (aget nl n))
+       (as-node (aget nl n)))
       ([nl n nf]
        (if (and (<= 0 n) (< n (.-length nl)))
-         (let [res (aget nl n)]
-           (if (instance? js/Text res)
-             (.-data res)
-             res))
+         (as-node (aget nl n))
          nf)))))
 
 (comment

@@ -52,3 +52,12 @@
   "Create a Comment node"
   [content]
   (.createComment doc content))
+
+(defn coerce-to-dom [node]
+  (cond
+    (string? node) node
+    (instance? js/Element node) node
+    (satisfies? ILookup node) (element* (:tag node)
+                                        (:attrs node)
+                                        (map coerce-to-dom (:content node)))
+    :else (throw (ex-info "Cannot coerce" {:form node}))))
