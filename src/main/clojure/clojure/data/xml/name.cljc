@@ -22,10 +22,20 @@
 
 (export-api
  #?@(:clj  [jvm/parse-qname jvm/make-qname]
-     :cljs [jsn/parse-qname jsn/make-qname])
- 
- ;; protocol functions can be redefined by extend-*
- protocols/qname-uri protocols/qname-local)
+     :cljs [jsn/parse-qname jsn/make-qname]))
+
+;; protocol functions can be redefined by extend-*, so we wrap
+;; protocols/qname-uri protocols/qname-local within regular fns
+
+(defn qname-uri
+  "Get the namespace uri for this qname"
+  [v]
+  (protocols/qname-uri v))
+
+(defn qname-local
+  "Get the name for this qname"
+  [v]
+  (protocols/qname-local v))
 
 (defn qname
   ([name] (make-qname "" name ""))
