@@ -118,6 +118,9 @@ namespace.
       
     </div>
   </div><div class="toc-section" style="margin-left: 1em;">
+    <a style="margin-top: 3px;" href="#"></a>
+    
+  </div><div class="toc-section" style="margin-left: 1em;">
     <a style="margin-top: 3px;" href="#clojure.data.xml.event">clojure.data.xml.event</a>
     <div class="toc-entry" style="margin-left: 1em;">
       <a href="#clojure.data.xml.event/CDataEvent" class="toc-entry-anchor">CDataEvent</a>
@@ -346,6 +349,7 @@ emit these as text.</pre>
     <pre id="var-usage">Usage: (aggregate-xmlns xml)
 </pre>
     <pre id="var-docstr">Put all occurring xmlns into the root</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj#L39">Source</a>
@@ -363,6 +367,7 @@ emit these as text.</pre>
  (declare-ns :xml.dav "DAV:")
  (alias-ns :D :xml.dav)
 {:tag ::D/propfind :content []}</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L105">Source</a>
@@ -374,6 +379,7 @@ emit these as text.</pre>
     <pre id="var-usage">Usage: (canonical-name n)
 </pre>
     <pre id="var-docstr">Put (q)name into canonical form as per ns-env</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L40">Source</a>
@@ -385,6 +391,7 @@ emit these as text.</pre>
     <pre id="var-usage">Usage: (cdata content)
 </pre>
     <pre id="var-docstr">Create a CData node</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L51">Source</a>
@@ -399,6 +406,7 @@ emit these as text.</pre>
 Arguments are pairs of ns-name - qname-uri
 ns-name must be a string, symbol, keyword or clojure namespace. The canonical form is string.
 ns-uri must be a string</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L86">Source</a>
@@ -412,6 +420,7 @@ ns-uri must be a string</pre>
        (element tag attrs &amp; content)
 </pre>
     <pre id="var-docstr">Create an xml Element from content varargs</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L45">Source</a>
@@ -424,6 +433,7 @@ ns-uri must be a string</pre>
        (element* tag attrs content)
 </pre>
     <pre id="var-docstr">Create an xml element from a content collection and optional metadata</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L30">Source</a>
@@ -435,6 +445,7 @@ ns-uri must be a string</pre>
     <pre id="var-usage">Usage: (element-nss {:keys [attrs], :as element})
 </pre>
     <pre id="var-docstr">Get xmlns environment from element</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L22">Source</a>
@@ -448,6 +459,7 @@ ns-uri must be a string</pre>
     <pre id="var-docstr">Prints the given Element tree as XML text to stream.
 Options:
  :encoding &lt;str&gt;          Character encoding to use</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L76">Source</a>
@@ -459,6 +471,7 @@ Options:
     <pre id="var-usage">Usage: (emit-str e &amp; opts)
 </pre>
     <pre id="var-docstr">Emits the Element to String and returns it</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L83">Source</a>
@@ -475,6 +488,7 @@ with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/
 and xml-input-factory-props for more information.
 Defaults coalescing true and supporting-external-entities false.
 :include-node? can be a set of #{:start-element :end-element :characters :comment}</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L45">Source</a>
@@ -486,6 +500,7 @@ Defaults coalescing true and supporting-external-entities false.
     <pre id="var-usage">Usage: (find-xmlns xml)
 </pre>
     <pre id="var-docstr">Find all xmlns occuring in a root</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj#L32">Source</a>
@@ -499,6 +514,7 @@ Defaults coalescing true and supporting-external-entities false.
     <pre id="var-docstr">Emits the XML and indents the result.  WARNING: this is slow
 it will emit the XML and read it in again to indent it.  Intended for
 debugging/testing only.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L90">Source</a>
@@ -510,6 +526,7 @@ debugging/testing only.</pre>
     <pre id="var-usage">Usage: (indent-str e &amp; opts)
 </pre>
     <pre id="var-docstr">Emits the XML and indents the result.  Writes the results to a String and returns it</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L97">Source</a>
@@ -521,6 +538,7 @@ debugging/testing only.</pre>
     <pre id="var-usage">Usage: (ns-uri ns)
 </pre>
     <pre id="var-docstr">Look up xmlns uri to keyword namespace</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L35">Source</a>
@@ -535,6 +553,7 @@ debugging/testing only.</pre>
 InputStream or Reader, and returns a lazy tree of Element records. Accepts key pairs
 with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html">http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html</a>
 and xml-input-factory-props for more information. Defaults coalescing true.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L61">Source</a>
@@ -548,6 +567,7 @@ and xml-input-factory-props for more information. Defaults coalescing true.</pre
     <pre id="var-docstr">Parses the passed in string to Clojure data structures.  Accepts key pairs
 with XMLInputFactory options, see <a href="http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html">http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html</a>
 and xml-input-factory-props for more information. Defaults coalescing true.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L69">Source</a>
@@ -559,6 +579,7 @@ and xml-input-factory-props for more information. Defaults coalescing true.</pre
     <pre id="var-usage">Usage: (sexp-as-element sexp)
 </pre>
     <pre id="var-docstr">Convert a single sexp into an Element</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj#L66">Source</a>
@@ -582,6 +603,7 @@ into the parent tag. A bare keyword not in a vector creates an empty element.
 
 To provide XML conversion for your own data types, extend the AsElements
 protocol to them.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj#L50">Source</a>
@@ -593,6 +615,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (uri-ns uri)
 </pre>
     <pre id="var-docstr">Look up keyword namespace to xmlns uri</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L40">Source</a>
@@ -604,11 +627,13 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (xml-comment content)
 </pre>
     <pre id="var-docstr">Create a Comment node</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L56">Source</a>
   </div>
 </div>
+
 <br />
 <h2 id="clojure.data.xml.event">clojure.data.xml.event</h2>
 <pre id="namespace-docstr">Data type for xml pull events</pre>
@@ -677,6 +702,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (-&gt;CDataEvent str)
 </pre>
     <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.CDataEvent.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L33">Source</a>
@@ -688,6 +714,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (-&gt;CharsEvent str)
 </pre>
     <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.CharsEvent.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L32">Source</a>
@@ -699,6 +726,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (-&gt;CommentEvent str)
 </pre>
     <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.CommentEvent.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L34">Source</a>
@@ -710,6 +738,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (-&gt;EndElementEvent tag)
 </pre>
     <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.EndElementEvent.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L31">Source</a>
@@ -721,6 +750,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (-&gt;StartElementEvent tag attrs nss)
 </pre>
     <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.StartElementEvent.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L30">Source</a>
@@ -732,6 +762,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (element-nss {:keys [attrs], :as element})
 </pre>
     <pre id="var-docstr">Get xmlns environment from element</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L22">Source</a>
@@ -743,6 +774,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (map-&gt;CDataEvent m#)
 </pre>
     <pre id="var-docstr">Factory function for class clojure.data.xml.event.CDataEvent, taking a map of keywords to field values.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L33">Source</a>
@@ -754,6 +786,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (map-&gt;CharsEvent m#)
 </pre>
     <pre id="var-docstr">Factory function for class clojure.data.xml.event.CharsEvent, taking a map of keywords to field values.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L32">Source</a>
@@ -765,6 +798,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (map-&gt;CommentEvent m#)
 </pre>
     <pre id="var-docstr">Factory function for class clojure.data.xml.event.CommentEvent, taking a map of keywords to field values.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L34">Source</a>
@@ -776,6 +810,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (map-&gt;EndElementEvent m#)
 </pre>
     <pre id="var-docstr">Factory function for class clojure.data.xml.event.EndElementEvent, taking a map of keywords to field values.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L31">Source</a>
@@ -787,11 +822,13 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (map-&gt;StartElementEvent m#)
 </pre>
     <pre id="var-docstr">Factory function for class clojure.data.xml.event.StartElementEvent, taking a map of keywords to field values.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj#L30">Source</a>
   </div>
 </div>
+
 <br />
 <h2 id="clojure.data.xml.impl">clojure.data.xml.impl</h2>
 <pre id="namespace-docstr">Shared private code for data.xml namespaces</pre>
@@ -811,6 +848,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (export-api &amp; names)
 </pre>
     <pre id="var-docstr">This creates vars, that take their (local) name, value and metadata from another var</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj#L26">Source</a>
@@ -822,6 +860,7 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (extend-protocol-fns proto &amp; types+mmaps)
 </pre>
     <pre id="var-docstr">Helper to many types to a protocol with a method map, similar to extend</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj#L41">Source</a>
@@ -833,11 +872,13 @@ protocol to them.</pre>
     <pre id="var-usage">Usage: (static-case val &amp; cases)
 </pre>
     <pre id="var-docstr">Variant of case where keys are evaluated at compile-time</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj#L31">Source</a>
   </div>
 </div>
+
 <br />
 <h2 id="clojure.data.xml.jvm.emit">clojure.data.xml.jvm.emit</h2>
 <pre id="namespace-docstr">JVM implementation of the emitter details</pre>
@@ -859,11 +900,13 @@ protocol to them.</pre>
     <pre id="var-docstr">Writes the given event seq as XML text to writer.
 Options:
  :encoding &lt;str&gt;          Character encoding to use</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8b620747d032d71ae94ecae488aa4647ca54e687/src/main/clojure/clojure/data/xml/jvm/emit.clj#L110">Source</a>
   </div>
 </div>
+
 <br />
 <h2 id="clojure.data.xml.jvm.parse">clojure.data.xml.jvm.parse</h2>
 <pre id="namespace-docstr"></pre>
@@ -884,11 +927,13 @@ Options:
 </pre>
     <pre id="var-docstr">Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to
 be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/49c8f6e2613c92e9346d54e2542c9700c44ef685/src/main/clojure/clojure/data/xml/jvm/parse.clj#L60">Source</a>
   </div>
 </div>
+
 <br />
 <h2 id="clojure.data.xml.name">clojure.data.xml.name</h2>
 <pre id="namespace-docstr"></pre>
@@ -907,6 +952,7 @@ be triggered by the JDK StAX parser, but is by others.  Leaving in to be more co
     <span id="var-type">dynamic var</span><br />
     <pre id="var-usage"></pre>
     <pre id="var-docstr">Thread local counter for a single document</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L168">Source</a>
@@ -924,6 +970,7 @@ be triggered by the JDK StAX parser, but is by others.  Leaving in to be more co
  (declare-ns :xml.dav "DAV:")
  (alias-ns :D :xml.dav)
 {:tag ::D/propfind :content []}</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L105">Source</a>
@@ -938,6 +985,7 @@ be triggered by the JDK StAX parser, but is by others.  Leaving in to be more co
 Arguments are pairs of ns-name - qname-uri
 ns-name must be a string, symbol, keyword or clojure namespace. The canonical form is string.
 ns-uri must be a string</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L86">Source</a>
@@ -951,6 +999,7 @@ ns-uri must be a string</pre>
 </pre>
     <pre id="var-docstr">Generates an xml prefix.
 Zero-arity can only be called, when *gen-prefix-counter* is bound and will increment it.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L172">Source</a>
@@ -962,6 +1011,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (merge-nss nss1 nss2)
 </pre>
     <pre id="var-docstr">Merge two attribute sets, deleting assignments of empty-string</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L124">Source</a>
@@ -973,6 +1023,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (ns-uri ns)
 </pre>
     <pre id="var-docstr">Look up xmlns uri to keyword namespace</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L35">Source</a>
@@ -984,6 +1035,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (separate-xmlns attrs cont)
 </pre>
     <pre id="var-docstr">Call cont with two args: attributes and xmlns attributes</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L144">Source</a>
@@ -995,6 +1047,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (uri-ns uri)
 </pre>
     <pre id="var-docstr">Look up keyword namespace to xmlns uri</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L40">Source</a>
@@ -1006,11 +1059,13 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (xmlns-attr? qn)
 </pre>
     <pre id="var-docstr">Is this qname an xmlns declaration?</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj#L135">Source</a>
   </div>
 </div>
+
 <br />
 <h2 id="clojure.data.xml.node">clojure.data.xml.node</h2>
 <pre id="namespace-docstr">Data types for xml nodes: Element, CData and Comment</pre>
@@ -1061,6 +1116,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (-&gt;CData content)
 </pre>
     <pre id="var-docstr">Positional factory function for class clojure.data.xml.node.CData.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L27">Source</a>
@@ -1072,6 +1128,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (-&gt;Comment content)
 </pre>
     <pre id="var-docstr">Positional factory function for class clojure.data.xml.node.Comment.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L28">Source</a>
@@ -1083,6 +1140,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (-&gt;Element tag attrs content)
 </pre>
     <pre id="var-docstr">Positional factory function for class clojure.data.xml.node.Element.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L16">Source</a>
@@ -1094,6 +1152,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (cdata content)
 </pre>
     <pre id="var-docstr">Create a CData node</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L51">Source</a>
@@ -1107,6 +1166,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
        (element tag attrs &amp; content)
 </pre>
     <pre id="var-docstr">Create an xml Element from content varargs</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L45">Source</a>
@@ -1119,6 +1179,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
        (element* tag attrs content)
 </pre>
     <pre id="var-docstr">Create an xml element from a content collection and optional metadata</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L30">Source</a>
@@ -1130,6 +1191,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (map-&gt;CData m#)
 </pre>
     <pre id="var-docstr">Factory function for class clojure.data.xml.node.CData, taking a map of keywords to field values.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L27">Source</a>
@@ -1141,6 +1203,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (map-&gt;Comment m#)
 </pre>
     <pre id="var-docstr">Factory function for class clojure.data.xml.node.Comment, taking a map of keywords to field values.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L28">Source</a>
@@ -1152,6 +1215,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (map-&gt;Element m#)
 </pre>
     <pre id="var-docstr">Factory function for class clojure.data.xml.node.Element, taking a map of keywords to field values.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L16">Source</a>
@@ -1163,11 +1227,13 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (xml-comment content)
 </pre>
     <pre id="var-docstr">Create a Comment node</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj#L56">Source</a>
   </div>
 </div>
+
 <br />
 <h2 id="clojure.data.xml.process">clojure.data.xml.process</h2>
 <pre id="namespace-docstr"></pre>
@@ -1187,6 +1253,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (aggregate-xmlns xml)
 </pre>
     <pre id="var-docstr">Put all occurring xmlns into the root</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj#L39">Source</a>
@@ -1198,11 +1265,13 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-usage">Usage: (find-xmlns xml)
 </pre>
     <pre id="var-docstr">Find all xmlns occuring in a root</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj#L32">Source</a>
   </div>
 </div>
+
 <br />
 <h2 id="clojure.data.xml.protocols">clojure.data.xml.protocols</h2>
 <pre id="namespace-docstr"></pre>
@@ -1226,6 +1295,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
       <pre id="var-usage">Usage: (as-elements expr)
 </pre>
       <pre id="var-docstr">Return a seq of elements represented by an expression.</pre>
+      <pre id="var-specs"></pre>
       
       
       
@@ -1247,6 +1317,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
       <pre id="var-usage">Usage: (qname-local qname)
 </pre>
       <pre id="var-docstr">Get the name for this qname</pre>
+      <pre id="var-specs"></pre>
       
       
       
@@ -1257,6 +1328,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
       <pre id="var-usage">Usage: (qname-uri qname)
 </pre>
       <pre id="var-docstr">Get the namespace uri for this qname</pre>
+      <pre id="var-specs"></pre>
       
       
       
@@ -1278,6 +1350,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
       <pre id="var-usage">Usage: (gen-event item)
 </pre>
       <pre id="var-docstr">Function to generate an event for e.</pre>
+      <pre id="var-specs"></pre>
       
       
       
@@ -1289,6 +1362,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
 </pre>
       <pre id="var-docstr">Returns the next set of events that should occur after e.  next-events are the
 events that should be generated after this one is complete.</pre>
+      <pre id="var-specs"></pre>
       
       
       
@@ -1298,6 +1372,7 @@ events that should be generated after this one is complete.</pre>
     <a id="proto-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj#L17">Source</a>
   </div>
 </div>
+
 
 
 <br />
@@ -1319,6 +1394,7 @@ events that should be generated after this one is complete.</pre>
     <pre id="var-usage">Usage: (sexp-as-element sexp)
 </pre>
     <pre id="var-docstr">Convert a single sexp into an Element</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj#L66">Source</a>
@@ -1342,11 +1418,13 @@ into the parent tag. A bare keyword not in a vector creates an empty element.
 
 To provide XML conversion for your own data types, extend the AsElements
 protocol to them.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj#L50">Source</a>
   </div>
 </div>
+
 <br />
 <h2 id="clojure.data.xml.tree">clojure.data.xml.tree</h2>
 <pre id="namespace-docstr"></pre>
@@ -1367,6 +1445,7 @@ protocol to them.</pre>
 </pre>
     <pre id="var-docstr">Returns a lazy tree of Element objects for the given seq of Event
 objects. See source-seq and parse.</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj#L66">Source</a>
@@ -1378,6 +1457,7 @@ objects. See source-seq and parse.</pre>
     <pre id="var-usage">Usage: (flatten-elements elements)
 </pre>
     <pre id="var-docstr">Flatten a collection of elements to an event seq</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj#L55">Source</a>
@@ -1409,6 +1489,7 @@ nor exit, and its return value will become a node of the output tree.
 (seq-tree #(when (= %1 :&lt;) (vector %2)) #{:&gt;} str
           [1 2 :&lt; 3 :&lt; 4 :&gt; :&gt; 5 :&gt; 6])
 ;=&gt; (("1" "2" [("3" [("4")])] "5") 6)</pre>
+    <pre id="var-specs"></pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj#L15">Source</a>

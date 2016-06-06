@@ -3,72 +3,71 @@
    "Functions to parse XML into lazy sequences and lazy trees and\nemit these as text.",
    :author "Chris Houser",
    :name "clojure.data.xml",
-   :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml-api.html",
+   :wiki-url "http://clojure.github.io/data.xml/index.html",
    :source-url
    "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj"}
   {:doc "Data type for xml pull events",
    :author "Herwig Hochleitner",
    :name "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.event-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.event",
    :source-url
    "https://github.com/clojure/data.xml/blob/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj"}
   {:doc "Shared private code for data.xml namespaces",
    :author "Herwig Hochleitner",
    :name "clojure.data.xml.impl",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.impl-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.impl",
    :source-url
    "https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj"}
   {:doc "JVM implementation of the emitter details",
    :author "Herwig Hochleitner",
    :name "clojure.data.xml.jvm.emit",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.jvm.emit-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.jvm.emit",
    :source-url
    "https://github.com/clojure/data.xml/blob/8b620747d032d71ae94ecae488aa4647ca54e687/src/main/clojure/clojure/data/xml/jvm/emit.clj"}
   {:doc nil,
    :name "clojure.data.xml.jvm.parse",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.jvm.parse-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.jvm.parse",
    :source-url
    "https://github.com/clojure/data.xml/blob/49c8f6e2613c92e9346d54e2542c9700c44ef685/src/main/clojure/clojure/data/xml/jvm/parse.clj"}
   {:doc nil,
    :name "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.name-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.name",
    :source-url
    "https://github.com/clojure/data.xml/blob/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj"}
   {:doc "Data types for xml nodes: Element, CData and Comment",
    :author "Herwig Hochleitner",
    :name "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.node-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.node",
    :source-url
    "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj"}
   {:doc nil,
    :name "clojure.data.xml.process",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.process-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.process",
    :source-url
    "https://github.com/clojure/data.xml/blob/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj"}
   {:doc nil,
    :name "clojure.data.xml.protocols",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.protocols-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.protocols",
    :source-url
    "https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj"}
   {:doc nil,
    :name "clojure.data.xml.prxml",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.prxml-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.prxml",
    :source-url
    "https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj"}
   {:doc nil,
    :name "clojure.data.xml.tree",
    :wiki-url
-   "http://clojure.github.com/data.xml/clojure.data.xml.tree-api.html",
+   "http://clojure.github.io/data.xml/index.html#clojure.data.xml.tree",
    :source-url
    "https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj"}),
  :vars
@@ -84,7 +83,7 @@
    :doc "Put all occurring xmlns into the root",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/aggregate-xmlns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/aggregate-xmlns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "alias-ns",
@@ -98,7 +97,7 @@
    "Define a clojure namespace alias for shortened keyword and symbol namespaces.\n Similar to clojure.core/alias, but if namespace doesn't exist, it is created.\n\n ## Example\n (declare-ns :xml.dav \"DAV:\")\n (alias-ns :D :xml.dav)\n{:tag ::D/propfind :content []}",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/alias-ns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/alias-ns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
    :name "canonical-name",
@@ -111,7 +110,7 @@
    :doc "Put (q)name into canonical form as per ns-env",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/canonical-name"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/canonical-name"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "cdata",
@@ -124,7 +123,7 @@
    :doc "Create a CData node",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/cdata"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/cdata"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "declare-ns",
@@ -138,7 +137,7 @@
    "Define mappings in the global keyword-ns -> qname-uri mapping table.\nArguments are pairs of ns-name - qname-uri\nns-name must be a string, symbol, keyword or clojure namespace. The canonical form is string.\nns-uri must be a string",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/declare-ns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/declare-ns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "element",
@@ -151,7 +150,7 @@
    :doc "Create an xml Element from content varargs",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/element"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/element"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "element*",
@@ -165,7 +164,7 @@
    "Create an xml element from a content collection and optional metadata",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/element*"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/element*"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "element-nss",
@@ -178,7 +177,7 @@
    :doc "Get xmlns environment from element",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/element-nss"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/element-nss"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
    :name "emit",
@@ -192,7 +191,7 @@
    "Prints the given Element tree as XML text to stream.\nOptions:\n :encoding <str>          Character encoding to use",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/emit"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/emit"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
    :name "emit-str",
@@ -205,7 +204,7 @@
    :doc "Emits the Element to String and returns it",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/emit-str"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/emit-str"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
    :name "event-seq",
@@ -219,7 +218,7 @@
    "Parses the XML InputSource source using a pull-parser. Returns\na lazy sequence of Event records.  Accepts key pairs\nwith XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html\nand xml-input-factory-props for more information.\nDefaults coalescing true and supporting-external-entities false.\n:include-node? can be a set of #{:start-element :end-element :characters :comment}",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/event-seq"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/event-seq"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj",
    :name "find-xmlns",
@@ -232,7 +231,7 @@
    :doc "Find all xmlns occuring in a root",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/find-xmlns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/find-xmlns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
    :name "indent",
@@ -246,7 +245,7 @@
    "Emits the XML and indents the result.  WARNING: this is slow\nit will emit the XML and read it in again to indent it.  Intended for\ndebugging/testing only.",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/indent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/indent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
    :name "indent-str",
@@ -260,7 +259,7 @@
    "Emits the XML and indents the result.  Writes the results to a String and returns it",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/indent-str"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/indent-str"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "ns-uri",
@@ -273,7 +272,7 @@
    :doc "Look up xmlns uri to keyword namespace",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/ns-uri"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/ns-uri"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
    :name "parse",
@@ -287,7 +286,7 @@
    "Parses the source, which can be an\nInputStream or Reader, and returns a lazy tree of Element records. Accepts key pairs\nwith XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html\nand xml-input-factory-props for more information. Defaults coalescing true.",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/parse"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/parse"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
    :name "parse-str",
@@ -301,7 +300,7 @@
    "Parses the passed in string to Clojure data structures.  Accepts key pairs\nwith XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html\nand xml-input-factory-props for more information. Defaults coalescing true.",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/parse-str"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/parse-str"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj",
    :name "sexp-as-element",
@@ -314,7 +313,7 @@
    :doc "Convert a single sexp into an Element",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/sexp-as-element"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/sexp-as-element"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj",
    :name "sexps-as-fragment",
@@ -328,7 +327,7 @@
    "Convert a compact prxml/hiccup-style data structure into the more formal\ntag/attrs/content format. A seq of elements will be returned, which may\nnot be suitable for immediate use as there is no root element. See also\nsexp-as-element.\n\nThe format is [:tag-name attr-map? content*]. Each vector opens a new tag;\nseqs do not open new tags, and are just used for inserting groups of elements\ninto the parent tag. A bare keyword not in a vector creates an empty element.\n\nTo provide XML conversion for your own data types, extend the AsElements\nprotocol to them.",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/sexps-as-fragment"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/sexps-as-fragment"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "uri-ns",
@@ -341,7 +340,7 @@
    :doc "Look up keyword namespace to xmlns uri",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/uri-ns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/uri-ns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "xml-comment",
@@ -354,7 +353,7 @@
    :doc "Create a Comment node",
    :namespace "clojure.data.xml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml/xml-comment"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml/xml-comment"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "->CDataEvent",
@@ -368,7 +367,7 @@
    "Positional factory function for class clojure.data.xml.event.CDataEvent.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/->CDataEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/->CDataEvent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "->CharsEvent",
@@ -382,7 +381,7 @@
    "Positional factory function for class clojure.data.xml.event.CharsEvent.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/->CharsEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/->CharsEvent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "->CommentEvent",
@@ -396,7 +395,7 @@
    "Positional factory function for class clojure.data.xml.event.CommentEvent.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/->CommentEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/->CommentEvent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "->EndElementEvent",
@@ -410,7 +409,7 @@
    "Positional factory function for class clojure.data.xml.event.EndElementEvent.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/->EndElementEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/->EndElementEvent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "->StartElementEvent",
@@ -424,7 +423,7 @@
    "Positional factory function for class clojure.data.xml.event.StartElementEvent.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/->StartElementEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/->StartElementEvent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "element-nss",
@@ -437,7 +436,7 @@
    :doc "Get xmlns environment from element",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/element-nss"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/element-nss"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "map->CDataEvent",
@@ -451,7 +450,7 @@
    "Factory function for class clojure.data.xml.event.CDataEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/map->CDataEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/map->CDataEvent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "map->CharsEvent",
@@ -465,7 +464,7 @@
    "Factory function for class clojure.data.xml.event.CharsEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/map->CharsEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/map->CharsEvent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "map->CommentEvent",
@@ -479,7 +478,7 @@
    "Factory function for class clojure.data.xml.event.CommentEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/map->CommentEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/map->CommentEvent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "map->EndElementEvent",
@@ -493,7 +492,7 @@
    "Factory function for class clojure.data.xml.event.EndElementEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/map->EndElementEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/map->EndElementEvent"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/5896a50e2f46b5231215b24d950350741ef912bc/src/main/clojure/clojure/data/xml/event.clj",
    :name "map->StartElementEvent",
@@ -507,13 +506,13 @@
    "Factory function for class clojure.data.xml.event.StartElementEvent, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.event",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/map->StartElementEvent"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/map->StartElementEvent"}
   {:name "CDataEvent",
    :var-type "record",
    :namespace "clojure.data.xml.event",
    :arglists nil,
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/CDataEvent",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/CDataEvent",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -522,7 +521,7 @@
    :namespace "clojure.data.xml.event",
    :arglists nil,
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/CharsEvent",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/CharsEvent",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -531,7 +530,7 @@
    :namespace "clojure.data.xml.event",
    :arglists nil,
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/CommentEvent",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/CommentEvent",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -540,7 +539,7 @@
    :namespace "clojure.data.xml.event",
    :arglists nil,
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/EndElementEvent",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/EndElementEvent",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -549,7 +548,7 @@
    :namespace "clojure.data.xml.event",
    :arglists nil,
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.event/StartElementEvent",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.event/StartElementEvent",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -566,7 +565,7 @@
    "This creates vars, that take their (local) name, value and metadata from another var",
    :namespace "clojure.data.xml.impl",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.impl/export-api"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.impl/export-api"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj",
    :name "extend-protocol-fns",
@@ -580,7 +579,7 @@
    "Helper to many types to a protocol with a method map, similar to extend",
    :namespace "clojure.data.xml.impl",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.impl/extend-protocol-fns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.impl/extend-protocol-fns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj",
    :name "static-case",
@@ -593,7 +592,7 @@
    :doc "Variant of case where keys are evaluated at compile-time",
    :namespace "clojure.data.xml.impl",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.impl/static-case"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.impl/static-case"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8b620747d032d71ae94ecae488aa4647ca54e687/src/main/clojure/clojure/data/xml/jvm/emit.clj",
    :name "write-document",
@@ -607,7 +606,7 @@
    "Writes the given event seq as XML text to writer.\nOptions:\n :encoding <str>          Character encoding to use",
    :namespace "clojure.data.xml.jvm.emit",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.jvm.emit/write-document"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.jvm.emit/write-document"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/49c8f6e2613c92e9346d54e2542c9700c44ef685/src/main/clojure/clojure/data/xml/jvm/parse.clj",
    :name "pull-seq",
@@ -621,7 +620,7 @@
    "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to\nbe triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete.",
    :namespace "clojure.data.xml.jvm.parse",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.jvm.parse/pull-seq"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.jvm.parse/pull-seq"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "*gen-prefix-counter*",
@@ -635,7 +634,7 @@
    :doc "Thread local counter for a single document",
    :namespace "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.name/*gen-prefix-counter*"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.name/*gen-prefix-counter*"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "alias-ns",
@@ -649,7 +648,7 @@
    "Define a clojure namespace alias for shortened keyword and symbol namespaces.\n Similar to clojure.core/alias, but if namespace doesn't exist, it is created.\n\n ## Example\n (declare-ns :xml.dav \"DAV:\")\n (alias-ns :D :xml.dav)\n{:tag ::D/propfind :content []}",
    :namespace "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.name/alias-ns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.name/alias-ns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "declare-ns",
@@ -663,7 +662,7 @@
    "Define mappings in the global keyword-ns -> qname-uri mapping table.\nArguments are pairs of ns-name - qname-uri\nns-name must be a string, symbol, keyword or clojure namespace. The canonical form is string.\nns-uri must be a string",
    :namespace "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.name/declare-ns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.name/declare-ns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "gen-prefix",
@@ -677,7 +676,7 @@
    "Generates an xml prefix.\nZero-arity can only be called, when *gen-prefix-counter* is bound and will increment it.",
    :namespace "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.name/gen-prefix"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.name/gen-prefix"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "merge-nss",
@@ -691,7 +690,7 @@
    "Merge two attribute sets, deleting assignments of empty-string",
    :namespace "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.name/merge-nss"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.name/merge-nss"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "ns-uri",
@@ -704,7 +703,7 @@
    :doc "Look up xmlns uri to keyword namespace",
    :namespace "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.name/ns-uri"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.name/ns-uri"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "separate-xmlns",
@@ -717,7 +716,7 @@
    :doc "Call cont with two args: attributes and xmlns attributes",
    :namespace "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.name/separate-xmlns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.name/separate-xmlns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "uri-ns",
@@ -730,7 +729,7 @@
    :doc "Look up keyword namespace to xmlns uri",
    :namespace "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.name/uri-ns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.name/uri-ns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/41aaffb316a67379b23561f242fb068eda9bb4cc/src/main/clojure/clojure/data/xml/name.clj",
    :name "xmlns-attr?",
@@ -743,7 +742,7 @@
    :doc "Is this qname an xmlns declaration?",
    :namespace "clojure.data.xml.name",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.name/xmlns-attr?"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.name/xmlns-attr?"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "->CData",
@@ -757,7 +756,7 @@
    "Positional factory function for class clojure.data.xml.node.CData.",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/->CData"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/->CData"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "->Comment",
@@ -771,7 +770,7 @@
    "Positional factory function for class clojure.data.xml.node.Comment.",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/->Comment"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/->Comment"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "->Element",
@@ -785,7 +784,7 @@
    "Positional factory function for class clojure.data.xml.node.Element.",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/->Element"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/->Element"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "cdata",
@@ -798,7 +797,7 @@
    :doc "Create a CData node",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/cdata"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/cdata"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "element",
@@ -811,7 +810,7 @@
    :doc "Create an xml Element from content varargs",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/element"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/element"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "element*",
@@ -825,7 +824,7 @@
    "Create an xml element from a content collection and optional metadata",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/element*"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/element*"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "map->CData",
@@ -839,7 +838,7 @@
    "Factory function for class clojure.data.xml.node.CData, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/map->CData"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/map->CData"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "map->Comment",
@@ -853,7 +852,7 @@
    "Factory function for class clojure.data.xml.node.Comment, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/map->Comment"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/map->Comment"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "map->Element",
@@ -867,7 +866,7 @@
    "Factory function for class clojure.data.xml.node.Element, taking a map of keywords to field values.",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/map->Element"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/map->Element"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml/node.clj",
    :name "xml-comment",
@@ -880,13 +879,13 @@
    :doc "Create a Comment node",
    :namespace "clojure.data.xml.node",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/xml-comment"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/xml-comment"}
   {:name "CData",
    :var-type "record",
    :namespace "clojure.data.xml.node",
    :arglists nil,
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/CData",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/CData",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -895,7 +894,7 @@
    :namespace "clojure.data.xml.node",
    :arglists nil,
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/Comment",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/Comment",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -904,7 +903,7 @@
    :namespace "clojure.data.xml.node",
    :arglists nil,
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.node/Element",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.node/Element",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -920,7 +919,7 @@
    :doc "Put all occurring xmlns into the root",
    :namespace "clojure.data.xml.process",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.process/aggregate-xmlns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.process/aggregate-xmlns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/1f511c10270d68f6c999715de2bfc89c84bfb4fe/src/main/clojure/clojure/data/xml/process.clj",
    :name "find-xmlns",
@@ -933,7 +932,7 @@
    :doc "Find all xmlns occuring in a root",
    :namespace "clojure.data.xml.process",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.process/find-xmlns"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.process/find-xmlns"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj",
    :name "AsElements",
@@ -946,7 +945,7 @@
    :doc nil,
    :namespace "clojure.data.xml.protocols",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/AsElements"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.protocols/AsElements"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj",
    :name "AsQName",
@@ -959,7 +958,7 @@
    :doc nil,
    :namespace "clojure.data.xml.protocols",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/AsQName"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.protocols/AsQName"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/protocols.clj",
    :name "EventGeneration",
@@ -972,14 +971,14 @@
    :doc "Protocol for generating new events based on element type",
    :namespace "clojure.data.xml.protocols",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/EventGeneration"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.protocols/EventGeneration"}
   {:name "as-elements",
    :doc "Return a seq of elements represented by an expression.",
    :var-type "function",
    :namespace "clojure.data.xml.protocols",
    :arglists ([expr]),
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/as-elements",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.protocols/as-elements",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -989,7 +988,7 @@
    :namespace "clojure.data.xml.protocols",
    :arglists ([qname]),
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/qname-local",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.protocols/qname-local",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -999,7 +998,7 @@
    :namespace "clojure.data.xml.protocols",
    :arglists ([qname]),
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/qname-uri",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.protocols/qname-uri",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -1009,7 +1008,7 @@
    :namespace "clojure.data.xml.protocols",
    :arglists ([item]),
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/gen-event",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.protocols/gen-event",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -1020,7 +1019,7 @@
    :namespace "clojure.data.xml.protocols",
    :arglists ([item next-items]),
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.protocols/next-events",
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.protocols/next-events",
    :source-url nil,
    :raw-source-url nil,
    :file nil}
@@ -1036,7 +1035,7 @@
    :doc "Convert a single sexp into an Element",
    :namespace "clojure.data.xml.prxml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.prxml/sexp-as-element"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.prxml/sexp-as-element"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj",
    :name "sexps-as-fragment",
@@ -1050,7 +1049,7 @@
    "Convert a compact prxml/hiccup-style data structure into the more formal\ntag/attrs/content format. A seq of elements will be returned, which may\nnot be suitable for immediate use as there is no root element. See also\nsexp-as-element.\n\nThe format is [:tag-name attr-map? content*]. Each vector opens a new tag;\nseqs do not open new tags, and are just used for inserting groups of elements\ninto the parent tag. A bare keyword not in a vector creates an empty element.\n\nTo provide XML conversion for your own data types, extend the AsElements\nprotocol to them.",
    :namespace "clojure.data.xml.prxml",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.prxml/sexps-as-fragment"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.prxml/sexps-as-fragment"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj",
    :name "event-tree",
@@ -1064,7 +1063,7 @@
    "Returns a lazy tree of Element objects for the given seq of Event\nobjects. See source-seq and parse.",
    :namespace "clojure.data.xml.tree",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.tree/event-tree"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.tree/event-tree"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj",
    :name "flatten-elements",
@@ -1077,7 +1076,7 @@
    :doc "Flatten a collection of elements to an event seq",
    :namespace "clojure.data.xml.tree",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.tree/flatten-elements"}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.tree/flatten-elements"}
   {:raw-source-url
    "https://github.com/clojure/data.xml/raw/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/tree.clj",
    :name "seq-tree",
@@ -1091,4 +1090,4 @@
    "Takes a seq of events that logically represents\na tree by each event being one of: enter-sub-tree event,\nexit-sub-tree event, or node event.\n\nReturns a lazy sequence whose first element is a sequence of\nsub-trees and whose remaining elements are events that are not\nsiblings or descendants of the initial event.\n\nThe given exit? function must return true for any exit-sub-tree\nevent.  parent must be a function of two arguments: the first is an\nevent, the second a sequence of nodes or subtrees that are children\nof the event.  parent must return nil or false if the event is not\nan enter-sub-tree event.  Any other return value will become\na sub-tree of the output tree and should normally contain in some\nway the children passed as the second arg.  The node function is\ncalled with a single event arg on every event that is neither parent\nnor exit, and its return value will become a node of the output tree.\n\n(seq-tree #(when (= %1 :<) (vector %2)) #{:>} str\n          [1 2 :< 3 :< 4 :> :> 5 :> 6])\n;=> ((\"1\" \"2\" [(\"3\" [(\"4\")])] \"5\") 6)",
    :namespace "clojure.data.xml.tree",
    :wiki-url
-   "http://clojure.github.com/data.xml//clojure.data.xml-api.html#clojure.data.xml.tree/seq-tree"})}
+   "http://clojure.github.io/data.xml//index.html#clojure.data.xml.tree/seq-tree"})}
