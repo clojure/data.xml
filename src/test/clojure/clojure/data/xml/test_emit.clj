@@ -82,6 +82,27 @@
           (binding [*out* (java.io.OutputStreamWriter. stream "UTF-8")]
             (emit (element :foo) *out* :encoding "ISO-8859-1"))))))
 
+(deftest doctype
+  (let [input-tree
+          (lazy-parse* "<how-cool>cool</how-cool>")
+        doctype-html "<!DOCTYPE html>"
+        doctype-html-401-transitional
+          "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
+        doctype-xhtml-10-strict
+          "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"]
+    (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                doctype-html
+                "<how-cool>cool</how-cool>")
+           (emit-str input-tree :doctype doctype-html)))
+    (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                doctype-html-401-transitional
+                "<how-cool>cool</how-cool>")
+           (emit-str input-tree :doctype doctype-html-401-transitional)))
+    (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                doctype-xhtml-10-strict
+                "<how-cool>cool</how-cool>")
+           (emit-str input-tree :doctype doctype-xhtml-10-strict)))))
+
 (deftest emitting-cdata
   (testing "basic cdata"
     (is (= (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -132,6 +153,13 @@
         expect (str "<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
         result (indent-str nested-xml)]
     (is (= expect (subs result (.indexOf result "<a>"))))))
+
+(deftest test-indent-str-with-doctype
+  (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
+        doctype "<!DOCTYPE html>"
+        expect (str doctype "\n<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
+        result (indent-str nested-xml :doctype doctype)]
+    (is (= expect (subs result (.indexOf result doctype))))))
 
 (deftest test-boolean
   (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>true</foo>"

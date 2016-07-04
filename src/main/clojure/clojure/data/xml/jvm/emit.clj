@@ -110,7 +110,8 @@
 (defn write-document
   "Writes the given event seq as XML text to writer.
    Options:
-    :encoding <str>          Character encoding to use"
+    :encoding <str>          Character encoding to use
+    :doctype  <str>          Document type (DOCTYPE) declaration to use"
   [^Writer swriter events opts]
   (binding [*gen-prefix-counter* 0]
     (let [^XMLStreamWriter writer (-> (XMLOutputFactory/newInstance)
@@ -120,6 +121,8 @@
         (check-stream-encoding swriter (or (:encoding opts) "UTF-8")))
 
       (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
+      (when-let [doctype (:doctype opts)]
+        (.writeDTD writer doctype))
       (doseq [event events] (emit-event event writer))
       (.writeEndDocument writer)
       swriter)))
