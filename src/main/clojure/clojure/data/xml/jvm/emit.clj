@@ -44,44 +44,51 @@
     (if (str/blank? (.getNamespaceURI nc pf))
       pf (recur nc))))
 
-;; The changes to the xmlns must be set before .writeStartElement
-(defn- set-xmlns-attributes [^XMLStreamWriter writer ns-attrs used-uris]
-  (let [thunks (reduce-kv (fn [left k v]
-                            (let [local (qname-local k)]
-                              (or (if (= "xmlns" local)
-                                    (when-not (= v (.. writer getNamespaceContext (getNamespaceURI "")))
-                                      (.setDefaultNamespace writer v)
-                                      (cons #(.writeDefaultNamespace writer v) left))
-                                    (when-let [prefix (and (str/blank? (.getPrefix writer v))
-                                                           (if (.. writer getNamespaceContext
-                                                                   (getNamespaceURI local))
-                                                             ;; rename clashing prefixes
-                                                             (make-prefix (.getNamespaceContext writer))
-                                                             local))]
-                                      (.setPrefix writer prefix v)
-                                      (cons #(.writeNamespace writer prefix v) left)))
-                                  left)))
-                          nil ns-attrs)
-        ;; Check that all uris used in the tag have a prefix
-        thunks' (reduce (fn [left uri]
-                          (if (and (not (str/blank? uri))
-                                   (str/blank? (.. writer getNamespaceContext
-                                                   (getPrefix uri))))
-                            (let [prefix (make-prefix (.getNamespaceContext writer))]
-                              (.setPrefix writer prefix uri)
-                              (cons #(.writeNamespace writer prefix uri) left))
-                            left))
-                        thunks used-uris)]
-    #(doseq [f thunks'] (f))))
+(defn- write-xmlns-attribute [^XMLStreamWriter writer k v]
+  (if (str/blank? k)
+    (do (.setDefaultNamespace writer v)
+        (.writeDefaultNamespace writer v))
+    (do (.setPrefix writer v k)
+        (.writeNamespace writer v k)))
+  writer)
+
+(defn- get-prefix [^XMLStreamWriter writer temp-xmlns uri]
+  (or (get temp-xmlns uri)
+      (.getPrefix writer uri)))
+
+(defn- xmlns-attribute-set [^XMLStreamWriter writer ns-attrs used-uris]
+  (let [tleft (transient {})
+        tleft (reduce-kv (fn [tleft k v]
+                           (let [local (qname-local k)]
+                             (or (if (= "xmlns" local)
+                                   (when-not (= v (.. writer getNamespaceContext (getNamespaceURI "")))
+                                     (assoc! tleft v ""))
+                                   (when-let [prefix (and (str/blank? (get-prefix writer tleft v))
+                                                          (if (.. writer getNamespaceContext
+                                                                  (getNamespaceURI local))
+                                                            ;; rename clashing prefixes
+                                                            (make-prefix (.getNamespaceContext writer))
+                                                            local))]
+                                     (assoc! tleft v prefix)))
+                                 tleft)))
+                         tleft ns-attrs)]
+    (persistent!
+     (reduce (fn [tleft uri]
+               (if (and (not (str/blank? uri))
+                        (str/blank? (get-prefix writer tleft uri)))
+                 (assoc! tleft uri (make-prefix (.getNamespaceContext writer)))
+                 tleft))
+             tleft used-uris))))
 
 (defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer]
   (let [uri   (qname-uri tag)
         local (qname-local tag)
-        write-ns-attrs (set-xmlns-attributes writer nss (cons uri (map qname-uri (keys attrs))))]
+        xmlns-attrs (xmlns-attribute-set writer nss (cons uri (map qname-uri (keys attrs))))]
     (if (str/blank? uri)
       (.writeStartElement writer local)
-      (.writeStartElement writer uri local))
-    (write-ns-attrs)
+      (.writeStartElement writer (get-prefix writer xmlns-attrs uri)
+                          local uri))
+    (reduce-kv write-xmlns-attribute writer xmlns-attrs)
     (emit-attrs writer attrs)))
 
 (defn- emit-cdata [^String cdata-str ^XMLStreamWriter writer]

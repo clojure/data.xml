@@ -178,3 +178,9 @@
 (deftest test-event-seq-emit
   (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a>123</a>"
          (emit-str (event-seq (java.io.StringReader. "<a>123</a>") {})))))
+
+(deftest test-sibling-xmlns
+  (let [el (element (to-qname "{NS1}top") {}
+                    (element (to-qname "{NS2}foo"))
+                    (element (to-qname "{NS2}bar")))]
+    (is (= (parse-str (emit-str el)) el))))
