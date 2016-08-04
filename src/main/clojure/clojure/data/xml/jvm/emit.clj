@@ -75,7 +75,7 @@
     (persistent!
      (reduce (fn [tleft uri]
                (if (and (not (str/blank? uri))
-                        (str/blank? (get-prefix writer tleft uri)))
+                        (nil? (get-prefix writer tleft uri)))
                  (assoc! tleft uri (make-prefix (.getNamespaceContext writer)))
                  tleft))
              tleft used-uris))))

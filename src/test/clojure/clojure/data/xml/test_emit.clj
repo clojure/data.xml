@@ -184,3 +184,8 @@
                     (element (to-qname "{NS2}foo"))
                     (element (to-qname "{NS2}bar")))]
     (is (= (parse-str (emit-str el)) el))))
+
+(deftest test-default-xmlns
+  (is (= {:clojure.data.xml/nss {:xmlns "NS"}}
+         (meta (parse-str "<foo xmlns=\"NS\"/>"))
+         (meta (parse-str (emit-str (parse-str "<foo xmlns=\"NS\"/>")))))))
