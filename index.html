@@ -382,7 +382,7 @@ emit these as text.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L40">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L40">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -458,11 +458,12 @@ ns-uri must be a string</pre>
 </pre>
     <pre id="var-docstr">Prints the given Element tree as XML text to stream.
 Options:
- :encoding &lt;str&gt;          Character encoding to use</pre>
+ :encoding &lt;str&gt;          Character encoding to use
+ :doctype  &lt;str&gt;          Document type (DOCTYPE) declaration to use</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L76">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L76">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -470,11 +471,14 @@ Options:
     <span id="var-type">function</span><br />
     <pre id="var-usage">Usage: (emit-str e &amp; opts)
 </pre>
-    <pre id="var-docstr">Emits the Element to String and returns it</pre>
+    <pre id="var-docstr">Emits the Element to String and returns it.
+Options:
+ :encoding &lt;str&gt;          Character encoding to use
+ :doctype  &lt;str&gt;          Document type (DOCTYPE) declaration to use</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L83">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L84">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -491,7 +495,7 @@ Defaults coalescing true and supporting-external-entities false.
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L45">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L45">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -517,7 +521,7 @@ debugging/testing only.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L90">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L94">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -529,7 +533,7 @@ debugging/testing only.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L97">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L101">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -556,7 +560,7 @@ and xml-input-factory-props for more information. Defaults coalescing true.</pre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L61">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L61">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -570,7 +574,7 @@ and xml-input-factory-props for more information. Defaults coalescing true.</pre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L69">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L69">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -899,11 +903,12 @@ protocol to them.</pre>
 </pre>
     <pre id="var-docstr">Writes the given event seq as XML text to writer.
 Options:
- :encoding &lt;str&gt;          Character encoding to use</pre>
+ :encoding &lt;str&gt;          Character encoding to use
+ :doctype  &lt;str&gt;          Document type (DOCTYPE) declaration to use</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/8b620747d032d71ae94ecae488aa4647ca54e687/src/main/clojure/clojure/data/xml/jvm/emit.clj#L110">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e84990d37ee25e6c7c4651bb0c435e8b77e17128/src/main/clojure/clojure/data/xml/jvm/emit.clj#L117">Source</a>
   </div>
 </div>
 

@@ -5,7 +5,7 @@
    :name "clojure.data.xml",
    :wiki-url "http://clojure.github.io/data.xml/index.html",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj"}
+   "https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj"}
   {:doc "Data type for xml pull events",
    :author "Herwig Hochleitner",
    :name "clojure.data.xml.event",
@@ -26,7 +26,7 @@
    :wiki-url
    "http://clojure.github.io/data.xml/index.html#clojure.data.xml.jvm.emit",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8b620747d032d71ae94ecae488aa4647ca54e687/src/main/clojure/clojure/data/xml/jvm/emit.clj"}
+   "https://github.com/clojure/data.xml/blob/e84990d37ee25e6c7c4651bb0c435e8b77e17128/src/main/clojure/clojure/data/xml/jvm/emit.clj"}
   {:doc nil,
    :name "clojure.data.xml.jvm.parse",
    :wiki-url
@@ -99,11 +99,11 @@
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml/alias-ns"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj",
    :name "canonical-name",
    :file "src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L40",
+   "https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L40",
    :line 40,
    :var-type "function",
    :arglists ([n]),
@@ -179,38 +179,39 @@
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml/element-nss"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj",
    :name "emit",
    :file "src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L76",
+   "https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L76",
    :line 76,
    :var-type "function",
    :arglists ([e writer & {:as opts}]),
    :doc
-   "Prints the given Element tree as XML text to stream.\nOptions:\n :encoding <str>          Character encoding to use",
+   "Prints the given Element tree as XML text to stream.\nOptions:\n :encoding <str>          Character encoding to use\n :doctype  <str>          Document type (DOCTYPE) declaration to use",
    :namespace "clojure.data.xml",
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml/emit"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj",
    :name "emit-str",
    :file "src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L83",
-   :line 83,
+   "https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L84",
+   :line 84,
    :var-type "function",
    :arglists ([e & opts]),
-   :doc "Emits the Element to String and returns it",
+   :doc
+   "Emits the Element to String and returns it.\nOptions:\n :encoding <str>          Character encoding to use\n :doctype  <str>          Document type (DOCTYPE) declaration to use",
    :namespace "clojure.data.xml",
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml/emit-str"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj",
    :name "event-seq",
    :file "src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L45",
+   "https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L45",
    :line 45,
    :var-type "function",
    :arglists ([source {:as props}]),
@@ -233,12 +234,12 @@
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml/find-xmlns"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj",
    :name "indent",
    :file "src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L90",
-   :line 90,
+   "https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L94",
+   :line 94,
    :var-type "function",
    :arglists ([e writer & opts]),
    :doc
@@ -247,12 +248,12 @@
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml/indent"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj",
    :name "indent-str",
    :file "src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L97",
-   :line 97,
+   "https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L101",
+   :line 101,
    :var-type "function",
    :arglists ([e & opts]),
    :doc
@@ -274,11 +275,11 @@
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml/ns-uri"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj",
    :name "parse",
    :file "src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L61",
+   "https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L61",
    :line 61,
    :var-type "function",
    :arglists ([source & opts]),
@@ -288,11 +289,11 @@
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml/parse"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj",
+   "https://github.com/clojure/data.xml/raw/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj",
    :name "parse-str",
    :file "src/main/clojure/clojure/data/xml.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8f47a1113152a2ab7df950b710837560d974ee52/src/main/clojure/clojure/data/xml.clj#L69",
+   "https://github.com/clojure/data.xml/blob/9d8546f36061533a63329bbcaa9724e5fe7c79e6/src/main/clojure/clojure/data/xml.clj#L69",
    :line 69,
    :var-type "function",
    :arglists ([s & opts]),
@@ -594,16 +595,16 @@
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml.impl/static-case"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/8b620747d032d71ae94ecae488aa4647ca54e687/src/main/clojure/clojure/data/xml/jvm/emit.clj",
+   "https://github.com/clojure/data.xml/raw/e84990d37ee25e6c7c4651bb0c435e8b77e17128/src/main/clojure/clojure/data/xml/jvm/emit.clj",
    :name "write-document",
    :file "src/main/clojure/clojure/data/xml/jvm/emit.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/8b620747d032d71ae94ecae488aa4647ca54e687/src/main/clojure/clojure/data/xml/jvm/emit.clj#L110",
-   :line 110,
+   "https://github.com/clojure/data.xml/blob/e84990d37ee25e6c7c4651bb0c435e8b77e17128/src/main/clojure/clojure/data/xml/jvm/emit.clj#L117",
+   :line 117,
    :var-type "function",
    :arglists ([swriter events opts]),
    :doc
-   "Writes the given event seq as XML text to writer.\nOptions:\n :encoding <str>          Character encoding to use",
+   "Writes the given event seq as XML text to writer.\nOptions:\n :encoding <str>          Character encoding to use\n :doctype  <str>          Document type (DOCTYPE) declaration to use",
    :namespace "clojure.data.xml.jvm.emit",
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml.jvm.emit/write-document"}
