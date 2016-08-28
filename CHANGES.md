@@ -1,3 +1,8 @@
+From 0.1.0-beta1 to 0.1.0-beta2
+- Add support for emitting DOCTYPEs (DXML-10)
+- Fix issue emitting sibling namespaces (DXML-33)
+- Fix issue printing defaulted namespaces (DXML-30)
+
 From 0.0.8 to 0.1.0-beta1
 - Add support for XML namespaces (DXML-4)
 - Fix pull-seq so it produces character events that work with emit-events (DXML-28)
