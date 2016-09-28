@@ -33,7 +33,7 @@
 
 (export-api node/element* node/element node/cdata node/xml-comment
             prxml/sexp-as-element prxml/sexps-as-fragment event/element-nss
-            name/ns-uri name/uri-ns name/declare-ns name/alias-ns
+            #_name/ns-uri #_name/uri-ns #_name/declare-ns #_name/alias-ns name/alias-uri
             name/parse-qname name/qname-uri name/qname-local name/qname name/to-qname
             process/find-xmlns process/aggregate-xmlns)
 

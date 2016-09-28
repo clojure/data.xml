@@ -11,7 +11,8 @@
              [protocols :refer [AsQName qname-uri qname-local]])
             [clojure.string :as str])
   (:import java.io.Writer
-           (javax.xml.namespace NamespaceContext QName)))
+           (javax.xml.namespace NamespaceContext QName)
+           (java.net URLEncoder URLDecoder)))
 
 (extend-protocol AsQName
   QName
@@ -26,3 +27,9 @@
 
 (definline make-qname [uri name prefix]
   `(QName. ~uri ~name ~prefix))
+
+(definline decode-uri [ns]
+  `(URLDecoder/decode ~ns "UTF-8"))
+
+(definline encode-uri [uri]
+  `(URLEncoder/encode ~uri "UTF-8"))

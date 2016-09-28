@@ -41,10 +41,10 @@
     (let [expect (str "<?xml version=\"1.0\" encoding=\"UTF-8\"?><D:bar xmlns:D=\"DAV:\" D:item=\"1\"><D:baz D:item=\"2\">done</D:baz></D:bar>")]
       (is (= expect (emit-str
                      (element "{DAV:}bar" {"{DAV:}item" 1 :xmlns/D "DAV:"}
-                              [(element "{DAV:}baz" {:xml.dav/item 2} "done")]))))
+                              [(element "{DAV:}baz" {:xmlns.DAV%3A/item 2} "done")]))))
       (is (= expect (emit-str
                      {:tag "{DAV:}bar" :attrs {"{DAV:}item" 1 :xmlns/D "DAV:"}
-                      :content [{:tag "{DAV:}baz" :attrs {:xml.dav/item 2} :content "done"}]}))))))
+                      :content [{:tag "{DAV:}baz" :attrs {:xmlns.DAV%3A/item 2} :content "done"}]}))))))
 
 (deftest mixed-quotes
   (is (= (lazy-parse*
@@ -180,9 +180,9 @@
          (emit-str (event-seq (java.io.StringReader. "<a>123</a>") {})))))
 
 (deftest test-sibling-xmlns
-  (let [el (element (to-qname "{NS1}top") {}
-                    (element (to-qname "{NS2}foo"))
-                    (element (to-qname "{NS2}bar")))]
+  (let [el (element (canonical-name "{NS1}top") {}
+                    (element (canonical-name "{NS2}foo"))
+                    (element (canonical-name "{NS2}bar")))]
     (is (= (parse-str (emit-str el)) el))))
 
 (deftest test-default-xmlns

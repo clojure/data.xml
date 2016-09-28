@@ -22,3 +22,9 @@
    (fn [s]
      (let [[_ ns-uri local] (re-matches #"(?:\{([^}]+)\})?([^{]*)" s)]
        (make-qname (or ns-uri "") local "")))))
+
+(defn decode-uri [ns]
+  (js/decodeURIComponent ns))
+
+(defn encode-uri [uri]
+  (js/encodeURIComponent uri))

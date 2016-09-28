@@ -21,8 +21,8 @@
              (:import (goog.string StringBuffer))]))
 
 (export-api
- #?@(:clj  [jvm/parse-qname jvm/make-qname]
-     :cljs [jsn/parse-qname jsn/make-qname]))
+ #?@(:clj  [jvm/parse-qname jvm/make-qname jvm/encode-uri jvm/decode-uri]
+     :cljs [jsn/parse-qname jsn/make-qname jsn/encode-uri jsn/decode-uri]))
 
 ;; protocol functions can be redefined by extend-*, so we wrap
 ;; protocols/qname-uri protocols/qname-local within regular fns
@@ -51,99 +51,70 @@
         (keyword? ns) (name ns)
         :else (str ns)))
 
-;; # Handling of xmlns - cljns bindings
-
-(def ^:private nss (atom {:ns->xs {} :xs->ns {}}))
-
-(defn ns-uri
-  "Look up xmlns uri to keyword namespace"
-  [ns]
-  (-> @nss :ns->xs (get ns)))
-
-(defn uri-ns
-  "Look up keyword namespace to xmlns uri"
-  [uri]
-  (-> @nss :xs->ns (get uri)))
+;; xmlns attributes get special treatment, as they are go into metadata and don't contribute to equality
+(def xmlns-uri "http://www.w3.org/2000/xmlns/")
+;; TODO find out if xml prefixed names need any special treatment too
+                                        ; (def xml-uri "http://www.w3.org/XML/1998/namespace")
 
 (extend-protocol AsQName
   Keyword
   (qname-local [kw] (name kw))
   (qname-uri [kw]
     (if-let [ns (namespace kw)]
-      (or (ns-uri ns)
-          (throw (ex-info (str "Unknown xmlns for clj ns: " (pr-str ns))
-                          {:qname kw})))
+      (if (str/starts-with? ns "xmlns.")
+        (decode-uri (subs ns 6))
+        (if (= "xmlns" ns)
+          xmlns-uri
+          (throw (ex-info "Keyword ns is not an xmlns. Needs to be in the form :xmlns.<encoded-uri>/<local>"
+                          {:kw kw}))))
       ""))
   #?(:clj String :cljs string)
   (qname-local [s] (qname-local (parse-qname s)))
   (qname-uri   [s] (qname-uri (parse-qname s))))
 
 (defn canonical-name [uri local prefix]
-  (if (str/blank? uri)
-    (keyword local)
-    (let [kw-prefix (uri-ns uri)]
-      (if (str/blank? kw-prefix)
-        (make-qname uri local prefix)
-        (keyword kw-prefix local)))))
+  (keyword (when-not (str/blank? uri)
+             (encode-uri (str "xmlns." uri)))
+           local))
 
 (defn to-qname [n]
   (make-qname (or (qname-uri n) "") (qname-local n) ""))
 
-(defn- declare-ns* [{:keys [ns->xs xs->ns] :as acc} [ns xmlns & rst :as nss]]
-  (if (seq nss)
-    (do (assert (>= (count nss) 2))
-        (let [n (clj-ns-name ns)]
-          (if-let [x' (ns->xs n)]
-            (if (= xmlns x')
-              (recur acc rst)
-              (throw (ex-info (str "Redefining " n) {:old x' :new xmlns})))
-            (if-let [n' (xs->ns xmlns)]
-              (throw (ex-info (str xmlns " already bound to " n')
-                              {:old n' :new n}))
-              (recur {:ns->xs (assoc ns->xs n xmlns)
-                      :xs->ns (assoc xs->ns xmlns n)}
-                     rst)))))
-    acc))
-
-(defn declare-ns
-  "Define mappings in the global keyword-ns -> qname-uri mapping table.
-   Arguments are pairs of ns-name - qname-uri
-   ns-name must be a string, symbol, keyword or clojure namespace. The canonical form is string.
-   ns-uri must be a string"
-  {:arglists '([& {:as cljns-xmlnss}])}
-  [& ns-xmlnss]
-  (swap! nss declare-ns* ns-xmlnss))
-
-(declare-ns
- :xml     "http://www.w3.org/XML/1998/namespace"
- :xmlns   "http://www.w3.org/2000/xmlns/")
-
-(def ;;once ^:const
-  empty-namespace
-  {"xml"   (ns-uri "xml")
-   "xmlns" (ns-uri "xmlns")})
-
-(def ;;once ^:const
-  xmlns-uri (ns-uri "xmlns"))
-
-#?(:clj
-   (defn alias-ns
-     "Define a clojure namespace alias for shortened keyword and symbol namespaces.
+#_(#?(:clj
+      (defn alias-ns
+        "Define a clojure namespace alias for shortened keyword and symbol namespaces.
    Similar to clojure.core/alias, but if namespace doesn't exist, it is created.
 
    ## Example
    (declare-ns :xml.dav \"DAV:\")
    (alias-ns :D :xml.dav)
   {:tag ::D/propfind :content []}"
+        {:arglists '([& {:as alias-nss}])}
+        [& ans]
+        (loop [[a n & rst :as ans] ans]
+          (when (seq ans)
+            (assert (<= 2 (count ans)) (pr-str ans))
+            (let [ns (symbol (clj-ns-name n))
+                  al (symbol (clj-ns-name a))]
+              (create-ns ns)
+              (alias al ns)
+              (recur rst)))))))
+
+#?(:clj
+   (defn alias-uri
+     "Define a clojure namespace alias for xmlns uri.
+  ## Example
+  (alias-uri :D \"DAV:\")
+  {:tag ::D/propfind}"
      {:arglists '([& {:as alias-nss}])}
      [& ans]
      (loop [[a n & rst :as ans] ans]
        (when (seq ans)
-         (assert (<= 2 (count ans)) (pr-str ans))
-         (let [ns (symbol (clj-ns-name n))
+         (assert (<= (count ans)) (pr-str ans))
+         (let [xn (symbol (encode-uri (str "xmlns." n)))
                al (symbol (clj-ns-name a))]
-           (create-ns ns)
-           (alias al ns)
+           (create-ns xn)
+           (alias al xn)
            (recur rst))))))
 
 (defn merge-nss
