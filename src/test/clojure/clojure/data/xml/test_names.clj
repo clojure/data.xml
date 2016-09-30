@@ -55,3 +55,9 @@
              ;; generated xmlns:a instead of xmlns:D
              (element ::V/other {:xmlns/D "uri-v:"}))
     (element ::D/limit {} (element ::V/other))))
+
+(deftest test-preserve-empty-ns
+  (are [el] (= el (parse-str (emit-str (assoc-in el [:attrs :xmlns] "DAV:"))))
+    (element :top-level)
+    (element ::D/local-root {}
+             (element :top-level))))

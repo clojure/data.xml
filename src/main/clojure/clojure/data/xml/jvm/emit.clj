@@ -15,11 +15,14 @@
             [clojure.string :as str])
   (:import (java.io OutputStreamWriter Writer StringWriter)
            (java.nio.charset Charset)
+           (java.util.logging Logger Level)
            (javax.xml.namespace NamespaceContext)
            (javax.xml.stream XMLStreamWriter XMLOutputFactory)
            (javax.xml.transform OutputKeys Transformer
                                 TransformerFactory)
            (clojure.data.xml.event StartElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent)))
+
+(def logger (Logger/getLogger "clojure.data.xml"))
 
 (defprotocol EventEmit
   (emit-event [event ^XMLStreamWriter writer]))
@@ -61,7 +64,8 @@
         tleft (reduce-kv (fn [tleft k v]
                            (let [local (qname-local k)]
                              (or (if (= "xmlns" local)
-                                   (when-not (= v (.. writer getNamespaceContext (getNamespaceURI "")))
+                                   (when-not (= (str v)
+                                                (str (.. writer getNamespaceContext (getNamespaceURI ""))))
                                      (assoc! tleft v ""))
                                    (when-let [prefix (and (str/blank? (get-prefix writer tleft v))
                                                           (if (.. writer getNamespaceContext
@@ -83,8 +87,20 @@
 (defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer]
   (let [uri   (qname-uri tag)
         local (qname-local tag)
-        xmlns-attrs (xmlns-attribute-set writer nss (cons uri (map qname-uri (keys attrs))))]
-    (if (str/blank? uri)
+        global (str/blank? uri)
+        xmlns-attrs (xmlns-attribute-set
+                     writer
+                     (cond-> nss
+                       global (as-> nss
+                                  (let [default (get nss :xmlns)]
+                                    (when (and
+                                           (not (str/blank? default))
+                                           (.isLoggable logger Level/FINE))
+                                      (.log logger Level/FINE
+                                            (format "Default `xmlns=\"%s\"` had to be replaced with a `xmlns=\"\"` because of global element `%s`" default local)))
+                                    (assoc nss :xmlns ""))))
+                     (cons uri (map qname-uri (keys attrs))))]
+    (if global
       (.writeStartElement writer local)
       (.writeStartElement writer (get-prefix writer xmlns-attrs uri)
                           local uri))
