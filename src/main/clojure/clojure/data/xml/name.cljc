@@ -27,6 +27,9 @@
 ;; protocol functions can be redefined by extend-*, so we wrap
 ;; protocols/qname-uri protocols/qname-local within regular fns
 
+(defn uri-symbol [uri]
+  (symbol (encode-uri (str "xmlns." uri))))
+
 (defn qname-uri
   "Get the namespace uri for this qname"
   [v]
@@ -80,26 +83,6 @@
 (defn to-qname [n]
   (make-qname (or (qname-uri n) "") (qname-local n) ""))
 
-#_(#?(:clj
-      (defn alias-ns
-        "Define a clojure namespace alias for shortened keyword and symbol namespaces.
-   Similar to clojure.core/alias, but if namespace doesn't exist, it is created.
-
-   ## Example
-   (declare-ns :xml.dav \"DAV:\")
-   (alias-ns :D :xml.dav)
-  {:tag ::D/propfind :content []}"
-        {:arglists '([& {:as alias-nss}])}
-        [& ans]
-        (loop [[a n & rst :as ans] ans]
-          (when (seq ans)
-            (assert (<= 2 (count ans)) (pr-str ans))
-            (let [ns (symbol (clj-ns-name n))
-                  al (symbol (clj-ns-name a))]
-              (create-ns ns)
-              (alias al ns)
-              (recur rst)))))))
-
 #?(:clj
    (defn alias-uri
      "Define a clojure namespace alias for xmlns uri.
@@ -111,7 +94,7 @@
      (loop [[a n & rst :as ans] ans]
        (when (seq ans)
          (assert (<= (count ans)) (pr-str ans))
-         (let [xn (symbol (encode-uri (str "xmlns." n)))
+         (let [xn (uri-symbol n)
                al (symbol (clj-ns-name a))]
            (create-ns xn)
            (alias al xn)

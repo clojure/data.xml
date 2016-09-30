@@ -7,7 +7,6 @@
    [clojure.data.xml.protocols :refer [AsQName]]))
 
 (export-api
- name/ns-uri name/uri-ns name/declare-ns
  name/parse-qname name/qname-uri name/qname-local name/qname name/to-qname
  node/element* node/element node/cdata node/xml-comment)
 

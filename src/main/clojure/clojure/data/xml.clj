@@ -33,8 +33,8 @@
 
 (export-api node/element* node/element node/cdata node/xml-comment
             prxml/sexp-as-element prxml/sexps-as-fragment event/element-nss
-            #_name/ns-uri #_name/uri-ns #_name/declare-ns #_name/alias-ns name/alias-uri
-            name/parse-qname name/qname-uri name/qname-local name/qname name/to-qname
+            name/alias-uri name/parse-qname name/qname-uri
+            name/qname-local name/qname name/to-qname name/uri-symbol
             process/find-xmlns process/aggregate-xmlns)
 
 (defn canonical-name
