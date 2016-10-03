@@ -26,7 +26,7 @@
    :wiki-url
    "http://clojure.github.io/data.xml/index.html#clojure.data.xml.jvm.emit",
    :source-url
-   "https://github.com/clojure/data.xml/blob/82fc4ca99139251586d1963b7e64f635148be9aa/src/main/clojure/clojure/data/xml/jvm/emit.clj"}
+   "https://github.com/clojure/data.xml/blob/fa497c80468b882b20e9ac03dcbbc27cacbbd259/src/main/clojure/clojure/data/xml/jvm/emit.clj"}
   {:doc nil,
    :name "clojure.data.xml.jvm.parse",
    :wiki-url
@@ -595,11 +595,11 @@
    :wiki-url
    "http://clojure.github.io/data.xml//index.html#clojure.data.xml.impl/static-case"}
   {:raw-source-url
-   "https://github.com/clojure/data.xml/raw/82fc4ca99139251586d1963b7e64f635148be9aa/src/main/clojure/clojure/data/xml/jvm/emit.clj",
+   "https://github.com/clojure/data.xml/raw/fa497c80468b882b20e9ac03dcbbc27cacbbd259/src/main/clojure/clojure/data/xml/jvm/emit.clj",
    :name "write-document",
    :file "src/main/clojure/clojure/data/xml/jvm/emit.clj",
    :source-url
-   "https://github.com/clojure/data.xml/blob/82fc4ca99139251586d1963b7e64f635148be9aa/src/main/clojure/clojure/data/xml/jvm/emit.clj#L133",
+   "https://github.com/clojure/data.xml/blob/fa497c80468b882b20e9ac03dcbbc27cacbbd259/src/main/clojure/clojure/data/xml/jvm/emit.clj#L133",
    :line 133,
    :var-type "function",
    :arglists ([swriter events opts]),
