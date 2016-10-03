@@ -90,15 +90,15 @@
         global (str/blank? uri)
         xmlns-attrs (xmlns-attribute-set
                      writer
-                     (cond-> nss
-                       global (as-> nss
-                                  (let [default (get nss :xmlns)]
-                                    (when (and
-                                           (not (str/blank? default))
-                                           (.isLoggable logger Level/FINE))
-                                      (.log logger Level/FINE
-                                            (format "Default `xmlns=\"%s\"` had to be replaced with a `xmlns=\"\"` because of global element `%s`" default local)))
-                                    (assoc nss :xmlns ""))))
+                     (if global
+                       (let [default (get nss :xmlns)]
+                         (when (and
+                                (not (str/blank? default))
+                                (.isLoggable logger Level/FINE))
+                           (.log logger Level/FINE
+                                 (format "Default `xmlns=\"%s\"` had to be replaced with a `xmlns=\"\"` because of global element `%s`" default local)))
+                         (assoc nss :xmlns ""))
+                       nss)
                      (cons uri (map qname-uri (keys attrs))))]
     (if global
       (.writeStartElement writer local)
