@@ -52,10 +52,11 @@
   [source {:as props}]
   (let [props* (merge {:include-node? #{:element :characters}
                        :coalescing true
-                       :supporting-external-entities false}
+                       :supporting-external-entities false
+                       :location-info true}
                       props)]
     (pull-seq (make-stream-reader props* source)
-              (get props* :include-node?)
+              props*
               nil)))
 
 (defn parse

@@ -186,6 +186,7 @@
     (is (= (parse-str (emit-str el)) el))))
 
 (deftest test-default-xmlns
-  (is (= {:clojure.data.xml/nss {:xmlns "NS"}}
-         (meta (parse-str "<foo xmlns=\"NS\"/>"))
-         (meta (parse-str (emit-str (parse-str "<foo xmlns=\"NS\"/>")))))))
+  (let [nss-meta (comp :clojure.data.xml/nss meta)]
+    (is (= {:xmlns "NS"}
+           (nss-meta (parse-str "<foo xmlns=\"NS\"/>"))
+           (nss-meta (parse-str (emit-str (parse-str "<foo xmlns=\"NS\"/>"))))))))

@@ -323,6 +323,22 @@ Removing the metadata will cause the elements to not have a prefix,
 which is still correct, but will cause new prefixes to be generated
 when the document is emitted.
 
+## Location information as meta
+
+By default the parser attaches location information as element meta,
+ `:character-offset`, `:column-number` and `:line-number` are available under
+ the `:clojure.data.xml/location-info` key:
+
+    (deftest test-location-meta
+      (let [input "<a><b/>\n<b/></a>"
+            location-meta (comp :clojure.data.xml/location-info meta)]
+        (is (= 1 (-> input parse-str location-meta :line-number)))
+        
+If you do not want to see the location info for any reason use an option to
+prevent that:
+
+    (parse-str your-input :location-info false)
+
 ## License
 
 Licensed under the [Eclipse Public License](http://www.opensource.org/licenses/eclipse-1.0.php).
