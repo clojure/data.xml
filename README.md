@@ -39,7 +39,7 @@ Add the following to the `project.clj` dependencies:
 
 ## Installation - Beta
 
-Latest beta release: 0.1.0-beta1
+Latest beta release: 0.1.0-beta3
 
 * [All Released Versions](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.xml%22)
 
@@ -51,13 +51,13 @@ For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` s
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>data.xml</artifactId>
-      <version>0.1.0-beta1</version>
+      <version>0.1.0-beta3</version>
      </dependency>
 
 ### Leiningen
 Add the following to the `project.clj` dependencies:
 
-    [org.clojure/data.xml "0.1.0-beta1"]
+    [org.clojure/data.xml "0.1.0-beta3"]
 
 ## Examples
 
@@ -334,8 +334,7 @@ By default the parser attaches location information as element meta,
             location-meta (comp :clojure.data.xml/location-info meta)]
         (is (= 1 (-> input parse-str location-meta :line-number)))
         
-If you do not want to see the location info for any reason use an option to
-prevent that:
+To elide location information, pass `:location-info false` to the parser:
 
     (parse-str your-input :location-info false)
 

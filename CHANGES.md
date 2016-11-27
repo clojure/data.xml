@@ -1,3 +1,7 @@
+From 0.1.0-beta2 to 0.1.0-beta3
+- Fix emitter to keep non-namespaced xml names out of any set default namespace
+- Add support for location info in parser
+
 From 0.1.0-beta1 to 0.1.0-beta2
 - Add support for emitting DOCTYPEs (DXML-10)
 - Fix issue emitting sibling namespaces (DXML-33)
