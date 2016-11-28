@@ -64,7 +64,7 @@
   (qname-local [kw] (name kw))
   (qname-uri [kw]
     (if-let [ns (namespace kw)]
-      (if (str/starts-with? ns "xmlns.")
+      (if (.startsWith ns "xmlns.")
         (decode-uri (subs ns 6))
         (if (= "xmlns" ns)
           xmlns-uri
