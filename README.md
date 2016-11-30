@@ -37,9 +37,9 @@ Add the following to the `project.clj` dependencies:
 
     [org.clojure/data.xml "0.0.8"]
 
-## Installation - Beta
+## Installation - Alpha
 
-Latest beta release: 0.1.0-beta3
+Latest alpha release: 0.2.0-alpha1
 
 * [All Released Versions](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.xml%22)
 
@@ -51,13 +51,13 @@ For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` s
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>data.xml</artifactId>
-      <version>0.1.0-beta3</version>
+      <version>0.2.0-alpha1</version>
      </dependency>
 
 ### Leiningen
 Add the following to the `project.clj` dependencies:
 
-    [org.clojure/data.xml "0.1.0-beta3"]
+    [org.clojure/data.xml "0.2.0-alpha1"]
 
 ## Examples
 
@@ -91,7 +91,7 @@ can be passed via key pairs:
     #clojure.data.xml.Element{:tag :a, :attrs {}, :content ("\nfoo bar\n" "\nbaz\n")}
 
 XML elements can be created using the typical defrecord constructor
-functions or the element function used below, and written using a
+functions or the element function used below or just a plain map with :tag :attrs :content keys, and written using a
 [java.io.Writer](http://docs.oracle.com/javase/6/docs/api/java/io/Writer.html).:
 
     (let [tags (element :foo {:foo-attr "foo value"}
@@ -196,84 +196,36 @@ Generated API docs for data.xml are available [here](http://clojure.github.com/d
 
 ## Namespace Support
 
-Parsing and emitting XML namespaces are supported and use the JDK built-in
-QName class. Below is an example of parsing an XHTML document:
+XML Namespaced names (QNames) are commonly encoded into clojure keywords, by percent-encoding the (XML) namespace: `{http://www.w3.org/1999/xhtml}head` is encoded in data.xml as `:http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml/head`.
+
+Below is an example of parsing an XHTML document:
 
     (parse-str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-                <foo:html xmlns:foo=\"http://www.w3.org/1999/xhtml\">
-                  <foo:head>
-                    <foo:title>Example title</foo:title>
-                  </foo:head>
-                  <foo:body>
-                    <foo:p>Example Paragraph</foo:p>
-                  </foo:body>
-                </foo:html>")
-
-    #...Element{:tag #object[javax.xml.namespace.QName 0x68651690 "{http://www.w3.org/1999/xhtml}html"],
-               :attrs {},
-               :content (...)}
-
-The above data structures are verbose. Each tag that includes a
-namespace will include that in it's QName:
-
-    #...Element{:tag #object[javax.xml.namespace.QName 0x7255cde4 "{http://www.w3.org/1999/xhtml}title"],
+                <foo:html xmlns:foo=\"http://www.w3.org/1999/xhtml\"/>")
+                
+    #...Element{:tag :xmlns.http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml/html,
                 :attrs {},
-                :content ("Example title")}
+                :content ()}
 
-This is the most basic representation of the parsed document that
-includes namespaces. Emitting namespace information in a similar way
-can use the `qname` function:
+Emitting namespaced XML is usually done by using `alias-uri` in combination with clojure's built-in `::kw-ns/shorthands`:
 
-    (element (qname "title" "http://www.w3.org/1999/xhtml" "foo")
-             {}
-             "Example title")
+    (alias-uri 'xh "http://www.w3.org/1999/xhtml")
+    
+    (emit-str {:tag ::xh/html
+               :content [{:tag ::xh/head} {:tag ::xh/body :content ["DOCUMENT"]}]})
 
-    #...Element{:tag #object[javax.xml.namespace.QName 0x22a22c0e "{title}http://www.w3.org/1999/xhtml"],
-                :attrs {},
-                :content ("Example title")}
+    <?xml version="1.0" encoding="UTF-8"?>
+    <a:html xmlns:a="http://www.w3.org/1999/xhtml">
+      <a:head/>
+      <a:body>DOCUMENT</a:body>
+    </a:html>
 
-The emitting code above is similarly verbose. By declaring the
-namespaces that will be parsed or emitted up-front via `declare-ns`,
-these representations can be made much more succinct:
+It is also allowable to use `javax.xml.namespace.QName` instances, as well as strings with the informal `{ns}n` encoding.
 
-    (declare-ns "xml.html" "http://www.w3.org/1999/xhtml")
-    (parse-str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-                <foo:html xmlns:foo=\"http://www.w3.org/1999/xhtml\">
-                  <foo:head>
-                    <foo:title>Example title</foo:title>
-                  </foo:head>
-                  <foo:body>
-                    <foo:p>Example Paragraph</foo:p>
-                  </foo:body>
-                </foo:html>")
-
-    #...Element{:tag :xml.html/html, :attrs {}, :content (...)}
-
-In the above example, all tags use the namespace
-`http://www.w3.org/1999/xhtml`. That namespace is declared as "xml.html" in
-Clojure. All the tags parsed from that document will be
-`:xml.html/the-tag-name`. Note that `xml.html` is not related to the namespace
-prefix declared in the document (`foo` in this example). `xml.html` is just
-a way to refer to names in the `http://www.w3.org/1999/xhtml` namespace
-with a keyword.
-
-The declared namespace can also be used in combination with the
-regular clojure namespace aliasing mechnism. When constructing XML
-documents, this leads pretty succinct representation with alias-aware keywords.
-
-    (alias-ns :xh :xml.html) ;; alias-ns will create the target ns - xml.html - so that it can be aliased into the current ns
-    (emit-str (element ::xh/title
-                       {:xmlns/foo "http://www.w3.org/1999/xhtml"}
-                       "Example title"))
-
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo:title xmlns:foo=\"http://www.w3.org/1999/xhtml\">Example title</foo:title>"
-
-Take note, that the keyword-namespaces `:xmlns/...` as well as
-`:xml/...` are predefined to refer to `http://www.w3.org/2000/xmlns/`
-and `http://www.w3.org/XML/1998/namespace` respectively.
-
-Because keywords interact with clojure's namespace - aliasing
-mechanism, applications can choose descriptive names in `declare-ns`.
+    (emit-str {:tag (qname "http://www.w3.org/1999/xhtml" "html")})
+    (emit-str {:tag "{http://www.w3.org/1999/xhtml}html"})
+    
+    <?xml version=\"1.0\" encoding=\"UTF-8\"?><a:html xmlns:a=\"http://www.w3.org/1999/xhtml\"></a:html>
 
 ### Namespace Prefixes
 
@@ -288,7 +240,6 @@ kw-namespace:
 
 Not specifying a namespace prefix will results in a prefix being generated:
 
-    ;; Assumes (declare-ns "xml.html" "http://www.w3.org/1999/xhtml") and (alias-ns :xh :xml.html)
     (emit-str (element ::xh/title
                        {}
                        "Example title"))

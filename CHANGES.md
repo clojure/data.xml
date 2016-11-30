@@ -1,3 +1,10 @@
+From 0.1.0-beta3 to 0.2.0-alpha1
+- Define uniform mapping of xml namespaces to clojure namespaces via percent-encoding
+- Remove declare-ns and alias-ns
+- Introduce alias-uri
+- Clojurescript support
+- data.xml now requires Clojure 1.5.0+ (due to percent-sign in keywords)
+
 From 0.1.0-beta2 to 0.1.0-beta3
 - Fix emitter to keep non-namespaced xml names out of any set default namespace
 - Add support for location info in parser
