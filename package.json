@@ -1,0 +1,13 @@
+{
+
+    "scripts": {
+        "build": "webpack"
+    }
+
+    , "devDependencies": {
+        "webpack": "2.1.0-beta.27",
+        "xmldom" : "0.1.27"
+        "domino" : ""
+    }
+    , "name": "dxml-nashorn-api"
+}

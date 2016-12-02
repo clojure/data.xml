@@ -289,6 +289,39 @@ To elide location information, pass `:location-info false` to the parser:
 
     (parse-str your-input :location-info false)
 
+## Clojurescript support
+
+The Clojurescript implementation uses the same namespace as the Clojure one `clojure.data.xml`.
+
+### Differences from Clojure implementation
+
+data.xml uses native browser dom elements to represent xml. To get back the convenience of treating them as maps, call `(extend-dom-as-data!)`. This extends the native dom node prototypes to Clojurescript collection protocols, such that you can treat them as data.xml parse trees.
+
+Of course, the map format is supported for emitting.
+
+### Missing Features, Patches Welcome
+
+#### Streaming
+
+data.xml on Clojurescript doesn't currently support streaming, hence only the `*-str` variants of `parse`/`emit` are implemented. Those are just wrappers for browser's native xml parsing/printing.
+
+Pull parsing doesn't seem the right solution for Clojurescript, because when code cannot block, the parser has no way of waiting on its input. For this reason, parsing in Clojurescript cannot be based around `event-seq`.
+
+Push parsing, on the other hand should not pose a problem, because when data arrives in a callback, it can be pushed on into the parser. Fortunately, clojure already has a nice push-based pendant for lazy sequences: transducers.
+
+#### Utilities
+
+Some utilities, like `process/*-xmlns`, `prxml/sexp-as-*`, `indent` aren't yet implemented.
+
+#### Immutable updates for dom types
+
+Make `extend-dom-as-data!` also support assoc, ... on dom nodes.
+
+#### Data coercions
+
+
+
+
 ## License
 
 Licensed under the [Eclipse Public License](http://www.opensource.org/licenses/eclipse-1.0.php).

@@ -2,3 +2,9 @@
 modules/xml/target/
 modules/xml.pull-parser/target/
 *~
+/out/
+/node_modules/
+/nashorn_code_cache/
+/figwheel_server.log
+/.nrepl-port
+/.cljs_nashorn_repl/
