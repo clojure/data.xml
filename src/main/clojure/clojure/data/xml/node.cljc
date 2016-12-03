@@ -27,20 +27,27 @@
 (defrecord CData [content])
 (defrecord Comment [content])
 
+#?(:cljs ;; http://dev.clojure.org/jira/browse/CLJS-1859
+   (extend-type Element
+     IEquiv
+     (-equiv [el o]
+       (js/cljs.core.equiv_map el o))))
+
 (defn element*
   "Create an xml element from a content collection and optional metadata"
   ([tag attrs content meta]
-     (Element. tag (or attrs {}) (remove nil? content) meta nil))
+   (Element. tag (or attrs {}) (remove nil? content) meta nil))
   ([tag attrs content]
-     (Element. tag (or attrs {}) (remove nil? content))))
+   (Element. tag (or attrs {}) (remove nil? content))))
 
-;; Compiler macro for inlining the two constructors
-(alter-meta! #'element* assoc :inline
-             (fn
-               ([tag attrs content meta]
-                  `(Element. ~tag (or ~attrs {}) (remove nil? ~content) ~meta nil))
-               ([tag attrs content]
-                  `(Element. ~tag (or ~attrs {}) (remove nil? ~content)))))
+#?(:clj
+   ;; Compiler macro for inlining the two constructors
+   (alter-meta! #'element* assoc :inline
+                (fn
+                  ([tag attrs content meta]
+                   `(Element. ~tag (or ~attrs {}) (remove nil? ~content) ~meta nil))
+                  ([tag attrs content]
+                   `(Element. ~tag (or ~attrs {}) (remove nil? ~content))))))
 
 (defn element
   "Create an xml Element from content varargs"
@@ -48,12 +55,12 @@
   ([tag attrs] (element* tag attrs nil))
   ([tag attrs & content] (element* tag attrs content)))
 
-(definline cdata
+(defn cdata
   "Create a CData node"
   [content]
-  `(CData. ~content))
+  (CData. content))
 
-(definline xml-comment
+(defn xml-comment
   "Create a Comment node"
   [content]
-  `(Comment. ~content))
+  (Comment. content))

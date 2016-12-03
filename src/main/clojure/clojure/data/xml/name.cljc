@@ -30,6 +30,12 @@
 (defn uri-symbol [uri]
   (symbol (encode-uri (str "xmlns." uri))))
 
+(defn symbol-uri [ss]
+  (let [du (decode-uri (str ss))]
+    (if (.startsWith du "xmlns.")
+      (subs du 6)
+      (throw (ex-info "Uri symbol not valid" {:sym ss})))))
+
 (defn qname-uri
   "Get the namespace uri for this qname"
   [v]
@@ -75,10 +81,13 @@
   (qname-local [s] (qname-local (parse-qname s)))
   (qname-uri   [s] (qname-uri (parse-qname s))))
 
-(defn canonical-name [uri local prefix]
-  (keyword (when-not (str/blank? uri)
-             (encode-uri (str "xmlns." uri)))
-           local))
+(defn canonical-name
+  ([local] (canonical-name "" local ""))
+  ([uri local] (canonical-name uri local ""))
+  ([uri local prefix]
+   (keyword (when-not (str/blank? uri)
+              (encode-uri (str "xmlns." uri)))
+            local)))
 
 (defn to-qname [n]
   (make-qname (or (qname-uri n) "") (qname-local n) ""))

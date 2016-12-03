@@ -4,12 +4,13 @@
   (:require
    [clojure.data.xml.name :as name]
    [clojure.data.xml.node :as node]
+   [clojure.data.xml.js.dom :as dom]
    [clojure.data.xml.protocols :refer [AsQName]]))
 
 (export-api
- name/parse-qname name/qname-uri name/qname-local name/qname name/to-qname name/uri-symbol
- node/element* node/element node/cdata node/xml-comment node/text-node
- node/extend-dom-as-data! node/element-node node/element-data)
+ name/parse-qname name/qname-uri name/qname-local name/qname name/to-qname name/uri-symbol name/symbol-uri
+ node/element* node/element node/cdata node/xml-comment
+ dom/extend-dom-as-data! dom/element-node dom/element-data)
 
 (defn canonical-name
   "Put (q)name into canonical form as per ns-env"
@@ -46,5 +47,5 @@
   [e & {:keys []}]
   (. (js/XMLSerializer.)
      (serializeToString
-      (node/element-node e))))
+      (element-node e))))
 

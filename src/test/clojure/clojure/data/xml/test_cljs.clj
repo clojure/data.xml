@@ -8,61 +8,60 @@
 
 (ns ^{:doc "Clojurescript tests for data.xml"}
     clojure.data.xml.test-cljs
-    (:require
-     [clojure.test :refer :all]
-     [cljs.repl :as repl]
-     [cljs.repl.nashorn :as repl-nh]
-     [cemerick.piggieback :as pback]
-     [cljs.closure :as closure]
-     #_[cljs.analyzer :as ana]
-     [cljs.build.api :as bapi]
-     [figwheel-sidecar.repl-api :refer [start-figwheel! stop-figwheel! cljs-repl]])
-    (:import
-     java.nio.file.Files
-     java.nio.file.attribute.FileAttribute))
+  (:require
+   [clojure.test :refer :all]
+   [cljs.repl :as repl]
+   [cljs.repl.nashorn :as repl-nh]
+   [cljs.closure :as closure]
+   [cljs.build.api :as bapi]
+   [clojure.string :as str]
+   [clojure.java.io :as io])
+  (:import
+   java.nio.file.Files
+   java.nio.file.attribute.FileAttribute))
 
 (defn nashorn-env []
   (let [{:as env :keys [engine]} (repl-nh/repl-env)]
     (repl-nh/eval-resource engine "dxml-nashorn.generated.js" true)
     env))
 
-(def handle-redirect (constantly {:status 307 :headers {"Location" "/cljs-tests/index.html"}}))
-
-(defn repl-figwheel! []
-  (start-figwheel!
-   {:figwheel-options
-    {:http-server-root "public"
-     :ring-handler `handle-redirect}
-    :all-builds
-    [{:id "tests"
-      :source-paths ["src/main/clojure" "src/test/clojure"]
-      :figwheel {:on-jsload "clojure.data.xml.test-cljs/-main"}
-      :compiler {:main 'clojure.data.xml.test-cljs
-                 :output-to "target/gen-resources/public/cljs-tests/main.js"
-                 :output-dir "target/gen-resources/public/cljs-tests/output"
-                 :asset-path "output"
-                 :source-map true}}]})
-  (cljs-repl))
-
-(defn repl-piggieback! []
-  (pback/cljs-repl (nashorn-env)))
-
-(defn repl-main! []
-  (repl/repl (nashorn-env)))
-
 (defn tempdir []
   (str (Files/createTempDirectory
         "cljs-nashorn-" (into-array FileAttribute []))))
 
-(defn compile-testsuite []
-  (bapi/build (bapi/inputs "src/main/clojure" "src/test/clojure")
-              (let [dir (tempdir)]
-                (println "Building in" dir)
-                {:output-to (str dir "/tests.js")
+(defn compile-testsuite! [dir]
+  (let [out (io/file dir "tests.js")]
+    (println "Building in" dir)
+    (bapi/build (bapi/inputs "src/main/clojure" "src/test/clojure")
+                {:output-to (str out)
                  :output-dir dir
-                 :optimizations :whitespace
-                 :pretty-print true
-                 :preamble ["src/test/resources/dxml-nashorn.generated.js"]})))
+                 :main 'clojure.data.xml.test-cljs
+                 :optimizations :simple
+                 ;; :pseudo-names true
+                 :preamble ["dxml-nashorn.generated.js"]})
+    (spit (io/file dir "tests.reopt.js")
+          (closure/optimize {:optimizations :simple
+                             :pretty-print true}
+                            (slurp out)))))
+
+(defn run-testsuite! [dir]
+  (let [{:keys [engine]} (repl-nh/repl-env)]
+    (compile-testsuite! dir)
+    (.eval engine (io/reader (io/file dir "tests.reopt.js")))
+    (.eval engine "clojure.data.xml.test_cljs._main()")))
+
+(deftest clojurescript-test-suite
+  (is (= false (run-testsuite! (tempdir)))))
+
+(comment
+
+  (def td (tempdir))
+  (def engine (:engine (repl-nh/repl-env)))
+  (run-testsuite! td)
+  (.eval engine (io/reader (io/file td "tests.reopt.js")))
+  (.eval engine "clojure.data.xml.test_cljs._main()")
+
+  )
 
 #_(deftest clojurescript-test-suite
     (is (= :success

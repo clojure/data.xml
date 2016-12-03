@@ -34,7 +34,7 @@
 (export-api node/element* node/element node/cdata node/xml-comment
             prxml/sexp-as-element prxml/sexps-as-fragment event/element-nss
             name/alias-uri name/parse-qname name/qname-uri
-            name/qname-local name/qname name/to-qname name/uri-symbol
+            name/qname-local name/qname name/to-qname name/uri-symbol name/symbol-uri
             process/find-xmlns process/aggregate-xmlns)
 
 (defn canonical-name

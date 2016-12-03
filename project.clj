@@ -6,5 +6,7 @@
                  [org.clojure/clojurescript "1.9.293"]
                  [com.cemerick/piggieback "0.2.1"]
                  [org.clojure/tools.nrepl "0.2.12"]
-                 [figwheel-sidecar "0.5.8"]]
+                 [org.clojure/test.check "0.9.0"]
+                 [figwheel-sidecar "0.5.8"]
+                 [binaryage/devtools "0.8.3"]]
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]})
