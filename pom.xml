@@ -57,7 +57,7 @@
       <plugin>
         <groupId>net.bendlas</groupId>
         <artifactId>cljc-maven-plugin</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.1.1</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
