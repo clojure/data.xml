@@ -45,6 +45,14 @@
   </dependencies>
 
   <build>
+    <testResources>
+      <testResource>
+        <directory>${project.basedir}/src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>${project.basedir}/src/test/clojurescript</directory>
+      </testResource>
+    </testResources>
     <plugins>
       <plugin>
         <groupId>net.bendlas</groupId>
@@ -81,6 +89,7 @@
   </build>
 
   <properties>
+    <!--clojure.version>1.5.0</clojure.version-->
     <clojure.version>1.9.0-alpha14</clojure.version>
   </properties>
 

@@ -1,6 +1,6 @@
 (defproject org.clojure/data.xml "0-UE-DEVELOPMENT"
   :source-paths ["src/main/clojure"]
-  :test-paths ["src/test/clojure"]
+  :test-paths ["src/test/clojure" "src/test/clojurescript"]
   :resource-paths ["src/test/resources" "target/gen-resources"]
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.293"]

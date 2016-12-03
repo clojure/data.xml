@@ -6,6 +6,11 @@
    [cljs.closure :as closure]
    [figwheel-sidecar.repl-api :refer [start-figwheel! stop-figwheel! cljs-repl]]))
 
+(defn nashorn-env []
+  (let [{:as env :keys [engine]} (repl-nh/repl-env)]
+    (repl-nh/eval-resource engine "dxml-nashorn.generated.js" true)
+    env))
+
 (def handle-redirect (constantly {:status 307 :headers {"Location" "/cljs-tests/index.html"}}))
 
 (defn repl-figwheel! []
@@ -15,7 +20,7 @@
      :ring-handler `handle-redirect}
     :all-builds
     [{:id "tests"
-      :source-paths ["src/main/clojure" "src/test/clojure"]
+      :source-paths ["src/main/clojure" "src/test/clojure" "src/test/clojurescript"]
       :figwheel {:on-jsload "clojure.data.xml.test-cljs/-main"}
       :compiler {:main 'clojure.data.xml.test-cljs
                  :preloads '[devtools.preload]

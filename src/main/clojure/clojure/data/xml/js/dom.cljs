@@ -91,7 +91,8 @@
     (string? el) (text-node el)
     (instance? Element el) el
     ;; stupid xmldom, (some? (.-item el))
-    (instance? NodeList el) el
+    #_(instance? NodeList el)
+    (some? (.-item el)) el
     (instance? Text el) el
     (satisfies? ILookup el) (element* (:tag el)
                                       (:attrs el)
@@ -110,24 +111,27 @@
   (identical? xmlns-uri (.-namespaceURI a)))
 (def remove-xmlns-attrs-xf (remove xmlns-attr?))
 (def remove-xmlns-attrs (partial into {} remove-xmlns-attrs-xf))
-(def filter-xmlns-attrs (partial into {} (filter xmlns-attr?)))
+(def filter-xmlns-attrs-xf (filter xmlns-attr?))
+(def filter-xmlns-attrs (partial into {} filter-xmlns-attrs-xf))
 
-(defn dom-element-attrs [el]
-  (transduce
-   remove-xmlns-attrs-xf
-   (completing
-    (fn [ta attr-node]
-      (assoc! ta
-              (dom-element-tag attr-node)
-              (.-value attr-node)))
-    persistent!)
-   (transient {})
-   (array-seq el)))
+(defn dom-element-attrs
+  ([el] (dom-element-attrs remove-xmlns-attrs-xf el))
+  ([xf el]
+   (transduce
+    xf
+    (completing
+     (fn [ta attr-node]
+       (assoc! ta
+               (dom-element-tag attr-node)
+               (.-value attr-node)))
+     persistent!)
+    (transient {})
+    (array-seq el))))
 
 (declare element-data)
 
 (defn- node-list-vec [nl]
-  (mapv element-data (array-seq nl)))
+  (into [] (map element-data) (array-seq nl)))
 
 (defn- as-node [n]
   (if (instance? Text n)
@@ -144,11 +148,9 @@
     (node/element* (dom-element-tag el)
                    (dom-element-attrs (.-attributes el))
                    (node-list-vec (.-childNodes el))
-                   (do
-                     (prn "META" {:clojure.data.xml/nss (filter-xmlns-attrs
-                                                         (.-attributes el))})
-                     {:clojure.data.xml/nss (filter-xmlns-attrs
-                                             (.-attributes el))}))
+                   {:clojure.data.xml/nss (dom-element-attrs
+                                           filter-xmlns-attrs-xf
+                                           (.-attributes el))})
     ;;(instance? NamedNodeMap el)
     (.-getNamedItemNS el)
     (dom-element-attrs el)
@@ -174,11 +176,11 @@
          :content (.-childNodes el)
          (throw "XML tag has no key" {:key k :el el})))
       ([el k nf]
-       (println "Element" k "=>" (case k
-                                   :tag (dom-element-tag el)
-                                   :attrs (.-attributes el)
-                                   :content (.-childNodes el)
-                                   nf))
+       #_(println "Element" k "=>" (case k
+                                     :tag (dom-element-tag el)
+                                     :attrs (.-attributes el)
+                                     :content (.-childNodes el)
+                                     nf))
        (case k
          :tag (dom-element-tag el)
          :attrs (remove-xmlns-attrs (.-attributes el))
@@ -208,9 +210,9 @@
          (.-value i)
          nil))
       ([attrs attr not-found]
-       (println "Attrs" attr "=>" (if-let [i (.getNamedItemNS attrs (qname-uri attr) (qname-local attr))]
-                                    (.-value i)
-                                    not-found))
+       #_(println "Attrs" attr "=>" (if-let [i (.getNamedItemNS attrs (qname-uri attr) (qname-local attr))]
+                                      (.-value i)
+                                      not-found))
        (if-let [i (.getNamedItemNS attrs (qname-uri attr) (qname-local attr))]
          (.-value i)
          not-found)))
@@ -229,11 +231,11 @@
               init nm))
     IEquiv
     (-equiv [nm0 nm1]
-      (println "NamedNodeMap.-equiv" (identical? nm0 nm1) (count nm0) (count nm1))
+      #_(println "NamedNodeMap.-equiv" (identical? nm0 nm1) (count nm0) (count nm1))
       (or (identical? nm0 nm1)
           (and (identical? (count nm0) (count nm1))
                (reduce-kv (fn [_ qn v]
-                            (println "=" v 'qn qn '(get nm1 qn "") (get nm1 qn ""))
+                            #_(println "=" v 'qn qn '(get nm1 qn "") (get nm1 qn ""))
                             (or (identical? v (get nm1 qn ""))
                                 (reduced false)))
                           true nm0)))))
@@ -254,7 +256,7 @@
          nf)))
     IEquiv
     (-equiv [nl0 nl1]
-      (println "NodeList.-equiv")
+      #_(println "NodeList.-equiv")
       (or (identical? nl0 nl1)
           (and (identical? (count nl0) (count nl1))
                (reduce (fn [_ n]
