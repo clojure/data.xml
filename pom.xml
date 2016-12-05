@@ -93,13 +93,13 @@
     <clojure.version>1.8.0</clojure.version>
   </properties>
 
-  <repositories>
+  <pluginRepositories>
     <!-- use clojars for cljc-maven-plugin -->
-    <repository>
+    <pluginRepository>
       <id>clojars.org</id>
       <url>https://clojars.org/repo</url>
-    </repository>
-  </repositories>
+    </pluginRepository>
+  </pluginRepositories>
 
   <scm>
     <connection>scm:git:git@github.com:clojure/data.xml.git</connection>
