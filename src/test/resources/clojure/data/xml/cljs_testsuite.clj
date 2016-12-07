@@ -34,9 +34,7 @@
 
 (defn run-testsuite! [dir]
   (System/setProperty "nashorn.persistent.code.cache" "target/nashorn_code_cache")
-  (let [engine (repl-nh/create-engine
-                ;; wait for upgrade to more recent jdk8
-                :code-cache false)]
+  (let [engine (repl-nh/create-engine)]
     (println "INFO" "Running nashorn-repl with" (System/getProperty "nashorn.persistent.code.cache"))
     (compile-testsuite! dir)
     (.eval engine (io/reader (io/file dir "tests.reopt.js")))

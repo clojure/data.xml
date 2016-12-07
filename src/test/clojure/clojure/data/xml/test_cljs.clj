@@ -16,7 +16,15 @@
     (require 'clojure.data.xml.cljs-testsuite)
     (eval '(clojure.data.xml.cljs-testsuite/run-testsuite! "target/cljs-test-nashorn"))
     (catch Exception e
-      (println "WARN: clojurescript test suite not available with Clojure"
-               *clojure-version* (System/getProperty "java.runtime.name")
-               (System/getProperty "java.vm.version") (System/getProperty "java.runtime.version")
-               \newline e))))
+      (if (or (neg? (compare ((juxt :major :minor) *clojure-version*)
+                             [1 8]))
+              (neg? (compare (System/getProperty "java.runtime.version")
+                             "1.8")))
+        (println "WARN: ignoring cljs testsuite error on clojure < 1.8 or jdk < 1.8"
+                 *clojure-version* (System/getProperty "java.runtime.name")
+                 (System/getProperty "java.vm.version") (System/getProperty "java.runtime.version")
+                 \newline (str e))
+        (do (println "ERROR: cljs nashorn test suite should be able to run on clojure >= 1.8 and jdk >= 1.8"
+                     *clojure-version* (System/getProperty "java.runtime.name")
+                     (System/getProperty "java.vm.version") (System/getProperty "java.runtime.version"))
+            (throw e))))))
