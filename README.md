@@ -293,11 +293,15 @@ To elide location information, pass `:location-info false` to the parser:
 
 The Clojurescript implementation uses the same namespace as the Clojure one `clojure.data.xml`.
 
-### Differences from Clojure implementation
+### Native DOM support
 
-data.xml uses native browser dom elements to represent xml. To get back the convenience of treating them as maps, call `(extend-dom-as-data!)`. This extends the native dom node prototypes to Clojurescript collection protocols, such that you can treat them as data.xml parse trees.
+data.xml can directly work with native dom nodes.
 
-Of course, the map format is supported for emitting.
+- To parse into DOM objects, call parse with `:raw true`
+- To use DOM objects like regular persistent maps, call `(extend-dom-as-data!)`.
+  This extends the native dom node prototypes to Clojurescript collection protocols, such that you can treat them as data.xml parse trees.
+- To coerce to native dom use `element-node`
+- To coerce to records use `element-data`
 
 ### Missing Features, Patches Welcome
 
@@ -317,10 +321,7 @@ Some utilities, like `process/*-xmlns`, `prxml/sexp-as-*`, `indent` aren't yet i
 
 Make `extend-dom-as-data!` also support assoc, ... on dom nodes.
 
-#### Data coercions
-
-
-
+#### Feel free to pick a [ticket](http://dev.clojure.org/jira/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+DXML+AND+status+in+%28Open%2C+%22In+Progress%22%2C+Reopened%29) to work on
 
 ## License
 
