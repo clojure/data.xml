@@ -67,7 +67,7 @@
 (defn pull-seq
   "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to
    be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete."
-  [^XMLStreamReader sreader {:keys [include-node? location-info] :as opts} ns-envs]
+  [^XMLStreamReader sreader {:keys [include-node? location-info skip-whitespace] :as opts} ns-envs]
   (lazy-seq
    (loop []
      (let [location (when location-info
@@ -94,10 +94,13 @@
            (recur))
          XMLStreamConstants/CHARACTERS
          (if-let [text (and (include-node? :characters)
-                            (not (.isWhiteSpace sreader))
+                            (not (and skip-whitespace
+                                      (.isWhiteSpace sreader)))
                             (.getText sreader))]
-           (cons (->CharsEvent text)
-                 (pull-seq sreader opts ns-envs))
+           (if (zero? (.length ^CharSequence text))
+             (recur)
+             (cons (->CharsEvent text)
+                   (pull-seq sreader opts ns-envs)))
            (recur))
          XMLStreamConstants/COMMENT
          (if (include-node? :comment)

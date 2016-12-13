@@ -41,9 +41,12 @@
 
 (deftest test-xml-with-whitespace
     (let [input (str "<a>\n<b with-attr=\"s p a c e\">123</b>\n<c>1 2 3</c>\n\n</a>")
-        expected (element :a {}
-                          (element :b {:with-attr "s p a c e"} "123")
-                          (element :c {}  "1 2 3"))]
+          expected (element :a {}
+                            "\n"
+                            (element :b {:with-attr "s p a c e"} "123")
+                            "\n"
+                            (element :c {}  "1 2 3")
+                            "\n\n")]
     (is (= expected (lazy-parse* input)))))
 
 (deftest test-cdata-parse
@@ -89,7 +92,40 @@
     (is (= 1 (-> input parse-str location-meta :column-number)))
     (is (= 1 (-> input parse-str :content first location-meta :line-number)))
     (is (= 4 (-> input parse-str :content first location-meta :column-number)))
-    (is (= 2 (-> input parse-str :content second location-meta :line-number)))
+    (is (= 2 (-> input (parse-str :skip-whitespace true) :content second location-meta :line-number)))
     (is (nil? (-> input
                   (parse-str :location-info false)
                   location-meta)))))
+
+(deftest test-ignorable-whitespace
+  ;; FIXME implement clojure.lang.MapEquivalence for records
+  (clojure.lang.APersistentMap/mapEquals
+   (parse-str "<?xml version=\"1.0\"?>
+<!DOCTYPE methodCall [
+  <!ELEMENT methodCall (methodName, params)>
+  <!ELEMENT params (param+)>
+  <!ELEMENT param (value)>
+  <!ELEMENT value (string)>
+  <!ELEMENT methodName (#PCDATA)>
+  <!ELEMENT string (#PCDATA)>
+]>
+<methodCall>
+  <methodName>lookupSymbol</methodName>
+  <params>
+    <param>
+      <value>
+        <string>
+          Clojure XML &lt;3
+        </string>
+      </value>
+    </param>
+  </params>
+</methodCall>")
+   {:tag :methodCall, :attrs {}, :content
+    [{:tag :methodName, :attrs {}, :content
+      ["lookupSymbol"]}
+     {:tag :params, :attrs {}, :content
+      [{:tag :param, :attrs {}, :content
+        [{:tag :value, :attrs {}, :content
+          [{:tag :string, :attrs {}, :content
+            ["\n          Clojure XML <3 \n        "]}]}]}]}]}))
