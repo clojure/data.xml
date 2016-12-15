@@ -61,6 +61,8 @@
     </testResources>
     <plugins>
       <plugin>
+        <!-- cljc-maven-plugin produces .clj files from .cljc files,
+             hence enabling usage of .cljc while supporting clojure < 1.7.0 -->
         <groupId>net.bendlas</groupId>
         <artifactId>cljc-maven-plugin</artifactId>
         <version>0.1.1</version>
@@ -95,7 +97,8 @@
   </build>
 
   <properties>
-    <!-- 1.8.0 is required to run cljs test suite -->
+    <!-- set clojure.version to >= 1.8.0 to run cljs test suite
+         (and make sure to run on jdk >= 1.8 for nashorn support) -->
     <clojure.version>1.5.0</clojure.version>
   </properties>
 
