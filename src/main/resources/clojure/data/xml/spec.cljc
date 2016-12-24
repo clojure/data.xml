@@ -18,7 +18,7 @@
                    ::s/invalid)))
           (fn [{:keys [uri local] :as arg}]
             (.log js/console arg)
-            (name/canonical-name uri local "")))
+            (name/qname uri local)))
          #(not (str/blank? (:local %)))))
 
 (s/def ::name/qname
@@ -30,7 +30,7 @@
                      :str (s/and string? ::qname-conformer)))
    (s/with-gen
      #(gen/fmap (fn [[uri local]]
-                  (name/canonical-name uri local))
+                  (name/qname uri local))
                 (gen/tuple (gen/fmap (fn [s] (when-not (str/blank? s)
                                                (str "urn:" s)))
                                      (gen/string-alphanumeric))

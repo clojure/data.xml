@@ -34,13 +34,9 @@
 (export-api node/element* node/element node/cdata node/xml-comment
             prxml/sexp-as-element prxml/sexps-as-fragment event/element-nss
             name/alias-uri name/parse-qname name/qname-uri
-            name/qname-local name/qname name/to-qname name/uri-symbol name/symbol-uri
+            name/qname-local name/qname name/as-qname name/uri-symbol name/symbol-uri
+            name/uri-file name/print-uri-file-command!
             process/find-xmlns process/aggregate-xmlns)
-
-(defn canonical-name
-  "Put (q)name into canonical form as per ns-env"
-  [n]
-  (name/canonical-name (qname-uri n) (qname-local n) ""))
 
 (defn event-seq
   "Parses the XML InputSource source using a pull-parser. Returns

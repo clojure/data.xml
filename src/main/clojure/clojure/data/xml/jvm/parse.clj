@@ -14,7 +14,7 @@
             [clojure.data.xml.impl :refer
              [static-case]]
             [clojure.data.xml.name :refer
-             [canonical-name]])
+             [qname]])
   (:import
    (javax.xml.stream
     XMLInputFactory XMLStreamReader XMLStreamConstants)))
@@ -38,9 +38,9 @@
 (defn- attr-hash [^XMLStreamReader sreader]
   (persistent!
    (reduce (fn [tr i]
-             (assoc! tr (canonical-name (.getAttributeNamespace sreader i)
-                                        (.getAttributeLocalName sreader i)
-                                        (.getAttributePrefix sreader i))
+             (assoc! tr (qname (.getAttributeNamespace sreader i)
+                               (.getAttributeLocalName sreader i)
+                               (.getAttributePrefix sreader i))
                      (.getAttributeValue sreader i)))
            (transient {})
            (range (.getAttributeCount sreader)))))
@@ -74,13 +74,12 @@
                       (location-hash sreader))]
        (static-case
          (.next sreader)
-         ; condp == (.next sreader)
          XMLStreamConstants/START_ELEMENT
          (if (include-node? :element)
            (let [ns-env (nss-hash sreader (or (first ns-envs) {}))]
-             (cons (->StartElementEvent (canonical-name (.getNamespaceURI sreader)
-                                                        (.getLocalName sreader)
-                                                        (.getPrefix sreader))
+             (cons (->StartElementEvent (qname (.getNamespaceURI sreader)
+                                               (.getLocalName sreader)
+                                               (.getPrefix sreader))
                                         (attr-hash sreader)
                                         ns-env
                                         location)

@@ -9,17 +9,17 @@
 (ns clojure.data.xml.node
   "Data types for xml nodes: Element, CData and Comment"
   {:author "Herwig Hochleitner"}
-  (:require [clojure.data.xml.name :refer [to-qname]]))
+  (:require [clojure.data.xml.name :refer [as-qname]]))
 
 ;; Parsed data format
 ;; Represents a node of an XML tree
 (defrecord Element [tag attrs content]
   Object
   (toString [_]
-    (let [qname (to-qname tag)]
+    (let [qname (as-qname tag)]
       (apply str (concat ["<" qname]
                          (mapcat (fn [[n a]]
-                                   [" " (to-qname n) "=" (pr-str a)])
+                                   [" " (as-qname n) "=" (pr-str a)])
                                  attrs)
                          (if (seq content)
                            (concat [">"] content ["</" qname ">"])

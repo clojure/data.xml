@@ -1,3 +1,9 @@
+From 0.2.0-alpha1 to 0.2.0-alpha2
+- qname function now returns canonical (keyword) names
+- Remove QName defrecord from Clojurescript
+- Rename canonical-name to as-qname
+- Remove to-qname
+
 From 0.1.0-beta3 to 0.2.0-alpha1
 - Define uniform mapping of xml namespaces to clojure namespaces via percent-encoding
 - Remove declare-ns and alias-ns

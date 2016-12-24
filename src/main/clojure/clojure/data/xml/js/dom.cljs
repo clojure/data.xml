@@ -1,6 +1,6 @@
 (ns clojure.data.xml.js.dom
   (:require
-   [clojure.data.xml.name :refer [qname-uri qname-local canonical-name xmlns-uri]]
+   [clojure.data.xml.name :refer [qname-uri qname-local qname xmlns-uri]]
    [clojure.data.xml.node :as node]))
 
 (def doc
@@ -103,9 +103,8 @@
 ;; ## -> DATA
 
 (defn- dom-element-tag [el]
-  (canonical-name (.-namespaceURI el)
-                  (.-localName el)
-                  ""))
+  (qname (.-namespaceURI el)
+         (.-localName el)))
 
 (defn- xmlns-attr? [a]
   (identical? xmlns-uri (.-namespaceURI a)))

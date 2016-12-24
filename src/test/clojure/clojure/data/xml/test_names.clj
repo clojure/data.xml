@@ -13,7 +13,7 @@
                                      (is (= vals [(qname-uri v) (qname-local v)])
                                          (str "Interpreted QName: " (pr-str v)))))
     ["" "name"]           ["name" :name (parse-qname "name")]
-    ["uri-u:" "name"]     [::U/name "{uri-u:}name" (parse-qname "{uri-u:}name") (canonical-name "{uri-u:}name")]
+    ["uri-u:" "name"]     [::U/name "{uri-u:}name" (parse-qname "{uri-u:}name") (as-qname "{uri-u:}name")]
     ["uri-v:" "vname"]    [::V/vname "{uri-v:}vname" (parse-qname "{uri-v:}vname")]
     ["uri-w:" "wname"]    [::W/wname "{uri-w:}wname" (parse-qname "{uri-w:}wname")]
     ;; ["http://www.w3.org/XML/1998/namespace" "name"] [:xml/name]
@@ -33,7 +33,7 @@
              (element ::D/nresults nil "100"))))
 
 (deftest qnames
-  (is (= (qname "foo") (to-qname :foo))))
+  (is (= (qname "foo") (as-qname :foo))))
 
 (deftest test-gen-prefix
   (are [node] (= (parse-str (emit-str node)) node)

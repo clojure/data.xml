@@ -19,14 +19,18 @@
   (qname-local [qname] (.getLocalPart qname))
   (qname-uri   [qname] (.getNamespaceURI qname)))
 
-(def parse-qname
+(def ^QName parse-qname
   (memoize
    (fn [s]
      ;; TODO weakly memoize this?
      (QName/valueOf s))))
 
-(definline make-qname [uri name prefix]
-  `(QName. ~uri ~name ~prefix))
+(extend-protocol AsQName
+  String
+  (qname-local [s]
+    (.getLocalPart (parse-qname s)))
+  (qname-uri [s]
+    (.getNamespaceURI (parse-qname s))))
 
 (definline decode-uri [ns]
   `(URLDecoder/decode ~ns "UTF-8"))

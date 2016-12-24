@@ -180,9 +180,9 @@
          (emit-str (event-seq (java.io.StringReader. "<a>123</a>") {})))))
 
 (deftest test-sibling-xmlns
-  (let [el (element (canonical-name "{NS1}top") {}
-                    (element (canonical-name "{NS2}foo"))
-                    (element (canonical-name "{NS2}bar")))]
+  (let [el (element (as-qname "{NS1}top") {}
+                    (element (as-qname "{NS2}foo"))
+                    (element (as-qname "{NS2}bar")))]
     (is (= (parse-str (emit-str el)) el))))
 
 (deftest test-default-xmlns

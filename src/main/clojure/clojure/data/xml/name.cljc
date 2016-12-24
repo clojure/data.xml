@@ -21,8 +21,8 @@
              (:import (goog.string StringBuffer))]))
 
 (export-api
- #?@(:clj  [jvm/parse-qname jvm/make-qname jvm/encode-uri jvm/decode-uri]
-     :cljs [jsn/parse-qname jsn/make-qname jsn/encode-uri jsn/decode-uri]))
+ #?@(:clj  [jvm/parse-qname jvm/encode-uri jvm/decode-uri]
+     :cljs [jsn/parse-qname jsn/encode-uri jsn/decode-uri]))
 
 ;; protocol functions can be redefined by extend-*, so we wrap
 ;; protocols/qname-uri protocols/qname-local within regular fns
@@ -47,9 +47,11 @@
   (protocols/qname-local v))
 
 (defn qname
-  ([name] (make-qname "" name ""))
-  ([uri name] (make-qname (or uri "") name ""))
-  ([uri name prefix] (make-qname (or uri "") name (or prefix ""))))
+  ([local] (qname "" local))
+  ([uri local] (keyword (when-not (str/blank? uri)
+                          (encode-uri (str "xmlns." uri)))
+                        local))
+  ([uri local prefix] (qname uri local)))
 
 ;; The empty string shall be equal to nil for xml names
 (defn namespaced? [qn]
@@ -76,28 +78,44 @@
           xmlns-uri
           (throw (ex-info "Keyword ns is not an xmlns. Needs to be in the form :xmlns.<encoded-uri>/<local>"
                           {:kw kw}))))
-      ""))
-  #?(:clj String :cljs string)
-  (qname-local [s] (qname-local (parse-qname s)))
-  (qname-uri   [s] (qname-uri (parse-qname s))))
+      "")))
 
-(defn canonical-name
-  ([local] (canonical-name "" local ""))
-  ([uri local] (canonical-name uri local ""))
-  ([uri local prefix]
-   (keyword (when-not (str/blank? uri)
-              (encode-uri (str "xmlns." uri)))
-            local)))
+(defn as-qname [n]
+  (qname (qname-uri n) (qname-local n)))
 
-(defn to-qname [n]
-  (make-qname (or (qname-uri n) "") (qname-local n) ""))
+(defn uri-file
+  "Dummy file name for :require'ing xmlns uri"
+  [uri]
+  (str (str/replace (name (uri-symbol uri))
+                    "." "/")
+       ".cljc"))
+
+(defn print-uri-file-command!
+  "Shell command to create a dummy file for xmlns. Execute from a source root."
+  [uri]
+  (println  "echo \"(ns" (str (uri-symbol uri) ")\" >") (uri-file uri)))
 
 #?(:clj
    (defn alias-uri
-     "Define a clojure namespace alias for xmlns uri.
+     "Define a Clojure namespace aliases for xmlns uris.
+
+  This sets up the current namespace for reading qnames denoted with
+  Clojure's ::alias/keywords reader feature.
+  
+
   ## Example
   (alias-uri :D \"DAV:\")
-  {:tag ::D/propfind}"
+                           ; similar in effect to
+  ;; (require '[xmlns.DAV%3A :as D])
+                           ; but required namespace is auto-created
+                           ; henceforth, shorthand keywords can be used
+  {:tag ::D/propfind}
+                           ; ::D/propfind will be expanded to :xmlns.DAV%3A/propfind
+                           ; in the current namespace by the reader
+
+  ## Clojurescript support
+  Currently, namespaces can't be auto-created in Clojurescript.
+  Dummy files for aliased uris have to exist. Have a look at `uri-file` and `print-uri-file-command!` to create those."
      {:arglists '([& {:as alias-nss}])}
      [& ans]
      (loop [[a n & rst :as ans] ans]

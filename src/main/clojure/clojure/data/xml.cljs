@@ -8,14 +8,9 @@
    [clojure.data.xml.protocols :refer [AsQName]]))
 
 (export-api
- name/parse-qname name/qname-uri name/qname-local name/qname name/to-qname name/uri-symbol name/symbol-uri
+ name/parse-qname name/qname-uri name/qname-local name/qname name/as-qname name/uri-symbol name/symbol-uri
  node/element* node/element node/cdata node/xml-comment
  dom/extend-dom-as-data! dom/element-node dom/element-data)
-
-(defn canonical-name
-  "Put (q)name into canonical form as per ns-env"
-  [n]
-  (name/canonical-name (qname-uri n) (qname-local n) ""))
 
 ;;;; ## TODO event-seq
 ;; This probably won't happen due to js' non-blocking semantics
