@@ -35,15 +35,15 @@
 (deftest prevent-xxe-by-default
   (testing "To prevent XXE attacks, exernal entities by default resolve to nil"
     (let [parsed (parse-vulnerable-file)
-          expected #clojure.data.xml.node.Element{:tag :foo
-                                                  :attrs {}
-                                                  :content ()}]
+          expected {:tag :foo
+                    :attrs {}
+                    :content ()}]
       (is (= expected parsed)))))
 
 (deftest allow-external-entities-if-required
   (testing "If explicitly enabled, external entities are property resolved"
     (let [parsed (parse-vulnerable-file :supporting-external-entities true)
-          expected #clojure.data.xml.node.Element{:tag :foo
-                                                  :attrs {}
-                                                  :content ("root_password\n")}]
+          expected {:tag :foo
+                    :attrs {}
+                    :content ["root_password\n"]}]
       (is (= expected parsed)))))

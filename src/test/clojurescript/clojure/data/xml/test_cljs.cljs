@@ -2,7 +2,8 @@
   (:require [cljs.test :as test]
             [clojure.data.xml :as xml]
             clojure.data.xml.test-cljs-basic
-            clojure.data.xml.test-cljs-extended))
+            clojure.data.xml.test-cljs-extended
+            clojure.data.xml.test-equiv))
 
 (def ^:dynamic *results*)
 
@@ -17,7 +18,8 @@
   (set! *print-err-fn* js/print)
   (binding [*results* nil]
     (println "Running Basic Tests")
-    (test/run-tests 'clojure.data.xml.test-cljs-basic)
+    (test/run-tests 'clojure.data.xml.test-cljs-basic
+                    'clojure.data.xml.test-equiv)
     (pr-str *results*)))
 
 (defn ^:export -main []
@@ -27,5 +29,7 @@
     (println "Extending DOM Objects and running again + extended tests")
     (xml/extend-dom-as-data!)
     (test/testing "with extended native dom"
-      (test/run-tests 'clojure.data.xml.test-cljs-basic 'clojure.data.xml.test-cljs-extended))
+      (test/run-tests 'clojure.data.xml.test-cljs-basic
+                      'clojure.data.xml.test-cljs-extended
+                      'clojure.data.xml.test-equiv))
     *results*))

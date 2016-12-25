@@ -3,6 +3,7 @@ From 0.2.0-alpha1 to 0.2.0-alpha2
 - Remove QName defrecord from Clojurescript
 - Rename canonical-name to as-qname
 - Remove to-qname
+- xml nodes now implement map equality
 
 From 0.1.0-beta3 to 0.2.0-alpha1
 - Define uniform mapping of xml namespaces to clojure namespaces via percent-encoding
