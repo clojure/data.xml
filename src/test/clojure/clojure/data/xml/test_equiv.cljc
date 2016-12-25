@@ -8,4 +8,6 @@
     (element :foo) {:tag :foo :attrs {} :content []}
     (element (qname "DAV:" "foo")) {:tag (qname "DAV:" "foo") :attrs {} :content []}
     (element :foo {:a "b"}) {:tag :foo :attrs {:a "b"} :content []}
-    (element :foo {:a "b"} "a" "b") {:tag :foo :attrs {:a "b"} :content ["a" "b"]}))
+    (element :foo {:a "b"} "a" "b") {:tag :foo :attrs {:a "b"} :content ["a" "b"]}
+    #?@(:clj ;; wait for https://github.com/clojure/clojurescript/commit/9484a134bdf039c10ec3c26c8aaa3acd0dcd9875
+        [#xml/element {:tag :foo :content ["C"]} {:tag :foo :attrs {} :content ["C"]}])))
