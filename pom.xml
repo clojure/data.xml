@@ -65,11 +65,17 @@
              hence enabling usage of .cljc while supporting clojure < 1.7.0 -->
         <groupId>net.bendlas</groupId>
         <artifactId>cljc-maven-plugin</artifactId>
-        <version>0.1.1</version>
+        <version>0.1.2</version>
         <executions>
           <execution>
+            <id>split-compile</id>
             <phase>generate-sources</phase>
             <goals><goal>split</goal></goals>
+          </execution>
+          <execution>
+            <id>split-compile-tests</id>
+            <phase>generate-test-sources</phase>
+            <goals><goal>split-tests</goal></goals>
           </execution>
         </executions>
       </plugin>

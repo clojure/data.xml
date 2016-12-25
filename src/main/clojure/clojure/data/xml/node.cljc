@@ -12,10 +12,9 @@
   (:require [clojure.data.xml.name :refer [as-qname]])
   #?(:clj (:import (clojure.lang IHashEq IObj ILookup IKeywordLookup Counted
                                  Associative Seqable IPersistentMap
-                                 APersistentMap RecordIterator RT
-                                 MapEquivalence)
+                                 APersistentMap RT MapEquivalence MapEntry)
                    (java.io Serializable Writer)
-                   (java.util Map))))
+                   (java.util Map Iterator))))
 
 ;; Parsed data format
 ;; Represents a node of an XML tree
@@ -30,6 +29,16 @@
 
 ;; FIXME hash caching cannot be used: http://dev.clojure.org/jira/browse/CLJ-2092
 
+#?
+(:clj
+ (deftype ElementIterator [el ^:volatile-mutable fields]
+   Iterator
+   (hasNext [_] (boolean (seq fields)))
+   (next [_]
+     (let [f (first fields)]
+       (set! fields (next fields))
+       (MapEntry. f (get el f))))))
+
 (deftype Element [tag attrs content meta]
 
   ;; serializing/cloning, hashing, equality, iteration
@@ -41,7 +50,7 @@
     IHashEq
     (hasheq [this] (APersistentMap/mapHasheq this))
     Iterable
-    (iterator [this] (RecordIterator. this [:tag :attrs :content] (RT/iter nil)))]
+    (iterator [this] (ElementIterator. this '(:tag :attrs :content)))]
    :cljs
    [ICloneable
     (-clone [_] (Element. tag attrs content meta))
