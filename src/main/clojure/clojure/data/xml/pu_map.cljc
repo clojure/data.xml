@@ -72,3 +72,18 @@
                     name/xmlns-uri ["xmlns"]}
             :p->u {"xml" name/xml-uri
                    "xmlns" name/xmlns-uri}})
+
+(defn reduce-diff
+  "A high-performance diffing operation, that reduces f over changed and removed prefixes"
+  [f s
+   {ppu :p->u}
+   {pu :p->u}]
+  (let [s (reduce-kv (fn [s p _]
+                       (if (contains? pu p)
+                         s (f s p "")))
+                     s ppu)
+        s (reduce-kv (fn [s p u]
+                       (if (= u (core/get ppu p))
+                         s (f s p u)))
+                     s pu)]
+    s))

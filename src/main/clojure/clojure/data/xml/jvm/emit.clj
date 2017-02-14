@@ -11,6 +11,7 @@
   {:author "Herwig Hochleitner"}
   (:require (clojure.data.xml
              [name :refer [qname-uri qname-local separate-xmlns gen-prefix *gen-prefix-counter*]]
+             [pu-map :as pu]
              event)
             [clojure.string :as str])
   (:import (java.io OutputStreamWriter Writer StringWriter)
@@ -25,7 +26,7 @@
 (def logger (Logger/getLogger "clojure.data.xml"))
 
 (defprotocol EventEmit
-  (emit-event [event ^XMLStreamWriter writer]))
+  (emit-event [event ^XMLStreamWriter writer prefix-uri-stack]))
 
 (defn check-stream-encoding [^OutputStreamWriter stream xml-encoding]
   (when (not= (Charset/forName xml-encoding) (Charset/forName (.getEncoding stream)))
@@ -35,79 +36,76 @@
                     {:stream-encoding (.getEncoding stream)
                      :declared-encoding xml-encoding}))))
 
-;; properly namespace aware version
-(defn- emit-attrs [^XMLStreamWriter writer attrs]
-  (doseq [[k v] attrs]
-    (let [uri   (qname-uri k)
-          local (qname-local k)]
-      (if (str/blank? uri)
-        (.writeAttribute writer     local (str v))
-        (.writeAttribute writer uri local (str v))))))
+(defn- emit-attrs [^XMLStreamWriter writer pu attrs]
+  (reduce-kv
+   (fn [_ attr value]
+     (let [uri (qname-uri attr)
+           local (qname-local attr)]
+       (if (str/blank? uri)
+         (.writeAttribute writer                         local value)
+         (.writeAttribute writer (pu/get-prefix pu uri) uri local value)))
+     _)
+   nil attrs))
 
-(defn- make-prefix [^NamespaceContext nc]
-  (let [pf (gen-prefix)]
-    (if (str/blank? (.getNamespaceURI nc pf))
-      pf (recur nc))))
+(defn- emit-ns-attrs [^XMLStreamWriter writer parent-pu pu]
+  (pu/reduce-diff
+   (fn [_ pf uri]
+     (if (str/blank? pf)
+       (.writeDefaultNamespace writer uri)
+       (.writeNamespace writer pf uri))
+     _)
+   nil parent-pu pu))
 
-(defn- write-xmlns-attribute [^XMLStreamWriter writer k v]
-  (if (str/blank? k)
-    (do (.setDefaultNamespace writer v)
-        (.writeDefaultNamespace writer v))
-    (do (.setPrefix writer v k)
-        (.writeNamespace writer v k)))
-  writer)
+(defn- compute-prefix [tpu uri suggested]
+  (or (pu/get-prefix tpu uri)
+      (loop [prefix (or suggested (gen-prefix))]
+        (if (pu/get tpu prefix)
+          (recur (gen-prefix))
+          prefix))))
 
-(defn- get-prefix [^XMLStreamWriter writer temp-xmlns uri]
-  (or (get temp-xmlns uri)
-      (.getPrefix writer uri)))
+(defn- compute-pu [pu ns-attrs attr-uris tag-uri tag-local]
+  (let [tpu (pu/transient pu)
+        ;; add namespaces from current environment
+        tpu (reduce-kv (fn [tpu ns-attr uri]
+                         (pu/assoc! tpu
+                                    (if (str/blank? (qname-uri ns-attr))
+                                      (do (assert (= "xmlns" (qname-local ns-attr))
+                                                  "non-prefixed attribute, that's not xmlns= is not a namespace attr")
+                                          "")
+                                      (compute-prefix tpu uri (qname-local ns-attr)))
+                                    uri))
+                       tpu ns-attrs)
+        ;; add implicit namespaces used by tag, attrs
+        tpu (reduce (fn [tpu uri]
+                      (pu/assoc! tpu (compute-prefix tpu uri nil) uri))
+                    tpu (if (str/blank? tag-uri)
+                          attr-uris
+                          (cons tag-uri attr-uris)))
+        ;; rename default namespace, if tag is global (not in a namespace)
+        tpu (if-let [uri (and (str/blank? tag-uri)
+                              (pu/get tpu ""))]
+              (do
+                (when (.isLoggable logger Level/FINE)
+                  (.log logger Level/FINE
+                        (format "Default `xmlns=\"%s\"` had to be replaced with a `xmlns=\"\"` because of global element `%s`"
+                                uri tag-local)))
+                (-> tpu
+                    (pu/assoc! "" "")
+                    (as-> tpu (pu/assoc! tpu (compute-prefix tpu uri nil) uri))))
+              tpu)]
+    (pu/persistent! tpu)))
 
-(defn- xmlns-attribute-set [^XMLStreamWriter writer ns-attrs used-uris]
-  (let [tleft (transient {})
-        tleft (reduce-kv (fn [tleft k v]
-                           (let [local (qname-local k)]
-                             (or (if (= "xmlns" local)
-                                   (when-not (= (str v)
-                                                (str (.. writer getNamespaceContext (getNamespaceURI ""))))
-                                     (assoc! tleft v ""))
-                                   (when-let [prefix (and (str/blank? (get-prefix writer tleft v))
-                                                          (if (.. writer getNamespaceContext
-                                                                  (getNamespaceURI local))
-                                                            ;; rename clashing prefixes
-                                                            (make-prefix (.getNamespaceContext writer))
-                                                            local))]
-                                     (assoc! tleft v prefix)))
-                                 tleft)))
-                         tleft ns-attrs)]
-    (persistent!
-     (reduce (fn [tleft uri]
-               (if (and (not (str/blank? uri))
-                        (nil? (get-prefix writer tleft uri)))
-                 (assoc! tleft uri (make-prefix (.getNamespaceContext writer)))
-                 tleft))
-             tleft used-uris))))
-
-(defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer]
+(defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer prefix-uri-stack]
   (let [uri   (qname-uri tag)
         local (qname-local tag)
-        global (str/blank? uri)
-        xmlns-attrs (xmlns-attribute-set
-                     writer
-                     (if global
-                       (let [default (get nss :xmlns)]
-                         (when (and
-                                (not (str/blank? default))
-                                (.isLoggable logger Level/FINE))
-                           (.log logger Level/FINE
-                                 (format "Default `xmlns=\"%s\"` had to be replaced with a `xmlns=\"\"` because of global element `%s`" default local)))
-                         (assoc nss :xmlns ""))
-                       nss)
-                     (cons uri (map qname-uri (keys attrs))))]
-    (if global
+        parent-pu (first prefix-uri-stack)
+        pu (compute-pu parent-pu nss (map qname-uri (keys attrs)) uri local)]
+    (if (str/blank? uri)
       (.writeStartElement writer local)
-      (.writeStartElement writer (get-prefix writer xmlns-attrs uri)
-                          local uri))
-    (reduce-kv write-xmlns-attribute writer xmlns-attrs)
-    (emit-attrs writer attrs)))
+      (.writeStartElement writer (pu/get-prefix pu uri) local uri))
+    (emit-ns-attrs writer parent-pu pu)
+    (emit-attrs writer pu attrs)
+    (cons pu prefix-uri-stack)))
 
 (defn- emit-cdata [^String cdata-str ^XMLStreamWriter writer]
   (when-not (str/blank? cdata-str)
@@ -120,15 +118,18 @@
 
 (extend-protocol EventEmit
   StartElementEvent
-  (emit-event [ev writer] (emit-start-tag ev writer))
+  (emit-event [ev writer pu-stack] (emit-start-tag ev writer pu-stack))
   EndElementEvent
-  (emit-event [ev writer] (.writeEndElement writer))
+  (emit-event [ev writer pu-stack]
+    (assert (next pu-stack) "balanced tags")
+    (.writeEndElement writer)
+    (next pu-stack))
   CharsEvent
-  (emit-event [{:keys [str]} writer] (.writeCharacters writer str))
+  (emit-event [{:keys [str]} writer s] (.writeCharacters writer str) s)
   CDataEvent
-  (emit-event [{:keys [str]} writer] (emit-cdata str writer))
+  (emit-event [{:keys [str]} writer s] (emit-cdata str writer) s)
   CommentEvent
-  (emit-event [{:keys [str]} writer] (.writeComment writer str)))
+  (emit-event [{:keys [str]} writer s] (.writeComment writer str) s))
 
 ;; Writers
 
@@ -148,7 +149,7 @@
       (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
       (when-let [doctype (:doctype opts)]
         (.writeDTD writer doctype))
-      (doseq [event events] (emit-event event writer))
+      (reduce #(emit-event %2 writer %1) [pu/EMPTY] events)
       (.writeEndDocument writer)
       swriter)))
 

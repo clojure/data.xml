@@ -58,3 +58,11 @@
        "r" "U:"]
       ["U:" ["r" "t"]
        "V:" ["s"]]))
+
+(deftest diffing
+  (is (= {"c" "d"}
+         (pu/reduce-diff
+          assoc {}
+          (pu/assoc pu/EMPTY "a" "b")
+          (pu/assoc pu/EMPTY
+                    "a" "b" "c" "d")))))
