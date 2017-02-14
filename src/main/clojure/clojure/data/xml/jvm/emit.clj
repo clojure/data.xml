@@ -29,9 +29,11 @@
 
 (defn check-stream-encoding [^OutputStreamWriter stream xml-encoding]
   (when (not= (Charset/forName xml-encoding) (Charset/forName (.getEncoding stream)))
-    (throw (Exception. (str "Output encoding of stream (" xml-encoding
-                            ") doesn't match declaration ("
-                            (.getEncoding stream) ")")))))
+    (throw (ex-info (str "Output encoding of writer (" (.getEncoding stream)
+                         ") doesn't match declaration ("
+                         xml-encoding ")")
+                    {:stream-encoding (.getEncoding stream)
+                     :declared-encoding xml-encoding}))))
 
 ;; properly namespace aware version
 (defn- emit-attrs [^XMLStreamWriter writer attrs]
