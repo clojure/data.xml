@@ -1,3 +1,6 @@
+From 0.2.0-alpha2 to 0.2.0-alpha3
+- Minimum requirement is now clojure 1.7.0
+
 From 0.2.0-alpha1 to 0.2.0-alpha2
 - qname function now returns canonical (keyword) names
 - Remove QName defrecord from Clojurescript
