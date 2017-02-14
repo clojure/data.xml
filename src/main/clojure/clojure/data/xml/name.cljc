@@ -62,10 +62,10 @@
         (keyword? ns) (name ns)
         :else (str ns)))
 
-;; xmlns attributes get special treatment, as they are go into metadata and don't contribute to equality
+;; xmlns attributes get special treatment. they go into metadata, don't contribute to equality
 (def xmlns-uri "http://www.w3.org/2000/xmlns/")
 ;; TODO find out if xml prefixed names need any special treatment too
-                                        ; (def xml-uri "http://www.w3.org/XML/1998/namespace")
+(def xml-uri "http://www.w3.org/XML/1998/namespace")
 
 (extend-protocol AsQName
   Keyword
