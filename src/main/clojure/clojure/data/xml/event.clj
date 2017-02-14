@@ -26,12 +26,15 @@
    attrs #(merge-nss (element-nss* element) %2)))
 
 ; Represents a parse event.
-; type is one of :start-element, :end-element, or :characters
 (defrecord StartElementEvent [tag attrs nss location-info])
-(defrecord EndElementEvent [tag])
 (defrecord CharsEvent [str])
 (defrecord CDataEvent [str])
 (defrecord CommentEvent [str])
+
+;; EndElementEvent doesn't have any data, so make it a singleton
+(deftype EndElementEvent [])
+(def end-element-event (EndElementEvent.))
+(defn ->EndElementEvent [] end-element-event)
 
 ;; Event Generation for stuff to show up in generated xml
 
@@ -42,7 +45,7 @@
                      attrs #(->StartElementEvent
                              tag %1 (merge-nss (element-nss* element) %2) nil)))
        :next-events (fn elem-next-events [{:keys [tag content]} next-items]
-                      (list* content (->EndElementEvent tag) next-items))}]
+                      (list* content end-element-event next-items))}]
   (extend-protocol-fns
    EventGeneration
    (StartElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent)
@@ -87,4 +90,4 @@
     :else (throw (ex-info "Illegal argument, not an event object" {:event event}))))
 
 (defn event-exit? [event]
-  (instance? EndElementEvent event))
+  (identical? end-element-event event))

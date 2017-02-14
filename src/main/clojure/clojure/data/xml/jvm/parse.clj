@@ -88,7 +88,7 @@
          XMLStreamConstants/END_ELEMENT
          (if (include-node? :element)
            (do (assert (seq ns-envs) "Balanced end")
-               (cons (->EndElementEvent (keyword (.getLocalName sreader)))
+               (cons (->EndElementEvent)
                      (pull-seq sreader opts (rest ns-envs))))
            (recur))
          XMLStreamConstants/CHARACTERS
