@@ -12,7 +12,8 @@
   (:require
    [clojure.test :refer :all]
    [clojure.data.xml :refer :all]
-   [clojure.data.xml.test-utils :refer [test-stream lazy-parse*]]))
+   [clojure.data.xml.test-utils :refer [test-stream lazy-parse*]])
+  (:import (javax.xml.namespace QName)))
 
 (def deep-tree
   (lazy-parse* (str "<a h=\"1\" i='2' j=\"3\">"
@@ -153,19 +154,54 @@
         result (indent-str nested-xml :doctype doctype)]
     (is (= expect (subs result (.indexOf result doctype))))))
 
-(deftest test-boolean
-  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>true</foo>"
-         (emit-str (element :foo {} true)))))
+(defmacro are-serializable [group-description extra-attrs & {:as data-strings}]
+  `(testing ~group-description
+     (testing "in content"
+       ~@(for [[data string] data-strings]
+           `(is (= (parse-str (emit-str (element :e ~extra-attrs ~string)))
+                   (parse-str (emit-str (element :e ~extra-attrs ~data)))))))
+     (testing "in attrs"
+       ~@(for [[data string] data-strings]
+           `(is (= (emit-str (element :e ~(assoc extra-attrs :a string)))
+                   (emit-str (element :e ~(assoc extra-attrs :a data)))))))))
 
-(deftest test-number
-  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>1</foo>"
-         (emit-str (element :foo {} 1))))
-  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>1.2</foo>"
-         (emit-str (element :foo {} 1.2))))
-  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>0</foo>"
-         (emit-str (element :foo {} (int 0)))))
-  (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo>1.2</foo>"
-         (emit-str (element :foo {} (float 1.2))))))
+(deftest test-datatypes
+  ;; https://www.w3.org/TR/xmlschema-2/#built-in-datatypes
+  (testing "serializing"
+    (are-serializable
+     "booleans" {}
+     true "true"
+     false "false")
+    (are-serializable
+     "numbers" {}
+     1 "1"
+     1.2 "1.2"
+     3/4 "0.75"
+     (int 0) "0"
+     (float 1.4) "1.4"
+     1.25M "1.25"
+     (BigInteger. "42424242424242424242424242424242") "42424242424242424242424242424242"
+     42424242424242424242424242424242 "42424242424242424242424242424242")
+    (are-serializable
+     "byte-arrays" {}
+     (byte-array [0 1 2 3 4]) "AAECAwQ=")
+    (are-serializable
+     "uris" {}
+     (java.net.URI. "S:l") "S:l"
+     (java.net.URL. "http://foo") "http://foo")
+    (are-serializable
+     "dates" {}
+     (java.util.Date. 0) "1970-01-01T00:00:00.000-00:00"
+     (java.time.Instant/ofEpochMilli 0) "1970-01-01T00:00:00.000-00:00")
+    (are-serializable
+     "qnames" {:xmlns/p "U:"}
+     :xmlns.U%3A/qn     "p:qn"
+     (QName. "U:" "qn") "p:qn")
+    (testing "qnames generated"
+      (is (thrown? Exception (emit-str (element :e {} :xmlns.U%3A/qn))))
+      (is (thrown? Exception (emit-str (element :e {:a :xmlns.U%3A/qn}))))
+      (is (thrown? Exception (emit-str (element :e {} (QName. "U:" "qn")))))
+      (is (thrown? Exception (emit-str (element :e {:a (QName. "U:" "qn")})))))))
 
 (deftest test-event-seq-emit
   (is (= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a>123</a>"
