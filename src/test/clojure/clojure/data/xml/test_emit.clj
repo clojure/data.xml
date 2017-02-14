@@ -56,9 +56,6 @@
                              {:single "'single'quotes'here"
                               :double "\"double\"quotes\"here\""}))))))
 
-;; TODO add an indentation test once we figure out how to indent portably across JREs
-
-
 (defn emit-char-seq [xml-tree encoding]
   (with-open [bos (java.io.ByteArrayOutputStream.)
         stream (java.io.OutputStreamWriter. bos encoding)]
@@ -133,11 +130,6 @@
                                 "comment "
                                 (xml-comment " goes here ")
                                 " not here")))))
-
-(def xml-decl-newline?
-  (-> (System/getProperty "java.version")
-      (.startsWith "1.8")
-      not))
 
 (deftest test-indent
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
