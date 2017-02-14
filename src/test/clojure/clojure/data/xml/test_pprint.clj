@@ -16,14 +16,10 @@
 (def xml
   "<foo><bar/></foo>")
 
-(defn jdk8? []
-  (-> (System/getProperty "java.version")
-      (.startsWith "1.8")))
-
 (def indented-xml
   (str
    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-   (when-not (jdk8?) "\n")
+   "\n"
    "<foo>
   <bar/>
 </foo>

@@ -16,7 +16,9 @@
   (doto (-> (TransformerFactory/newInstance) .newTransformer)
     (.setOutputProperty (OutputKeys/INDENT) "yes")
     (.setOutputProperty (OutputKeys/METHOD) "xml")
-    (.setOutputProperty "{http://xml.apache.org/xslt}indent-amount" "2")))
+    (.setOutputProperty "{http://xml.apache.org/xslt}indent-amount" "2")
+    ;; print newline after preamble https://bugs.openjdk.java.net/browse/JDK-7150637
+    (.setOutputProperty "http://www.oracle.com/xml/is-standalone" "yes")))
 
 (defn indent-xml
   [xml-str ^Writer writer]
