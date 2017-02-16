@@ -1,6 +1,10 @@
 From 0.2.0-alpha2 to 0.2.0-alpha3
 - Minimum requirement is now clojure 1.7.0
 - Print newline after preamble when pretty-printing (DXML-35)
+- Serialize built-in data types in XML Schema (DXML-27)
+- Reimplement namespace context tracking, due to bug in JDK
+- Various fixes in documentation and error messages (DXML-39)
+- Emit empty tags for elements with no content (DXML-25)
 
 From 0.2.0-alpha1 to 0.2.0-alpha2
 - qname function now returns canonical (keyword) names
