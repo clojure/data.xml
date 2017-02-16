@@ -12,7 +12,8 @@
   (:require
    [clojure.test :refer :all]
    [clojure.data.xml :refer :all]
-   [clojure.data.xml.test-utils :refer [test-stream lazy-parse*]])
+   [clojure.data.xml.test-utils :refer [test-stream lazy-parse*]]
+   [clojure.data.xml.impl :refer [compile-if]])
   (:import (javax.xml.namespace QName)))
 
 (def deep-tree
@@ -191,8 +192,13 @@
      (java.net.URL. "http://foo") "http://foo")
     (are-serializable
      "dates" {}
-     (java.util.Date. 0) "1970-01-01T00:00:00.000-00:00"
-     (java.time.Instant/ofEpochMilli 0) "1970-01-01T00:00:00.000-00:00")
+     (java.util.Date. 0) "1970-01-01T00:00:00.000-00:00")
+    (compile-if
+     (Class/forName "java.time.Instant")
+     (are-serializable
+      "instants" {}
+      (java.time.Instant/ofEpochMilli 0) "1970-01-01T00:00:00.000-00:00")
+     nil)
     (are-serializable
      "qnames" {:xmlns/p "U:"}
      :xmlns.U%3A/qn     "p:qn"
