@@ -23,7 +23,7 @@
            (javax.xml.stream XMLStreamWriter XMLOutputFactory)
            (javax.xml.transform OutputKeys Transformer
                                 TransformerFactory)
-           (clojure.data.xml.event StartElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent QNameEvent)
+           (clojure.data.xml.event StartElementEvent EmptyElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent QNameEvent)
            (clojure.lang BigInt)
            (java.net URI URL)
            (java.util Date)
@@ -112,17 +112,24 @@
               tpu)]
     (pu/persistent! tpu)))
 
-(defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer prefix-uri-stack]
+(defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer prefix-uri-stack empty]
   (let [uri   (qname-uri tag)
         local (qname-local tag)
         parent-pu (first prefix-uri-stack)
         pu (compute-pu parent-pu nss (map qname-uri (keys attrs)) uri local)]
-    (if (str/blank? uri)
-      (.writeStartElement writer local)
-      (.writeStartElement writer (pu/get-prefix pu uri) local uri))
-    (emit-ns-attrs writer parent-pu pu)
-    (emit-attrs writer pu attrs)
-    (cons pu prefix-uri-stack)))
+    (if empty
+      (do (if (str/blank? uri)
+            (.writeEmptyElement writer local)
+            (.writeEmptyElement writer (pu/get-prefix pu uri) local uri))
+          (emit-ns-attrs writer parent-pu pu)
+          (emit-attrs writer pu attrs)
+          prefix-uri-stack)
+      (do (if (str/blank? uri)
+            (.writeStartElement writer local)
+            (.writeStartElement writer (pu/get-prefix pu uri) local uri))
+          (emit-ns-attrs writer parent-pu pu)
+          (emit-attrs writer pu attrs)
+          (cons pu prefix-uri-stack)))))
 
 (defn- emit-cdata [^String cdata-str ^XMLStreamWriter writer]
   (when-not (str/blank? cdata-str)
@@ -135,7 +142,9 @@
 
 (extend-protocol EventEmit
   StartElementEvent
-  (emit-event [ev writer pu-stack] (emit-start-tag ev writer pu-stack))
+  (emit-event [ev writer pu-stack] (emit-start-tag ev writer pu-stack false))
+  EmptyElementEvent
+  (emit-event [ev writer pu-stack] (emit-start-tag ev writer pu-stack true))
   EndElementEvent
   (emit-event [ev writer pu-stack]
     (assert (next pu-stack) "balanced tags")

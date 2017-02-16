@@ -9,7 +9,7 @@
 (ns clojure.data.xml.jvm.parse
   (:require [clojure.string :as str]
             [clojure.data.xml.event :refer
-             [->StartElementEvent ->EndElementEvent
+             [->StartElementEvent ->EmptyElementEvent ->EndElementEvent
               ->CharsEvent ->CDataEvent ->CommentEvent]]
             [clojure.data.xml.impl :refer
              [static-case]]
@@ -17,7 +17,8 @@
              [qname]])
   (:import
    (javax.xml.stream
-    XMLInputFactory XMLStreamReader XMLStreamConstants)))
+    XMLInputFactory XMLStreamReader XMLStreamConstants)
+   (clojure.data.xml.event EndElementEvent)))
 
 (def ^{:private true} input-factory-props
   {:allocator XMLInputFactory/ALLOCATOR
@@ -76,14 +77,16 @@
          (.next sreader)
          XMLStreamConstants/START_ELEMENT
          (if (include-node? :element)
-           (let [ns-env (nss-hash sreader (or (first ns-envs) {}))]
-             (cons (->StartElementEvent (qname (.getNamespaceURI sreader)
-                                               (.getLocalName sreader)
-                                               (.getPrefix sreader))
-                                        (attr-hash sreader)
-                                        ns-env
-                                        location)
-                   (pull-seq sreader opts (cons ns-env ns-envs))))
+           (let [ns-env (nss-hash sreader (or (first ns-envs) {}))
+                 tag (qname (.getNamespaceURI sreader)
+                            (.getLocalName sreader)
+                            (.getPrefix sreader))
+                 attrs (attr-hash sreader)
+                 next-events (pull-seq sreader opts (cons ns-env ns-envs))]
+             ;; Can't emit EmptyElementEvent here, since
+             ;; for seq-tree node and exit? are mutually exclusive
+             (cons (->StartElementEvent tag attrs ns-env location)
+                   next-events))
            (recur))
          XMLStreamConstants/END_ELEMENT
          (if (include-node? :element)

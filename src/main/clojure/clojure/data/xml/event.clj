@@ -31,6 +31,7 @@
 
 ; Represents a parse event.
 (defrecord StartElementEvent [tag attrs nss location-info])
+(defrecord EmptyElementEvent [tag attrs nss location-info])
 (defrecord CharsEvent [str])
 (defrecord CDataEvent [str])
 (defrecord CommentEvent [str])
@@ -45,19 +46,22 @@
 
 (let [second-arg #(do %2)
       elem-event-generation
-      {:gen-event (fn elem-gen-event [{:keys [tag attrs] :as element}]
+      {:gen-event (fn elem-gen-event [{:keys [tag attrs content] :as element}]
                     (separate-xmlns
-                     attrs #(->StartElementEvent
+                     attrs #((if (seq content)
+                               ->StartElementEvent ->EmptyElementEvent)
                              tag %1 (merge-nss (element-nss* element) %2) nil)))
        :next-events (fn elem-next-events [{:keys [tag content]} next-items]
-                      (list* content end-element-event next-items))}
+                      (if (seq content)
+                        (list* content end-element-event next-items)
+                        next-items))}
       string-event-generation {:gen-event (comp ->CharsEvent #'xml-str)
                                :next-events second-arg}
       qname-event-generation {:gen-event ->QNameEvent
                               :next-events second-arg}]
   (extend-protocol-fns
    EventGeneration
-   (StartElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent)
+   (StartElementEvent EmptyElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent)
    {:gen-event identity
     :next-events second-arg}
    (String Boolean Number (Class/forName "[B") Date URI URL nil)
@@ -89,7 +93,8 @@
 ;; Node Generation for events
 
 (defn event-element [event contents]
-  (when (instance? StartElementEvent event)
+  (when (or (instance? StartElementEvent event)
+            (instance? EmptyElementEvent event))
     (element* (:tag event) (:attrs event) contents
               (if-let [loc (:location-info event)]
                 {:clojure.data.xml/location-info loc

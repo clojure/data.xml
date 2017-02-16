@@ -218,3 +218,7 @@
     (is (= {:xmlns "NS"}
            (nss-meta (parse-str "<foo xmlns=\"NS\"/>"))
            (nss-meta (parse-str (emit-str (parse-str "<foo xmlns=\"NS\"/>"))))))))
+
+(deftest test-empty-elements
+  (is (= (emit-str {:tag :a :content []}) "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a/>"))
+  (is (= (emit-str {:tag :a :content [""]}) "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a></a>")))
