@@ -10,11 +10,15 @@
   "Data type for xml pull events"
   {:author "Herwig Hochleitner"}
   (:require [clojure.data.xml.protocols :refer
-             [EventGeneration gen-event next-events]]
+             [EventGeneration gen-event next-events xml-str]]
             [clojure.data.xml.name :refer [merge-nss separate-xmlns]]
             [clojure.data.xml.node :refer [element* cdata xml-comment]]
-            [clojure.data.xml.impl :refer [extend-protocol-fns]])
-  (:import (clojure.data.xml.node Element CData Comment)))
+            [clojure.data.xml.impl :refer [extend-protocol-fns compile-if]])
+  (:import (clojure.data.xml.node Element CData Comment)
+           (clojure.lang Sequential IPersistentMap Keyword)
+           (java.net URI URL)
+           (java.util Date)
+           (javax.xml.namespace QName)))
 
 (definline element-nss* [element]
   `(get (meta ~element) :clojure.data.xml/nss {}))
@@ -30,6 +34,7 @@
 (defrecord CharsEvent [str])
 (defrecord CDataEvent [str])
 (defrecord CommentEvent [str])
+(defrecord QNameEvent [qn])
 
 ;; EndElementEvent doesn't have any data, so make it a singleton
 (deftype EndElementEvent [])
@@ -45,26 +50,35 @@
                      attrs #(->StartElementEvent
                              tag %1 (merge-nss (element-nss* element) %2) nil)))
        :next-events (fn elem-next-events [{:keys [tag content]} next-items]
-                      (list* content end-element-event next-items))}]
+                      (list* content end-element-event next-items))}
+      string-event-generation {:gen-event (comp ->CharsEvent #'xml-str)
+                               :next-events second-arg}
+      qname-event-generation {:gen-event ->QNameEvent
+                              :next-events second-arg}]
   (extend-protocol-fns
    EventGeneration
    (StartElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent)
    {:gen-event identity
     :next-events second-arg}
-   (String Boolean Number nil)
-   {:gen-event (comp ->CharsEvent str)
-    :next-events second-arg}
+   (String Boolean Number (Class/forName "[B") Date URI URL nil)
+   string-event-generation
+   (Keyword QName) qname-event-generation
    CData
    {:gen-event (comp ->CDataEvent :content)
     :next-events second-arg}
    Comment
    {:gen-event (comp ->CommentEvent :content)
     :next-events second-arg}
-   (clojure.lang.IPersistentMap Element) elem-event-generation))
+   (IPersistentMap Element) elem-event-generation)
+  (compile-if
+   (Class/forName "java.time.Instant")
+   (extend java.time.Instant
+     EventGeneration
+     string-event-generation)
+   nil))
 
 (extend-protocol EventGeneration
-  
-  clojure.lang.Sequential
+  Sequential
   (gen-event   [coll]
     (gen-event (first coll)))
   (next-events [coll next-items]

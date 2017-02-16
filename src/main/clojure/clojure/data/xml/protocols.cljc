@@ -24,3 +24,6 @@
 
 (defprotocol AsElements
   (as-elements [expr] "Return a seq of elements represented by an expression."))
+
+(defprotocol AsXmlString
+  (xml-str [node] "Serialize atribute value or content node"))

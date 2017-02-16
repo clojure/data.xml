@@ -8,7 +8,8 @@
 
 (ns clojure.data.xml.impl
   "Shared private code for data.xml namespaces"
-  {:author "Herwig Hochleitner"})
+  {:author "Herwig Hochleitner"}
+  (:require [clojure.data.codec.base64 :as b64]))
 
 (defn- var-form? [form]
   (and (seq? form) (= 'var (first form))))
@@ -49,3 +50,17 @@
                  `(let [~mm ~mmap]
                     ~@(map gen-extend type (repeat mm))))
                (gen-extend type mmap))))))
+
+(defmacro compile-if
+  "Evaluate `exp` and if it returns logical true and doesn't error, expand to
+  `then`.  Else expand to `else`.
+
+  see clojure.core.reducers"
+  [exp then else]
+  (if (try (eval exp)
+           (catch Throwable _ false))
+    `(do ~then)
+    `(do ~else)))
+
+(defn b64-encode [ba]
+  (String. (b64/encode ba)))

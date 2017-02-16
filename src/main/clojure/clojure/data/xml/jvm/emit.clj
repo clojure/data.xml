@@ -12,16 +12,22 @@
   (:require (clojure.data.xml
              [name :refer [qname-uri qname-local separate-xmlns gen-prefix *gen-prefix-counter*]]
              [pu-map :as pu]
+             [protocols :refer [AsXmlString xml-str]]
+             [impl :refer [extend-protocol-fns b64-encode compile-if]]
              event)
             [clojure.string :as str])
   (:import (java.io OutputStreamWriter Writer StringWriter)
            (java.nio.charset Charset)
            (java.util.logging Logger Level)
-           (javax.xml.namespace NamespaceContext)
+           (javax.xml.namespace NamespaceContext QName)
            (javax.xml.stream XMLStreamWriter XMLOutputFactory)
            (javax.xml.transform OutputKeys Transformer
                                 TransformerFactory)
-           (clojure.data.xml.event StartElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent)))
+           (clojure.data.xml.event StartElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent QNameEvent)
+           (clojure.lang BigInt)
+           (java.net URI URL)
+           (java.util Date)
+           (java.text DateFormat SimpleDateFormat)))
 
 (def logger (Logger/getLogger "clojure.data.xml"))
 
@@ -36,14 +42,25 @@
                     {:stream-encoding (.getEncoding stream)
                      :declared-encoding xml-encoding}))))
 
+(defn- prefix-for [qn pu]
+  (or (pu/get-prefix pu (qname-uri qn))
+      (throw (ex-info "Auto-generating prefixes is not supported for content-qnames. Please declare all URIs used in content qnames."
+                      {:qname qn
+                       :uri (qname-uri qn)}))))
+
+(defn- attr-str [value pu]
+  (if (or (keyword? value) (instance? QName value))
+    (str (prefix-for value pu) ":" (qname-local value))
+    (xml-str value)))
+
 (defn- emit-attrs [^XMLStreamWriter writer pu attrs]
   (reduce-kv
    (fn [_ attr value]
      (let [uri (qname-uri attr)
            local (qname-local attr)]
        (if (str/blank? uri)
-         (.writeAttribute writer                         local value)
-         (.writeAttribute writer (pu/get-prefix pu uri) uri local value)))
+         (.writeAttribute writer                            local (attr-str value pu))
+         (.writeAttribute writer (pu/get-prefix pu uri) uri local (attr-str value pu))))
      _)
    nil attrs))
 
@@ -129,7 +146,44 @@
   CDataEvent
   (emit-event [{:keys [str]} writer s] (emit-cdata str writer) s)
   CommentEvent
-  (emit-event [{:keys [str]} writer s] (.writeComment writer str) s))
+  (emit-event [{:keys [str]} writer s] (.writeComment writer str) s)
+  QNameEvent
+  (emit-event [{:keys [qn]} writer pu-stack]
+    (.writeCharacters writer (prefix-for qn (first pu-stack)))
+    (.writeCharacters writer ":")
+    (.writeCharacters writer (qname-local qn))
+    pu-stack))
+
+(def ^:private ^ThreadLocal thread-local-utc-date-format
+  ;; SimpleDateFormat is not thread-safe, so we use a ThreadLocal proxy for access.
+  ;; http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4228335
+  (proxy [ThreadLocal] []
+    (initialValue []
+      (doto (SimpleDateFormat. "yyyy-MM-dd'T'HH:mm:ss.SSS-00:00")
+        ;; RFC3339 says to use -00:00 when the timezone is unknown (+00:00 implies a known GMT)
+        (.setTimeZone (java.util.TimeZone/getTimeZone "GMT"))))))
+
+(extend-protocol-fns
+ AsXmlString
+ String {:xml-str identity}
+ (Boolean Byte Character Short Integer Long Float Double
+  BigInteger BigDecimal BigInt URI URL nil) {:xml-str str})
+
+(extend-protocol AsXmlString
+  (Class/forName "[B")
+  (xml-str [ba] (b64-encode ba))
+  Date
+  (xml-str [d] (let [^DateFormat utc-format (.get thread-local-utc-date-format)]
+                 (.format utc-format d)))
+  clojure.lang.Ratio
+  (xml-str [r] (str (.decimalValue r))))
+
+(compile-if
+ (Class/forName "java.time.Instant")
+ (extend-protocol AsXmlString
+   java.time.Instant
+   (xml-str [i] (xml-str (Date/from i))))
+ nil)
 
 ;; Writers
 
