@@ -1,91 +1,131 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <groupId>nu</groupId>
   <artifactId>data.xml</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
-  <name>data.xml</name>
   <packaging>jar</packaging>
-  <description>Functions to parse XML into lazy sequences and lazy trees and emit these as text</description>
-  <developers>
-    <developer>
-      <name>Chouser</name>
-      <email>chouser@n01se.net</email>
-      <url>http://chouser.n01se.net</url>
-      <timezone>-5</timezone>
-    </developer>
-    <developer>
-      <name>Alan Malloy</name>
-      <email>amalloy@4clojure.com</email>
-      <timezone>-8</timezone>
-    </developer>
-    <developer>
-      <name>Ryan Senior</name>
-      <email>senior.ryan@gmail.com</email>
-      <timezone>-6</timezone>
-    </developer>
-    <developer>
-      <name>Herwig Hochleitner</name>
-      <email>herwig@bendlas.net</email>
-      <timezone>+1</timezone>
-    </developer>
-  </developers>
-
-  <parent>
-    <groupId>org.clojure</groupId>
-    <artifactId>pom.contrib</artifactId>
-    <version>0.2.0</version>
-  </parent>
-
+  <version>0.2.0-alpha3</version>
+  <name>data.xml</name>
+  <description/>
+  <scm>
+    <connection>scm:git:git://github.com/nubank/data.xml.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/nubank/data.xml.git</developerConnection>
+    <tag>967435dd9e7cce971135e7d3882d6d8b36f238c7
+</tag>
+    <url>https://github.com/nubank/data.xml</url>
+  </scm>
+  <build>
+    <sourceDirectory>src/main/clojure</sourceDirectory>
+    <testSourceDirectory>src/test/clojure</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/test/resources</directory>
+      </resource>
+      <resource>
+        <directory>target/gen-resources</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>target/gen-resources</directory>
+      </testResource>
+    </testResources>
+    <directory>target</directory>
+    <outputDirectory>target/classes</outputDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/test/clojurescript</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>https://repo1.maven.org/maven2/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>clojars</id>
+      <url>https://clojars.org/repo/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
+  <dependencyManagement>
+    <dependencies/>
+  </dependencyManagement>
   <dependencies>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>clojure</artifactId>
+      <version>1.8.0</version>
+    </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>data.codec</artifactId>
       <version>0.1.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.clojure</groupId>
-      <artifactId>test.check</artifactId>
-      <version>0.9.0</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojurescript</artifactId>
       <version>1.9.473</version>
-      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.cemerick</groupId>
+      <artifactId>piggieback</artifactId>
+      <version>0.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>tools.nrepl</artifactId>
+      <version>0.2.12</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>test.check</artifactId>
+      <version>0.9.0</version>
+    </dependency>
+    <dependency>
+      <groupId>figwheel-sidecar</groupId>
+      <artifactId>figwheel-sidecar</artifactId>
+      <version>0.5.8</version>
+    </dependency>
+    <dependency>
+      <groupId>binaryage</groupId>
+      <artifactId>devtools</artifactId>
+      <version>0.8.3</version>
     </dependency>
   </dependencies>
-
-  <build>
-    <testResources>
-      <testResource>
-        <directory>${project.basedir}/src/test/resources</directory>
-      </testResource>
-      <testResource>
-        <directory>${project.basedir}/src/test/clojurescript</directory>
-      </testResource>
-    </testResources>
-  </build>
-
-  <properties>
-    <!-- set clojure.version to >= 1.8.0 to run cljs test suite
-         (and make sure to run on jdk >= 1.8 for nashorn support) -->
-    <clojure.version>1.7.0</clojure.version>
-  </properties>
-
-  <pluginRepositories>
-    <!-- use clojars for cljc-maven-plugin -->
-    <pluginRepository>
-      <id>clojars.org</id>
-      <url>https://clojars.org/repo</url>
-    </pluginRepository>
-  </pluginRepositories>
-
-  <scm>
-    <connection>scm:git:git@github.com:clojure/data.xml.git</connection>
-    <developerConnection>scm:git:git@github.com:clojure/data.xml.git</developerConnection>
-    <url>git@github.com:clojure/data.xml.git</url>
-    <tag>HEAD</tag>
-  </scm>
-
 </project>
+
+<!-- This file was autogenerated by Leiningen.
+  Please do not edit it directly; instead edit project.clj and regenerate it.
+  It should not be considered canonical data. For more information see
+  https://github.com/technomancy/leiningen -->
