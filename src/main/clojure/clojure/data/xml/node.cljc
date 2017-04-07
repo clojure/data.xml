@@ -119,6 +119,8 @@
       :clj
       [(seq [this] (iterator-seq (.iterator this)))])
 
+  #?(:clj (empty [_] (Element. tag {} [] {})))
+
   ;; j.u.Map and included interfaces
   #?@(:clj
       [Map
