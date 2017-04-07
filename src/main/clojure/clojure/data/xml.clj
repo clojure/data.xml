@@ -31,7 +31,7 @@
    [clojure.data.xml.tree :refer
     [event-tree flatten-elements]]))
 
-(export-api node/element* node/element node/cdata node/xml-comment
+(export-api node/element* node/element node/cdata node/xml-comment node/element?
             prxml/sexp-as-element prxml/sexps-as-fragment event/element-nss
             name/alias-uri name/parse-qname name/qname-uri
             name/qname-local name/qname name/as-qname name/uri-symbol name/symbol-uri

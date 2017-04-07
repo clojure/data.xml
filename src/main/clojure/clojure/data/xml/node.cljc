@@ -217,3 +217,6 @@
         ;; TODO support hiccup syntax
         :else (throw (ex-info "Unsupported element representation"
                               {:element el}))))
+
+(defn element? [el]
+  (and (map? el) (some? (:tag el))))
