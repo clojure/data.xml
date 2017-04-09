@@ -7,7 +7,7 @@ data.xml has the following features:
 
 * Parses XML documents into Clojure data structures
 * Emits XML from Clojure data structures
-* No additional dependencies if using 1.6
+* No additional dependencies if using JDK >= 1.6
 * Uses StAX internally
 * lazy - should allow parsing and emitting of large XML documents
 
@@ -17,7 +17,11 @@ Please report bugs using JIRA [here](http://dev.clojure.org/jira/browse/DXML).
 
 ## Installation
 
-Latest stable release: 0.0.8
+Latest stable release: `0.0.8`
+
+Latest preview release: `0.2.0-alpha3`
+
+(The main features of the `0.2.0` series are XML Namespace support and Clojurescript support)
 
 * [All Released Versions](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.xml%22)
 
@@ -25,6 +29,8 @@ Latest stable release: 0.0.8
 
 ### Maven
 For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` section:
+
+    For stable:
 
     <dependency>
       <groupId>org.clojure</groupId>
@@ -32,38 +38,34 @@ For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` s
       <version>0.0.8</version>
      </dependency>
 
-### Leiningen
-Add the following to the `project.clj` dependencies:
+---
 
-    [org.clojure/data.xml "0.0.8"]
-
-## Installation - Alpha
-
-Latest alpha release: 0.2.0-alpha2
-
-* [All Released Versions](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.xml%22)
-
-* [Development Snapshot Versions](https://oss.sonatype.org/index.html#nexus-search;gav~org.clojure~data.xml~~~)
-
-### Maven
-For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` section:
+    For preview:
 
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>data.xml</artifactId>
-      <version>0.2.0-alpha2</version>
+      <version>0.2.0-alpha3</version>
      </dependency>
 
 ### Leiningen
 Add the following to the `project.clj` dependencies:
 
-    [org.clojure/data.xml "0.2.0-alpha2"]
+    For stable:
+
+    [org.clojure/data.xml "0.0.8"]
+
+---
+
+    For preview:
+
+    [org.clojure/data.xml "0.2.0-alpha3"]
 
 ## Examples
 
-The examples below assume you have added a `use` for data.xml:
+The examples below assume you have added a `:refer :all` for data.xml:
 
-    (use 'clojure.data.xml)
+    (require '[clojure.data.xml :refer :all])
 
 data.xml supports parsing and emitting XML. The parsing functions will
 read XML from a
@@ -202,7 +204,7 @@ Below is an example of parsing an XHTML document:
 
     (parse-str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                 <foo:html xmlns:foo=\"http://www.w3.org/1999/xhtml\"/>")
-                
+
     #...Element{:tag :xmlns.http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml/html,
                 :attrs {},
                 :content ()}
@@ -210,7 +212,7 @@ Below is an example of parsing an XHTML document:
 Emitting namespaced XML is usually done by using `alias-uri` in combination with clojure's built-in `::kw-ns/shorthands`:
 
     (alias-uri 'xh "http://www.w3.org/1999/xhtml")
-    
+
     (emit-str {:tag ::xh/html
                :content [{:tag ::xh/head} {:tag ::xh/body :content ["DOCUMENT"]}]})
 
@@ -224,7 +226,7 @@ It is also allowable to use `javax.xml.namespace.QName` instances, as well as st
 
     (emit-str {:tag (qname "http://www.w3.org/1999/xhtml" "html")})
     (emit-str {:tag "{http://www.w3.org/1999/xhtml}html"})
-    
+
     <?xml version=\"1.0\" encoding=\"UTF-8\"?><a:html xmlns:a=\"http://www.w3.org/1999/xhtml\"></a:html>
 
 ### Namespace Prefixes
@@ -284,7 +286,7 @@ By default the parser attaches location information as element meta,
       (let [input "<a><b/>\n<b/></a>"
             location-meta (comp :clojure.data.xml/location-info meta)]
         (is (= 1 (-> input parse-str location-meta :line-number)))
-        
+
 To elide location information, pass `:location-info false` to the parser:
 
     (parse-str your-input :location-info false)
