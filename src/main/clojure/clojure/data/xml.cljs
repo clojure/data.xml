@@ -9,7 +9,7 @@
 
 (export-api
  name/parse-qname name/qname-uri name/qname-local name/qname name/as-qname name/uri-symbol name/symbol-uri
- node/element* node/element node/cdata node/xml-comment
+ node/element* node/element node/cdata node/xml-comment node/element?
  dom/extend-dom-as-data! dom/element-node dom/element-data)
 
 ;;;; ## TODO event-seq

@@ -120,6 +120,9 @@
       [(seq [this] (iterator-seq (.iterator this)))])
 
   #?(:clj (empty [_] (Element. tag {} [] {})))
+  #?@(:cljs
+      [IEmptyableCollection
+       (-empty [_] (Element. tag {} [] {}))])
 
   ;; j.u.Map and included interfaces
   #?@(:clj
