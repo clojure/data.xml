@@ -132,7 +132,13 @@ namespace.
       <a href="#clojure.data.xml.event/CommentEvent" class="toc-entry-anchor">CommentEvent</a>
       
     </div><div class="toc-entry" style="margin-left: 1em;">
+      <a href="#clojure.data.xml.event/EmptyElementEvent" class="toc-entry-anchor">EmptyElementEvent</a>
+      
+    </div><div class="toc-entry" style="margin-left: 1em;">
       <a href="#clojure.data.xml.event/EndElementEvent" class="toc-entry-anchor">EndElementEvent</a>
+      
+    </div><div class="toc-entry" style="margin-left: 1em;">
+      <a href="#clojure.data.xml.event/QNameEvent" class="toc-entry-anchor">QNameEvent</a>
       
     </div><div class="toc-entry" style="margin-left: 1em;">
       <a href="#clojure.data.xml.event/StartElementEvent" class="toc-entry-anchor">StartElementEvent</a>
@@ -147,7 +153,10 @@ namespace.
       <a href="#clojure.data.xml.event/-&gt;CommentEvent" class="toc-entry-anchor">-&gt;CommentEvent</a>
       
     </div><div class="toc-entry" style="margin-left: 1em;">
-      <a href="#clojure.data.xml.event/-&gt;EndElementEvent" class="toc-entry-anchor">-&gt;EndElementEvent</a>
+      <a href="#clojure.data.xml.event/-&gt;EmptyElementEvent" class="toc-entry-anchor">-&gt;EmptyElementEvent</a>
+      
+    </div><div class="toc-entry" style="margin-left: 1em;">
+      <a href="#clojure.data.xml.event/-&gt;QNameEvent" class="toc-entry-anchor">-&gt;QNameEvent</a>
       
     </div><div class="toc-entry" style="margin-left: 1em;">
       <a href="#clojure.data.xml.event/-&gt;StartElementEvent" class="toc-entry-anchor">-&gt;StartElementEvent</a>
@@ -165,7 +174,10 @@ namespace.
       <a href="#clojure.data.xml.event/map-&gt;CommentEvent" class="toc-entry-anchor">map-&gt;CommentEvent</a>
       
     </div><div class="toc-entry" style="margin-left: 1em;">
-      <a href="#clojure.data.xml.event/map-&gt;EndElementEvent" class="toc-entry-anchor">map-&gt;EndElementEvent</a>
+      <a href="#clojure.data.xml.event/map-&gt;EmptyElementEvent" class="toc-entry-anchor">map-&gt;EmptyElementEvent</a>
+      
+    </div><div class="toc-entry" style="margin-left: 1em;">
+      <a href="#clojure.data.xml.event/map-&gt;QNameEvent" class="toc-entry-anchor">map-&gt;QNameEvent</a>
       
     </div><div class="toc-entry" style="margin-left: 1em;">
       <a href="#clojure.data.xml.event/map-&gt;StartElementEvent" class="toc-entry-anchor">map-&gt;StartElementEvent</a>
@@ -174,6 +186,9 @@ namespace.
   </div><div class="toc-section" style="margin-left: 1em;">
     <a style="margin-top: 3px;" href="#clojure.data.xml.impl">clojure.data.xml.impl</a>
     <div class="toc-entry" style="margin-left: 1em;">
+      <a href="#clojure.data.xml.impl/compile-if" class="toc-entry-anchor">compile-if</a>
+      
+    </div><div class="toc-entry" style="margin-left: 1em;">
       <a href="#clojure.data.xml.impl/export-api" class="toc-entry-anchor">export-api</a>
       
     </div><div class="toc-entry" style="margin-left: 1em;">
@@ -297,6 +312,11 @@ namespace.
         <a href="#clojure.data.xml.protocols/qname-uri" class="toc-subentry-anchor">qname-uri</a>
       </div>
     </div><div class="toc-entry" style="margin-left: 1em;">
+      <a href="#clojure.data.xml.protocols/AsXmlString" class="toc-entry-anchor">AsXmlString</a>
+      <div class="toc-subentry" style="margin-left: 1em;">
+        <a href="#clojure.data.xml.protocols/xml-str" class="toc-subentry-anchor">xml-str</a>
+      </div>
+    </div><div class="toc-entry" style="margin-left: 1em;">
       <a href="#clojure.data.xml.protocols/EventGeneration" class="toc-entry-anchor">EventGeneration</a>
       <div class="toc-subentry" style="margin-left: 1em;">
         <a href="#clojure.data.xml.protocols/gen-event" class="toc-subentry-anchor">gen-event</a>
@@ -311,6 +331,12 @@ namespace.
       
     </div><div class="toc-entry" style="margin-left: 1em;">
       <a href="#clojure.data.xml.prxml/sexps-as-fragment" class="toc-entry-anchor">sexps-as-fragment</a>
+      
+    </div>
+  </div><div class="toc-section" style="margin-left: 1em;">
+    <a style="margin-top: 3px;" href="#clojure.data.xml.pu-map">clojure.data.xml.pu-map</a>
+    <div class="toc-entry" style="margin-left: 1em;">
+      <a href="#clojure.data.xml.pu-map/reduce-diff" class="toc-entry-anchor">reduce-diff</a>
       
     </div>
   </div><div class="toc-section" style="margin-left: 1em;">
@@ -388,7 +414,7 @@ Dummy files for aliased uris have to exist. Have a look at `uri-file` and `print
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L99">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L99">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -439,7 +465,7 @@ Dummy files for aliased uris have to exist. Have a look at `uri-file` and `print
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L22">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L26">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -565,7 +591,7 @@ and xml-input-factory-props for more information. Defaults coalescing true.</pre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L93">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L93">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -577,7 +603,7 @@ and xml-input-factory-props for more information. Defaults coalescing true.</pre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L44">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L44">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -589,7 +615,7 @@ and xml-input-factory-props for more information. Defaults coalescing true.</pre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L39">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L39">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -637,7 +663,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L86">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L86">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -693,10 +719,28 @@ protocol to them.</pre>
   </div><div id="type-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml.event/EndElementEvent">EndElementEvent</h2>
+    <h2 id="clojure.data.xml.event/EmptyElementEvent">EmptyElementEvent</h2>
     <span id="type-type">record</span><br />
     <pre id="type-docstr"></pre>
-    Fields: <span id="type-fields">[tag]</span><br />
+    Fields: <span id="type-fields">[tag attrs nss location-info]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
+  </div><div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/EndElementEvent">EndElementEvent</h2>
+    <span id="type-type">type</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[]</span><br />
+    Protocols: <span id="type-protocols"></span><br />
+    Interfaces: <span id="type-interfaces"></span><br />
+  </div><div id="type-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/QNameEvent">QNameEvent</h2>
+    <span id="type-type">record</span><br />
+    <pre id="type-docstr"></pre>
+    Fields: <span id="type-fields">[qn]</span><br />
     Protocols: <span id="type-protocols"></span><br />
     Interfaces: <span id="type-interfaces">clojure.lang.IHashEq, clojure.lang.IKeywordLookup, clojure.lang.ILookup, clojure.lang.IObj, clojure.lang.IPersistentMap, java.io.Serializable, java.util.Map</span><br />
   </div><div id="type-entry">
@@ -724,7 +768,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L33">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L36">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -736,7 +780,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L32">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L35">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -748,19 +792,31 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L34">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L37">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml.event/-&gt;EndElementEvent">-&gt;EndElementEvent</h2>
+    <h2 id="clojure.data.xml.event/-&gt;EmptyElementEvent">-&gt;EmptyElementEvent</h2>
     <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (-&gt;EndElementEvent tag)
+    <pre id="var-usage">Usage: (-&gt;EmptyElementEvent tag attrs nss location-info)
 </pre>
-    <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.EndElementEvent.</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.EmptyElementEvent.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L31">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L34">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/-&gt;QNameEvent">-&gt;QNameEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (-&gt;QNameEvent qn)
+</pre>
+    <pre id="var-docstr">Positional factory function for class clojure.data.xml.event.QNameEvent.</pre>
+    <pre id="var-specs"></pre>
+    
+    
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L38">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -772,7 +828,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L30">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L33">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -784,7 +840,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L22">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L26">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -796,7 +852,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L33">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L36">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -808,7 +864,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L32">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L35">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -820,19 +876,31 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L34">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L37">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
-    <h2 id="clojure.data.xml.event/map-&gt;EndElementEvent">map-&gt;EndElementEvent</h2>
+    <h2 id="clojure.data.xml.event/map-&gt;EmptyElementEvent">map-&gt;EmptyElementEvent</h2>
     <span id="var-type">function</span><br />
-    <pre id="var-usage">Usage: (map-&gt;EndElementEvent m#)
+    <pre id="var-usage">Usage: (map-&gt;EmptyElementEvent m#)
 </pre>
-    <pre id="var-docstr">Factory function for class clojure.data.xml.event.EndElementEvent, taking a map of keywords to field values.</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.event.EmptyElementEvent, taking a map of keywords to field values.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L31">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L34">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.event/map-&gt;QNameEvent">map-&gt;QNameEvent</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (map-&gt;QNameEvent m#)
+</pre>
+    <pre id="var-docstr">Factory function for class clojure.data.xml.event.QNameEvent, taking a map of keywords to field values.</pre>
+    <pre id="var-specs"></pre>
+    
+    
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L38">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -844,7 +912,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/144f799507a5041a00ba683681ef41300eb7c9ca/src/main/clojure/clojure/data/xml/event.clj#L30">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/event.clj#L33">Source</a>
   </div>
 </div>
 
@@ -862,6 +930,21 @@ protocol to them.</pre>
   <div id="var-entry">
     <br />
     <hr />
+    <h2 id="clojure.data.xml.impl/compile-if">compile-if</h2>
+    <span id="var-type">macro</span><br />
+    <pre id="var-usage">Usage: (compile-if exp then else)
+</pre>
+    <pre id="var-docstr">Evaluate `exp` and if it returns logical true and doesn't error, expand to
+`then`.  Else expand to `else`.
+
+see clojure.core.reducers</pre>
+    <pre id="var-specs"></pre>
+    
+    
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e7d7deebb59be833aa0a8211c8aea61b8810ebb7/src/main/clojure/clojure/data/xml/impl.clj#L54">Source</a>
+  </div><div id="var-entry">
+    <br />
+    <hr />
     <h2 id="clojure.data.xml.impl/export-api">export-api</h2>
     <span id="var-type">macro</span><br />
     <pre id="var-usage">Usage: (export-api &amp; names)
@@ -870,7 +953,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj#L26">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e7d7deebb59be833aa0a8211c8aea61b8810ebb7/src/main/clojure/clojure/data/xml/impl.clj#L27">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -882,7 +965,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj#L41">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e7d7deebb59be833aa0a8211c8aea61b8810ebb7/src/main/clojure/clojure/data/xml/impl.clj#L42">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -894,7 +977,7 @@ protocol to them.</pre>
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/impl.clj#L31">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e7d7deebb59be833aa0a8211c8aea61b8810ebb7/src/main/clojure/clojure/data/xml/impl.clj#L32">Source</a>
   </div>
 </div>
 
@@ -923,7 +1006,7 @@ Options:
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/fa497c80468b882b20e9ac03dcbbc27cacbbd259/src/main/clojure/clojure/data/xml/jvm/emit.clj#L133">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/jvm/emit.clj#L199">Source</a>
   </div>
 </div>
 
@@ -950,7 +1033,7 @@ be triggered by the JDK StAX parser, but is by others.  Leaving in to be more co
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/jvm/parse.clj#L67">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e48b651cf3d768e09d1ff85044dd4ee9661e06f5/src/main/clojure/clojure/data/xml/jvm/parse.clj#L68">Source</a>
   </div>
 </div>
 
@@ -975,7 +1058,7 @@ be triggered by the JDK StAX parser, but is by others.  Leaving in to be more co
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L178">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L178">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -1005,7 +1088,7 @@ Dummy files for aliased uris have to exist. Have a look at `uri-file` and `print
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L99">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L99">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -1019,7 +1102,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L182">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L182">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -1031,7 +1114,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L130">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L130">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -1043,7 +1126,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L93">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L93">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -1055,7 +1138,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L44">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L44">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -1067,7 +1150,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L39">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L39">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -1079,7 +1162,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L150">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L150">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -1091,7 +1174,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L86">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L86">Source</a>
   </div><div id="var-entry">
     <br />
     <hr />
@@ -1103,7 +1186,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     <pre id="var-specs"></pre>
     
     
-    <a id="var-source" href="https://github.com/clojure/data.xml/blob/e8eee2d46907e3190af45f219cb1c8f9a1eb5193/src/main/clojure/clojure/data/xml/name.cljc#L141">Source</a>
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/82195ad23db333bdc55b1fccf5495a7de3c3a99c/src/main/clojure/clojure/data/xml/name.cljc#L141">Source</a>
   </div>
 </div>
 
@@ -1352,7 +1435,7 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     </div>
     
     
-    <a id="proto-source" href="https://github.com/clojure/data.xml/blob/d1d2b8d49326038247e9876523ac51f337e55fa2/src/main/clojure/clojure/data/xml/protocols.cljc#L25">Source</a>
+    <a id="proto-source" href="https://github.com/clojure/data.xml/blob/e7d7deebb59be833aa0a8211c8aea61b8810ebb7/src/main/clojure/clojure/data/xml/protocols.cljc#L25">Source</a>
   </div><div id="proto-entry">
     <br />
     <hr />
@@ -1385,14 +1468,36 @@ Zero-arity can only be called, when *gen-prefix-counter* is bound and will incre
     </div>
     
     
-    <a id="proto-source" href="https://github.com/clojure/data.xml/blob/d1d2b8d49326038247e9876523ac51f337e55fa2/src/main/clojure/clojure/data/xml/protocols.cljc#L13">Source</a>
+    <a id="proto-source" href="https://github.com/clojure/data.xml/blob/e7d7deebb59be833aa0a8211c8aea61b8810ebb7/src/main/clojure/clojure/data/xml/protocols.cljc#L13">Source</a>
+  </div><div id="proto-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.protocols/AsXmlString">AsXmlString</h2>
+    <span id="proto-type">Protocol</span><br />
+    <pre id="proto-docstr"></pre>
+    Known implementations: <span id="proto-impls">array-of-bytes, clojure.lang.BigInt, clojure.lang.Ratio, java.lang.Boolean, java.lang.Byte, java.lang.Character, java.lang.Double, java.lang.Float, java.lang.Integer, java.lang.Long, java.lang.Short, java.lang.String, java.math.BigDecimal, java.math.BigInteger, java.net.URI, java.net.URL, java.time.Instant, java.util.Date, nil</span>
+    <div id="proto-var-entry">
+      <br />
+      <h3 id="clojure.data.xml.protocols/xml-str">xml-str</h3>
+      <span id="var-type">function</span><br />
+      <pre id="var-usage">Usage: (xml-str node)
+</pre>
+      <pre id="var-docstr">Serialize atribute value or content node</pre>
+      <pre id="var-specs"></pre>
+      
+      
+      
+    </div>
+    
+    
+    <a id="proto-source" href="https://github.com/clojure/data.xml/blob/e7d7deebb59be833aa0a8211c8aea61b8810ebb7/src/main/clojure/clojure/data/xml/protocols.cljc#L28">Source</a>
   </div><div id="proto-entry">
     <br />
     <hr />
     <h2 id="clojure.data.xml.protocols/EventGeneration">EventGeneration</h2>
     <span id="proto-type">Protocol</span><br />
     <pre id="proto-docstr">Protocol for generating new events based on element type</pre>
-    Known implementations: <span id="proto-impls">clojure.data.xml.event.CDataEvent, clojure.data.xml.event.CDataEvent, clojure.data.xml.event.CharsEvent, clojure.data.xml.event.CharsEvent, clojure.data.xml.event.CommentEvent, clojure.data.xml.event.CommentEvent, clojure.data.xml.event.EndElementEvent, clojure.data.xml.event.EndElementEvent, clojure.data.xml.event.StartElementEvent, clojure.data.xml.event.StartElementEvent, clojure.data.xml.node.CData, clojure.data.xml.node.Comment, clojure.data.xml.node.Element, clojure.lang.IPersistentMap, clojure.lang.Sequential, java.lang.Boolean, java.lang.Number, java.lang.String, nil</span>
+    Known implementations: <span id="proto-impls">array-of-bytes, clojure.data.xml.event.CDataEvent, clojure.data.xml.event.CDataEvent, clojure.data.xml.event.CharsEvent, clojure.data.xml.event.CharsEvent, clojure.data.xml.event.CommentEvent, clojure.data.xml.event.CommentEvent, clojure.data.xml.event.EmptyElementEvent, clojure.data.xml.event.EmptyElementEvent, clojure.data.xml.event.EndElementEvent, clojure.data.xml.event.EndElementEvent, clojure.data.xml.event.StartElementEvent, clojure.data.xml.event.StartElementEvent, clojure.data.xml.node.CData, clojure.data.xml.node.Comment, clojure.data.xml.node.Element, clojure.lang.IPersistentMap, clojure.lang.Keyword, clojure.lang.Sequential, java.lang.Boolean, java.lang.Number, java.lang.String, java.net.URI, java.net.URL, java.time.Instant, java.util.Date, javax.xml.namespace.QName, nil</span>
     <div id="proto-var-entry">
       <br />
       <h3 id="clojure.data.xml.protocols/gen-event">gen-event</h3>
@@ -1419,7 +1524,7 @@ events that should be generated after this one is complete.</pre>
     </div>
     
     
-    <a id="proto-source" href="https://github.com/clojure/data.xml/blob/d1d2b8d49326038247e9876523ac51f337e55fa2/src/main/clojure/clojure/data/xml/protocols.cljc#L17">Source</a>
+    <a id="proto-source" href="https://github.com/clojure/data.xml/blob/e7d7deebb59be833aa0a8211c8aea61b8810ebb7/src/main/clojure/clojure/data/xml/protocols.cljc#L17">Source</a>
   </div>
 </div>
 
@@ -1472,6 +1577,39 @@ protocol to them.</pre>
     
     
     <a id="var-source" href="https://github.com/clojure/data.xml/blob/3d231d6be9b70e829817e1415297ac0dca98a647/src/main/clojure/clojure/data/xml/prxml.clj#L50">Source</a>
+  </div>
+</div>
+
+<br />
+<h2 id="clojure.data.xml.pu-map">clojure.data.xml.pu-map</h2>
+<pre id="namespace-docstr">Provides a bidirectional mapping for keeping track of prefix-&gt;uri mappings in xml namespaces.
+
+This has the semantics of a basic key -&gt; multiple values map + two special features, both of which are dictated by the xml standard:
+
+- instead of a special dissoc, there is assoc to empty string or nil
+- there are two fixed, unique mappings:
+  - "xml" &lt;-&gt; ["<a href="http://www.w3.org/2000/xmlns/">http://www.w3.org/2000/xmlns/</a>"]
+  - "xmlns" &lt;-&gt; ["<a href="http://www.w3.org/XML/1998/namespace">http://www.w3.org/XML/1998/namespace</a>"]</pre>
+
+
+<br />
+
+
+<div id="var-section">
+  <p></p>
+  <h2>Public Variables and Functions</h2>
+  <div id="var-entry">
+    <br />
+    <hr />
+    <h2 id="clojure.data.xml.pu-map/reduce-diff">reduce-diff</h2>
+    <span id="var-type">function</span><br />
+    <pre id="var-usage">Usage: (reduce-diff f s {ppu :p-&gt;u} {pu :p-&gt;u})
+</pre>
+    <pre id="var-docstr">A high-performance diffing operation, that reduces f over changed and removed prefixes</pre>
+    <pre id="var-specs"></pre>
+    
+    
+    <a id="var-source" href="https://github.com/clojure/data.xml/blob/75e5669637381cf5482e338a0a04de484b3d3b42/src/main/clojure/clojure/data/xml/pu_map.cljc#L76">Source</a>
   </div>
 </div>
 

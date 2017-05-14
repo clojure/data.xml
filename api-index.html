@@ -77,6 +77,7 @@ Shortcuts:<br />
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.protocols/as-elements">as-elements</a><span id="line-content">                  function      clojure.data.xml.protocols Return a seq of elements represented by an...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.protocols/AsElements">AsElements</a><span id="line-content">                   protocol      clojure.data.xml.protocols 
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.protocols/AsQName">AsQName</a><span id="line-content">                      protocol      clojure.data.xml.protocols 
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.protocols/AsXmlString">AsXmlString</a><span id="line-content">                  protocol      clojure.data.xml.protocols 
 </span></span>
   </pre>
 </div><div id="index-body">
@@ -99,6 +100,7 @@ Shortcuts:<br />
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/CharsEvent">CharsEvent</a><span id="line-content">                   record        clojure.data.xml.event 
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.node/Comment">Comment</a><span id="line-content">                      record        clojure.data.xml.node 
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/CommentEvent">CommentEvent</a><span id="line-content">                 record        clojure.data.xml.event 
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.impl/compile-if">compile-if</a><span id="line-content">                   macro         clojure.data.xml.impl Evaluate `exp` and if it returns logical true a...
 </span></span>
   </pre>
 </div><div id="index-body">
@@ -111,7 +113,7 @@ Shortcuts:<br />
   <pre>
 <span id="section-content"> <a href="index.html#clojure.data.xml.node/-&gt;Element">-&gt;Element</a><span id="line-content">                    function      clojure.data.xml.node Positional factory function for class clojure.d...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.node/-&gt;ElementIterator">-&gt;ElementIterator</a><span id="line-content">            function      clojure.data.xml.node Positional factory function for class clojure.d...
-</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/-&gt;EndElementEvent">-&gt;EndElementEvent</a><span id="line-content">            function      clojure.data.xml.event Positional factory function for class clojure....
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/-&gt;EmptyElementEvent">-&gt;EmptyElementEvent</a><span id="line-content">          function      clojure.data.xml.event Positional factory function for class clojure....
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml/element">element</a><span id="line-content">                      function      clojure.data.xml   Create an xml Element from content varargs.
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.node/element">element</a><span id="line-content">                      function      clojure.data.xml.node Create an xml Element from content varargs.
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.node/Element">Element</a><span id="line-content">                      type          clojure.data.xml.node 
@@ -122,7 +124,8 @@ Shortcuts:<br />
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.node/ElementIterator">ElementIterator</a><span id="line-content">              type          clojure.data.xml.node 
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml/emit">emit</a><span id="line-content">                         function      clojure.data.xml   Prints the given Element tree as XML text to strea...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml/emit-str">emit-str</a><span id="line-content">                     function      clojure.data.xml   Emits the Element to String and returns it. Option...
-</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/EndElementEvent">EndElementEvent</a><span id="line-content">              record        clojure.data.xml.event 
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/EmptyElementEvent">EmptyElementEvent</a><span id="line-content">            record        clojure.data.xml.event 
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/EndElementEvent">EndElementEvent</a><span id="line-content">              type          clojure.data.xml.event 
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml/event-seq">event-seq</a><span id="line-content">                    function      clojure.data.xml   Parses the XML InputSource source using a pull-par...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.tree/event-tree">event-tree</a><span id="line-content">                   function      clojure.data.xml.tree Returns a lazy tree of Element objects for the ...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.protocols/EventGeneration">EventGeneration</a><span id="line-content">              protocol      clojure.data.xml.protocols Protocol for generating new events based o...
@@ -181,7 +184,8 @@ Shortcuts:<br />
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/map-&gt;CharsEvent">map-&gt;CharsEvent</a><span id="line-content">              function      clojure.data.xml.event Factory function for class clojure.data.xml.ev...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.node/map-&gt;Comment">map-&gt;Comment</a><span id="line-content">                 function      clojure.data.xml.node Factory function for class clojure.data.xml.nod...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/map-&gt;CommentEvent">map-&gt;CommentEvent</a><span id="line-content">            function      clojure.data.xml.event Factory function for class clojure.data.xml.ev...
-</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/map-&gt;EndElementEvent">map-&gt;EndElementEvent</a><span id="line-content">         function      clojure.data.xml.event Factory function for class clojure.data.xml.ev...
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/map-&gt;EmptyElementEvent">map-&gt;EmptyElementEvent</a><span id="line-content">       function      clojure.data.xml.event Factory function for class clojure.data.xml.ev...
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/map-&gt;QNameEvent">map-&gt;QNameEvent</a><span id="line-content">              function      clojure.data.xml.event Factory function for class clojure.data.xml.ev...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/map-&gt;StartElementEvent">map-&gt;StartElementEvent</a><span id="line-content">       function      clojure.data.xml.event Factory function for class clojure.data.xml.ev...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.name/merge-nss">merge-nss</a><span id="line-content">                    function      clojure.data.xml.name Merge two attribute sets, deleting assignments ...
 </span></span>
@@ -210,18 +214,21 @@ Shortcuts:<br />
 </div><div id="index-body">
   <h2 id="Q"><span id="section-head">Q</span></h2>
   <pre>
-<span id="section-content"> <a href="index.html#clojure.data.xml/qname-local">qname-local</a><span id="line-content">                  function      clojure.data.xml   Get the name for this qname.
+<span id="section-content"> <a href="index.html#clojure.data.xml.event/-&gt;QNameEvent">-&gt;QNameEvent</a><span id="line-content">                 function      clojure.data.xml.event Positional factory function for class clojure....
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml/qname-local">qname-local</a><span id="line-content">                  function      clojure.data.xml   Get the name for this qname.
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.name/qname-local">qname-local</a><span id="line-content">                  function      clojure.data.xml.name Get the name for this qname.
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.protocols/qname-local">qname-local</a><span id="line-content">                  function      clojure.data.xml.protocols Get the name for this qname.
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml/qname-uri">qname-uri</a><span id="line-content">                    function      clojure.data.xml   Get the namespace uri for this qname.
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.name/qname-uri">qname-uri</a><span id="line-content">                    function      clojure.data.xml.name Get the namespace uri for this qname.
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.protocols/qname-uri">qname-uri</a><span id="line-content">                    function      clojure.data.xml.protocols Get the namespace uri for this qname.
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/QNameEvent">QNameEvent</a><span id="line-content">                   record        clojure.data.xml.event 
 </span></span>
   </pre>
 </div><div id="index-body">
   <h2 id="R"><span id="section-head">R</span></h2>
   <pre>
-
+<span id="section-content"> <a href="index.html#clojure.data.xml.pu-map/reduce-diff">reduce-diff</a><span id="line-content">                  function      clojure.data.xml.pu-map A high-performance diffing operation, that re...
+</span></span>
   </pre>
 </div><div id="index-body">
   <h2 id="S"><span id="section-head">S</span></h2>
@@ -265,6 +272,7 @@ Shortcuts:<br />
   <pre>
 <span id="section-content"> <a href="index.html#clojure.data.xml/xml-comment">xml-comment</a><span id="line-content">                  function      clojure.data.xml   Create a Comment node.
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.node/xml-comment">xml-comment</a><span id="line-content">                  function      clojure.data.xml.node Create a Comment node.
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.protocols/xml-str">xml-str</a><span id="line-content">                      function      clojure.data.xml.protocols Serialize atribute value or content node.
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.name/xmlns-attr?">xmlns-attr?</a><span id="line-content">                  function      clojure.data.xml.name Is this qname an xmlns declaration?.
 </span></span>
   </pre>
