@@ -102,8 +102,8 @@
         tpu (if-let [uri (and (str/blank? tag-uri)
                               (pu/get tpu ""))]
               (do
-                (when (.isLoggable logger Level/FINE)
-                  (.log logger Level/FINE
+                (when (.isLoggable ^Logger logger Level/FINE)
+                  (.log ^Logger logger Level/FINE
                         (format "Default `xmlns=\"%s\"` had to be replaced with a `xmlns=\"\"` because of global element `%s`"
                                 uri tag-local)))
                 (-> tpu
@@ -148,16 +148,16 @@
   EndElementEvent
   (emit-event [ev writer pu-stack]
     (assert (next pu-stack) "balanced tags")
-    (.writeEndElement writer)
+    (.writeEndElement ^XMLStreamWriter writer)
     (next pu-stack))
   CharsEvent
-  (emit-event [{:keys [str]} writer s] (.writeCharacters writer str) s)
+  (emit-event [{:keys [str]} writer s] (.writeCharacters ^XMLStreamWriter writer str) s)
   CDataEvent
   (emit-event [{:keys [str]} writer s] (emit-cdata str writer) s)
   CommentEvent
-  (emit-event [{:keys [str]} writer s] (.writeComment writer str) s)
+  (emit-event [{:keys [str]} writer s] (.writeComment ^XMLStreamWriter writer str) s)
   QNameEvent
-  (emit-event [{:keys [qn]} writer pu-stack]
+  (emit-event [{:keys [qn]} ^XMLStreamWriter writer pu-stack]
     (.writeCharacters writer (prefix-for qn (first pu-stack)))
     (.writeCharacters writer ":")
     (.writeCharacters writer (qname-local qn))
