@@ -5,6 +5,8 @@ From 0.2.0-alpha2 to 0.2.0-alpha3
 - Reimplement namespace context tracking, due to bug in JDK
 - Various fixes in documentation and error messages (DXML-39)
 - Emit empty tags for elements with no content (DXML-25)
+- Add clojure.data.xml/element? predicate
+- Support empty protocol function on Element deftypes (DXML-44)
 
 From 0.2.0-alpha1 to 0.2.0-alpha2
 - qname function now returns canonical (keyword) names
