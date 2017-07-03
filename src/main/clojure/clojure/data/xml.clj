@@ -38,35 +38,97 @@
             name/uri-file name/print-uri-file-command!
             process/find-xmlns process/aggregate-xmlns)
 
+(def ^:private ^:const parser-opts-arg
+  '{:keys [include-node? location-info
+           coalescing supporting-external-entities
+           allocator namespace-aware replacing-entity-references
+           validating reporter resolver support-dtd]
+    :or {include-node? #{:element :characters}
+         location-info true
+         coalescing true
+         supporting-external-entities false}})
+
 (defn event-seq
-  "Parses the XML InputSource source using a pull-parser. Returns
-   a lazy sequence of Event records.  Accepts key pairs
-   with XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
-   and xml-input-factory-props for more information.
-   Defaults coalescing true and supporting-external-entities false.
-   :include-node? can be a set of #{:start-element :end-element :characters :comment}"
-  [source {:as props}]
+  "Parses an XML input source into a lazy sequence of pull events.
+
+Input source can be a java.io.InputStream or java.io.Reader
+
+Options:
+
+  :include-node? can be a subset of #{:element :characters :comment} default #{:element :characters}
+  :location-info pass false to skip generating location meta data
+
+See http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
+for documentation on options:
+
+  {:allocator                      XMLInputFactory/ALLOCATOR
+   :coalescing                     XMLInputFactory/IS_COALESCING
+   :namespace-aware                XMLInputFactory/IS_NAMESPACE_AWARE
+   :replacing-entity-references    XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
+   :supporting-external-entities   XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
+   :validating                     XMLInputFactory/IS_VALIDATING
+   :reporter                       XMLInputFactory/REPORTER
+   :resolver                       XMLInputFactory/RESOLVER
+   :support-dtd                    XMLInputFactory/SUPPORT_DTD}"
+  {:arglists (list ['source parser-opts-arg])}
+  [source opts]
   (let [props* (merge {:include-node? #{:element :characters}
                        :coalescing true
                        :supporting-external-entities false
                        :location-info true}
-                      props)]
+                      opts)]
     (pull-seq (make-stream-reader props* source)
               props*
               nil)))
 
 (defn parse
-  "Parses the source, which can be an
-   InputStream or Reader, and returns a lazy tree of Element records. Accepts key pairs
-   with XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
-   and xml-input-factory-props for more information. Defaults coalescing true."
-  [source & opts]
+  "Parses an XML input source into a a tree of Element records.
+The element tree is realized lazily, so huge XML files can be streamed through a depth-first tree walk.
+
+Input source can be a java.io.InputStream or java.io.Reader
+
+Options:
+
+  :include-node? can be a subset of #{:element :characters :comment} default #{:element :characters}
+  :location-info pass false to skip generating location meta data
+
+See http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
+for documentation on options:
+
+  {:allocator                      XMLInputFactory/ALLOCATOR
+   :coalescing                     XMLInputFactory/IS_COALESCING
+   :namespace-aware                XMLInputFactory/IS_NAMESPACE_AWARE
+   :replacing-entity-references    XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
+   :supporting-external-entities   XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
+   :validating                     XMLInputFactory/IS_VALIDATING
+   :reporter                       XMLInputFactory/REPORTER
+   :resolver                       XMLInputFactory/RESOLVER
+   :support-dtd                    XMLInputFactory/SUPPORT_DTD}"
+  {:arglists (list ['source '& parser-opts-arg])}
+  [source & {:as opts}]
   (event-tree (event-seq source opts)))
 
 (defn parse-str
-  "Parses the passed in string to Clojure data structures.  Accepts key pairs
-   with XMLInputFactory options, see http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
-   and xml-input-factory-props for more information. Defaults coalescing true."
+  "Parses an XML String into a a tree of Element records.
+
+Options:
+
+  :include-node? can be a subset of #{:element :characters :comment} default #{:element :characters}
+  :location-info pass false to skip generating location meta data
+
+See http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
+for documentation on options:
+
+  {:allocator                      XMLInputFactory/ALLOCATOR
+   :coalescing                     XMLInputFactory/IS_COALESCING
+   :namespace-aware                XMLInputFactory/IS_NAMESPACE_AWARE
+   :replacing-entity-references    XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
+   :supporting-external-entities   XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
+   :validating                     XMLInputFactory/IS_VALIDATING
+   :reporter                       XMLInputFactory/REPORTER
+   :resolver                       XMLInputFactory/RESOLVER
+   :support-dtd                    XMLInputFactory/SUPPORT_DTD}"
+  {:arglists (list ['string '& parser-opts-arg])}
   [s & opts]
   (apply parse (string-source s) opts))
 

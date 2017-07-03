@@ -198,7 +198,7 @@ Generated API docs for data.xml are available [here](http://clojure.github.com/d
 
 ## Namespace Support
 
-XML Namespaced names (QNames) are commonly encoded into clojure keywords, by percent-encoding the (XML) namespace: `{http://www.w3.org/1999/xhtml}head` is encoded in data.xml as `:http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml/head`.
+XML Namespaced names (QNames) are encoded into clojure keywords, by percent-encoding the (XML) namespace: `{http://www.w3.org/1999/xhtml}head` is encoded in data.xml as `:http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml/head`.
 
 Below is an example of parsing an XHTML document:
 
@@ -262,19 +262,14 @@ tags with the same namespace will use one prefix:
 
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a:html xmlns:a=\"http://www.w3.org/1999/xhtml\"><a:head><a:title>Example title</a:title></a:head></a:html>"
 
-Note that the Java QName does not consider namespace prefixes when
-checking equality. Similarly constructing QNames from string
-representations does not preserve prefixes. Prefixes are treated
-similarly in data.xml. Prefixes are currently represented as metadata
-on the elements. This preserves the same equality behavior that QNames
-have:
+Note that the jdk QName ignores namespace prefixes for equality, but allows to preserve them for emitting.
 
     (= (parse-str "<foo:title xmlns:foo=\"http://www.w3.org/1999/xhtml2\">Example title</foo:title>")
        (parse-str "<bar:title xmlns:bar=\"http://www.w3.org/1999/xhtml2\">Example title</bar:title>"))
 
-Removing the metadata will cause the elements to not have a prefix,
-which is still correct, but will cause new prefixes to be generated
-when the document is emitted.
+In data.xml prefix mappings are (by default) retained in metadata on a tag record. If there is no metadata, new prefixes will be generated when emitting.
+
+    (emit-str (parse-str "<foo:element xmlns:foo=\"FOO:\" />"))
 
 ## Location information as meta
 
