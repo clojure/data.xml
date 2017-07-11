@@ -63,4 +63,4 @@
     `(do ~else)))
 
 (defn b64-encode [ba]
-  (String. (b64/encode ba)))
+  (String. ^bytes (b64/encode ba)))

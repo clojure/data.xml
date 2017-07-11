@@ -17,6 +17,7 @@
              [qname]]
             [clojure.data.xml.pu-map :as pu])
   (:import
+   (java.io InputStream Reader)
    (javax.xml.stream
     XMLInputFactory XMLStreamReader XMLStreamConstants)
    (clojure.data.xml.event EndElementEvent)))
@@ -114,7 +115,7 @@
          ;; Consume and ignore comments, spaces, processing instructions etc
          (recur))))))
 
-(defn- make-input-factory [props]
+(defn- make-input-factory ^XMLInputFactory [props]
   (let [fac (XMLInputFactory/newInstance)]
     (doseq [[k v] props
             :when (contains? input-factory-props k)
@@ -124,11 +125,11 @@
 
 (defn make-stream-reader [props source]
   (let [fac (make-input-factory props)]
-    ;; Reflection on following line cannot be eliminated via a
-    ;; type hint, because s is advertised by fn parse to be an
-    ;; InputStream or Reader, and there are different
-    ;; createXMLStreamReader signatures for each of those types.
-    (.createXMLStreamReader fac source)))
+    (cond
+      (instance? Reader source) (.createXMLStreamReader fac ^Reader source)
+      (instance? InputStream source) (.createXMLStreamReader fac ^InputStream source)
+      :else (throw (IllegalArgumentException.
+                     "source should be java.io.Reader or java.io.InputStream")))))
 
 (defn string-source [s]
   (java.io.StringReader. s))
