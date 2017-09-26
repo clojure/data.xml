@@ -221,10 +221,17 @@
 
 (deftest test-default-xmlns
   (let [nss-meta (comp :clojure.data.xml/nss meta)]
-    (is (= {:xmlns "NS"}
+    (is (= {"xmlns" "NS"}
            (nss-meta (parse-str "<foo xmlns=\"NS\"/>"))
            (nss-meta (parse-str (emit-str (parse-str "<foo xmlns=\"NS\"/>"))))))))
 
 (deftest test-empty-elements
   (is (= (emit-str {:tag :a :content []}) "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a/>"))
   (is (= (emit-str {:tag :a :content [""]}) "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a></a>")))
+
+(deftest test-roundtrip
+  (is (= (emit-str (with-meta (parse-str "<foo:element xmlns:foo=\"FOO:\"/>")
+                     nil))
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a:element xmlns:a=\"FOO:\"/>"))
+  (is (= (emit-str (parse-str "<foo:element xmlns:foo=\"FOO:\"/>"))
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo:element xmlns:foo=\"FOO:\"/>")))

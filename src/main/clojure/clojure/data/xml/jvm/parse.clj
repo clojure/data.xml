@@ -51,7 +51,7 @@
    (reduce (fn [tr ^long i]
              (let [ns-pf (.getNamespacePrefix sreader i)]
                (assoc! tr (if (str/blank? ns-pf)
-                            :xmlns ns-pf)
+                            "xmlns" ns-pf)
                        (.getNamespaceURI ^XMLStreamReader sreader i))))
            (transient parent-hash)
            (range (.getNamespaceCount sreader)))))

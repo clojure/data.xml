@@ -141,11 +141,10 @@
 (defn xmlns-attr?
   "Is this qname an xmlns declaration?"
   [qn]
-  (let [uri (qname-uri qn)
-        local (qname-local qn)]
+  (let [uri (qname-uri qn)]
     (or (= xmlns-uri uri)
         (and (str/blank? uri)
-             (= "xmlns" local)))))
+             (= "xmlns" (qname-local qn))))))
 
 (defn separate-xmlns
   "Call cont with two args: attributes and xmlns attributes"
@@ -157,7 +156,7 @@
       (let [val (get attrs qn)]
         (if (xmlns-attr? qn)
           (recur attrs*
-                 (assoc! xmlns* qn val)
+                 (assoc! xmlns* (qname-local qn) val)
                  (next attrs'))
           (recur (assoc! attrs* qn val)
                  xmlns*
