@@ -11,6 +11,10 @@ data.xml has the following features:
 * Uses StAX internally
 * lazy - should allow parsing and emitting of large XML documents
 
+## API Reference
+
+Generated API docs for data.xml are available [here](http://clojure.github.com/data.xml).
+
 ## Bugs
 
 Please report bugs using JIRA [here](http://dev.clojure.org/jira/browse/DXML).
@@ -193,8 +197,6 @@ But are ignored when read:
                     (element :bar {} "and another element")))))
 
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><bar>and another element</bar></foo>"
-
-Generated API docs for data.xml are available [here](http://clojure.github.com/data.xml).
 
 ## Namespace Support
 
