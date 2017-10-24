@@ -51,7 +51,7 @@
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojurescript</artifactId>
-      <version>1.9.908</version>
+      <version>1.9.946</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
