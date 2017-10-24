@@ -12,10 +12,24 @@
             [clojure.core :as core])
   (:refer-clojure :exclude [assoc! dissoc! transient persistent! get assoc]))
 
-(defn transient [{:keys [u->ps p->u]}]
-  (core/assoc! (core/transient {})
-               :p->u (core/transient p->u)
-               :u->ps (core/transient u->ps)))
+(def prefix-map :p->u)
+(def uri-map    :u->ps)
+
+;; TODO replace this with a deftype for memory savings
+(def EMPTY {:u->ps {name/xml-uri ["xml"]
+                    name/xmlns-uri ["xmlns"]}
+            :p->u {"xml" name/xml-uri
+                   "xmlns" name/xmlns-uri}})
+
+;; TODO implement valid? with internal consistency check
+
+(defn transient [pu]
+  (let [{:keys [u->ps p->u] :as pu*}
+        (or pu EMPTY)]
+    (assert (and u->ps p->u) (str "Not a pu-map " (pr-str pu*)))
+    (core/assoc! (core/transient {})
+                 :p->u (core/transient p->u)
+                 :u->ps (core/transient u->ps))))
 
 (defn persistent! [put]
   (core/persistent!
@@ -35,27 +49,24 @@
     (core/dissoc! u->ps uri)))
 
 (defn assoc! [{:as put :keys [p->u u->ps]} prefix uri]
-  (when (or (core/get #{"xml" "xmlns"} prefix)
-            (core/get #{name/xml-uri name/xmlns-uri} uri))
-    (throw (ex-info "Mapping for xml: and xmlns: prefixes are fixed by the standard"
-                    {:attempted-mapping {:prefix prefix
-                                         :uri uri}})))
-  (let [prev-uri (core/get p->u prefix)]
+  (name/legal-xmlns-binding! prefix uri)
+  (let [prefix* (str prefix)
+        prev-uri (core/get p->u prefix*)]
     (core/assoc! put
                  :p->u (if (str/blank? uri)
-                         (core/dissoc! p->u prefix)
-                         (core/assoc! p->u prefix uri))
+                         (core/dissoc! p->u prefix*)
+                         (core/assoc! p->u prefix* uri))
                  :u->ps (if (str/blank? uri)
-                          (dissoc-uri! u->ps prev-uri prefix)
+                          (dissoc-uri! u->ps prev-uri prefix*)
                           (cond
                             (= uri prev-uri) u->ps
-                            (not prev-uri) (assoc-uri! u->ps uri prefix)
+                            (not prev-uri) (assoc-uri! u->ps uri prefix*)
                             :else (-> u->ps
-                                      (dissoc-uri! prev-uri prefix)
-                                      (assoc-uri! uri prefix)))))))
+                                      (dissoc-uri! prev-uri prefix*)
+                                      (assoc-uri! uri prefix*)))))))
 
 (defn get [{:keys [p->u]} prefix]
-  (core/get p->u prefix))
+  (core/get p->u (str prefix)))
 
 (defn get-prefixes [{:keys [u->ps]} uri]
   (core/get u->ps uri))
@@ -65,13 +76,6 @@
 (defn assoc [put & {:as kvs}]
   (persistent!
    (reduce-kv assoc! (transient put) kvs)))
-
-
-;; TODO replace this with a deftype for memory savings
-(def EMPTY {:u->ps {name/xml-uri ["xml"]
-                    name/xmlns-uri ["xmlns"]}
-            :p->u {"xml" name/xml-uri
-                   "xmlns" name/xmlns-uri}})
 
 (defn reduce-diff
   "A high-performance diffing operation, that reduces f over changed and removed prefixes"
@@ -87,3 +91,13 @@
                          s (f s p u)))
                      s pu)]
     s))
+
+(defn merge-prefix-map
+  "Merge a prefix map into pu-map"
+  [pu pm]
+  (persistent! (reduce-kv assoc! (transient pu) pm)))
+
+(defn merge
+  "Merge two pu-maps, left to right"
+  [pu {:keys [:p->u]}]
+  (merge-prefix-map pu p->u))

@@ -8,12 +8,14 @@
 
 (ns ^{:doc "Tests for emit to print XML text."
       :author "Chris Houser"}
-  clojure.data.xml.test-emit
+    clojure.data.xml.test-emit
   (:require
    [clojure.test :refer :all]
    [clojure.data.xml :refer :all]
    [clojure.data.xml.test-utils :refer [test-stream lazy-parse*]]
-   [clojure.data.xml.impl :refer [compile-if]])
+   [clojure.data.xml.impl :refer [compile-if]]
+   [clojure.data.xml.name :as name]
+   [clojure.data.xml.pu-map :as pu])
   (:import (javax.xml.namespace QName)))
 
 (def deep-tree
@@ -219,11 +221,23 @@
                     (element (as-qname "{NS2}bar")))]
     (is (= (parse-str (emit-str el)) el))))
 
+(alias-uri :xml name/xml-uri)
+
 (deftest test-default-xmlns
   (let [nss-meta (comp :clojure.data.xml/nss meta)]
-    (is (= {"xmlns" "NS"}
+    (is (= (pu/merge-prefix-map nil {"" "NS"})
            (nss-meta (parse-str "<foo xmlns=\"NS\"/>"))
-           (nss-meta (parse-str (emit-str (parse-str "<foo xmlns=\"NS\"/>"))))))))
+           (nss-meta (parse-str (emit-str (parse-str "<foo xmlns=\"NS\"/>")))))))
+  (is (thrown? Exception (emit-str {:tag :el :attrs {(name/qname name/xmlns-uri "xml")   "foo"}})))
+  (is (thrown? Exception (emit-str {:tag :el :attrs {(name/qname name/xmlns-uri "xmlns") "foo"}})))
+  (is (thrown? Exception (emit-str {:tag :el :attrs {:xmlns/xml   "foo"}})))
+  (is (thrown? Exception (emit-str {:tag :el :attrs {:xmlns/xmlns "foo"}})))
+  (is (thrown? Exception (parse-str "<element xmlns:xmlns=\"http://www.w3.org/2000/xmlns/\" />"))
+      "TODO: find out if this is standard conforming, or a bug in StAX")
+  (is (= (emit-str {:tag :el :attrs {:xmlns/xmlns "http://www.w3.org/2000/xmlns/"}})
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><el/>"))
+  (is (= (emit-str {:tag :el :attrs {:xmlns/xml "http://www.w3.org/XML/1998/namespace" ::xml/lang "en"}})
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><el xml:lang=\"en\"/>")))
 
 (deftest test-empty-elements
   (is (= (emit-str {:tag :a :content []}) "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a/>"))
@@ -233,5 +247,12 @@
   (is (= (emit-str (with-meta (parse-str "<foo:element xmlns:foo=\"FOO:\"/>")
                      nil))
          "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a:element xmlns:a=\"FOO:\"/>"))
-  (is (= (emit-str (parse-str "<foo:element xmlns:foo=\"FOO:\"/>"))
-         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo:element xmlns:foo=\"FOO:\"/>")))
+  (is (= (emit-str (parse-str "<foo:element xmlns:xml=\"http://www.w3.org/XML/1998/namespace\" xmlns:foo=\"FOO:\"/>"))
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo:element xmlns:foo=\"FOO:\"/>"))
+  (is (= (emit-str (parse-str "<element xmlns=\"FOO:\"/>"))
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><element xmlns=\"FOO:\"/>"))
+  ; builtins
+  (is (= (emit-str (parse-str "<element xmlns:xml=\"http://www.w3.org/XML/1998/namespace\" xml:foo=\"FOO!\"/>"))
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><element xml:foo=\"FOO!\"/>"))
+  (is (thrown? Exception (parse-str "<xmlns:el/>"))
+      "TODO: find out if this is standard conforming, or a bug in StAX"))

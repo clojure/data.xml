@@ -80,19 +80,15 @@
           (recur (gen-prefix))
           prefix))))
 
-(defn- compute-pu [pu ns-attrs attr-uris tag-uri tag-local]
+(defn- compute-pu [pu elem-pu attr-uris tag-uri tag-local]
   (let [tpu (pu/transient pu)
-        ;; add xmlns, if exists
-        tpu (if-let [uri (get ns-attrs "xmlns")]
-              (pu/assoc! tpu "" uri)
-              tpu)
         ;; add namespaces from current environment
         tpu (reduce-kv (fn [tpu ns-attr uri]
-                         (assert (string? ns-attr) (pr-str ns-attr))
+                         (assert (string? ns-attr) (pr-str ns-attr uri))
                          (pu/assoc! tpu
                                     (compute-prefix tpu uri ns-attr)
                                     uri))
-                       tpu ns-attrs)
+                       tpu (pu/prefix-map elem-pu))
         ;; add implicit namespaces used by tag, attrs
         tpu (reduce (fn [tpu uri]
                       (pu/assoc! tpu (compute-prefix tpu uri nil) uri))

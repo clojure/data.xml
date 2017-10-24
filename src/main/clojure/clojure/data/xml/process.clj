@@ -3,7 +3,8 @@
             [clojure.data.xml.name :as name :refer [gen-prefix *gen-prefix-counter* qname-uri]]
             [clojure.data.xml.node :refer [element] :as node]
             [clojure.data.xml.tree :refer [flatten-elements] :as tree]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [clojure.data.xml.pu-map :as pu]))
 
 (defn- reduce-tree
   "Optimized reducer for in-order traversal of nodes, with reduce-like accumulator"
@@ -26,7 +27,8 @@
     (if (map? el)
       (reduce-kv
        (fn [s attr _] (xf s (qname-uri attr)))
-       (xf s (qname-uri (:tag el))) (:attrs el))
+       (xf s (qname-uri (:tag el)))
+       (:attrs el))
       s)))
 
 (defn find-xmlns
@@ -42,11 +44,8 @@
   (with-meta
     xml {:clojure.data.xml/nss
          (binding [*gen-prefix-counter* 0]
-           (persistent!
-            (reduce (fn [tm uri]
-                      (if (str/blank? uri)
-                        tm
-                        (assoc! tm (keyword "xmlns" (gen-prefix)) uri)))
-                    (transient {}) (find-xmlns xml))))}))
-
-
+           (-> (fn [tm uri]
+                 (pu/assoc! tm (gen-prefix) uri))
+               qname-uri-xf
+               (reduce-tree (pu/transient pu/EMPTY) xml)
+               pu/persistent!))}))

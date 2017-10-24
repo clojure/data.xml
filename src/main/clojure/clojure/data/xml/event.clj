@@ -11,9 +11,10 @@
   {:author "Herwig Hochleitner"}
   (:require [clojure.data.xml.protocols :refer
              [EventGeneration gen-event next-events xml-str]]
-            [clojure.data.xml.name :refer [merge-nss separate-xmlns]]
+            [clojure.data.xml.name :refer [separate-xmlns]]
             [clojure.data.xml.node :refer [element* cdata xml-comment]]
-            [clojure.data.xml.impl :refer [extend-protocol-fns compile-if]])
+            [clojure.data.xml.impl :refer [extend-protocol-fns compile-if]]
+            [clojure.data.xml.pu-map :as pu])
   (:import (clojure.data.xml.node Element CData Comment)
            (clojure.lang Sequential IPersistentMap Keyword)
            (java.net URI URL)
@@ -21,13 +22,13 @@
            (javax.xml.namespace QName)))
 
 (definline element-nss* [element]
-  `(get (meta ~element) :clojure.data.xml/nss {}))
+  `(get (meta ~element) :clojure.data.xml/nss pu/EMPTY))
 
 (defn element-nss
   "Get xmlns environment from element"
   [{:keys [attrs] :as element}]
   (separate-xmlns
-   attrs #(merge-nss (element-nss* element) %2)))
+   attrs #(pu/merge-prefix-map (element-nss* element) %2)))
 
 ; Represents a parse event.
 (defrecord StartElementEvent [tag attrs nss location-info])
@@ -50,7 +51,7 @@
                     (separate-xmlns
                      attrs #((if (seq content)
                                ->StartElementEvent ->EmptyElementEvent)
-                             tag %1 (merge-nss (element-nss* element) %2) nil)))
+                             tag %1 (pu/merge-prefix-map (element-nss* element) %2) nil)))
        :next-events (fn elem-next-events [{:keys [tag content]} next-items]
                       (if (seq content)
                         (list* content end-element-event next-items)

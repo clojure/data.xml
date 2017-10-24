@@ -33,6 +33,17 @@
        name/xml-uri ["xml"]
        name/xmlns-uri ["xmlns"]]
 
+      [[nil "FIN:"]]
+      ["wrong-prefix" nil
+       "xml" name/xml-uri
+       "xmlns" name/xmlns-uri
+       "" "FIN:"
+       nil "FIN:"]
+      ["wrong-uri" nil
+       "FIN:" [""]
+       name/xml-uri ["xml"]
+       name/xmlns-uri ["xmlns"]]
+
       [["p" "U:"
         "q" "V:"]]
       ["wrong-prefix" nil
@@ -57,7 +68,26 @@
        "q" nil
        "r" "U:"]
       ["U:" ["r" "t"]
-       "V:" ["s"]]))
+       "V:" ["s"]]
+
+      [["xml" name/xml-uri
+        "xmlns" name/xmlns-uri]]
+      ["xml" name/xml-uri
+       "xmlns" name/xmlns-uri]
+      [name/xml-uri ["xml"]
+       name/xmlns-uri ["xmlns"]]))
+
+(deftest assoc-nil
+  (let [pu (pu/assoc nil nil "NIL")]
+    (is (= "NIL" (pu/get pu nil) (pu/get pu "")))
+    (is (= "" (pu/get-prefix pu "NIL")))))
+
+(deftest direct-access
+  (is (= {"" "NIL" "a" "A"
+          "xml" name/xml-uri
+          "xmlns" name/xmlns-uri}
+         (pu/prefix-map
+          (pu/assoc nil "a" "A" nil "NIL")))))
 
 (deftest diffing
   (is (= {"c" "d"}

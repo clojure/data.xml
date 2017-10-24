@@ -127,17 +127,6 @@
            (alias al xn)
            (recur rst))))))
 
-(defn merge-nss
-  "Merge two attribute sets, deleting assignments of empty-string"
-  [nss1 nss2]
-  (persistent!
-   (reduce-kv (fn [a k v]
-                (if (str/blank? v)
-                  (dissoc! a k)
-                  (assoc! a k v)))
-              (transient nss1)
-              nss2)))
-
 (defn xmlns-attr?
   "Is this qname an xmlns declaration?"
   [qn]
@@ -145,6 +134,26 @@
     (or (= xmlns-uri uri)
         (and (str/blank? uri)
              (= "xmlns" (qname-local qn))))))
+
+(defn xmlns-attr-prefix [qn]
+  (let [uri (qname-uri qn)]
+    (if (str/blank? uri)
+      (do (when-not (= "xmlns" (qname-local qn))
+            (throw (ex-info "Not an xmlns-attr name" {:qname qn})))
+          "")
+      (do (when-not (= xmlns-uri uri)
+            (throw (ex-info "Not an xmlns-attr name" {:qname qn})))
+          (qname-local qn)))))
+
+(defn legal-xmlns-binding! [prefix uri]
+  (when (not= (= "xml" prefix)
+              (= xml-uri uri))
+    (throw (ex-info (str "The xmlns binding for prefix `xml` is fixed to `" xml-uri "`")
+                    {:attempted-mapping {:prefix prefix :uri uri}})))
+  (when (not= (= "xmlns" prefix)
+              (= xmlns-uri uri))
+    (throw (ex-info (str "The xmlns binding for prefix `xmlns` is fixed to `" xmlns-uri "`")
+                    {:attempted-mapping {:prefix prefix :uri uri}}))))
 
 (defn separate-xmlns
   "Call cont with two args: attributes and xmlns attributes"
@@ -155,9 +164,11 @@
     (if (seq attrs')
       (let [val (get attrs qn)]
         (if (xmlns-attr? qn)
-          (recur attrs*
-                 (assoc! xmlns* (qname-local qn) val)
-                 (next attrs'))
+          (let [prefix (xmlns-attr-prefix qn)]
+            (legal-xmlns-binding! prefix val)
+            (recur attrs*
+                   (assoc! xmlns* prefix val)
+                   (next attrs')))
           (recur (assoc! attrs* qn val)
                  xmlns*
                  (next attrs'))))
