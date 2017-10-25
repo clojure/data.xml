@@ -153,9 +153,11 @@
 (deftest test-indent-str-with-doctype
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
         doctype "<!DOCTYPE html>"
-        expect (str doctype "\n<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
-        result (indent-str nested-xml :doctype doctype)]
-    (is (= expect (subs result (.indexOf result doctype))))))
+        expect "\n<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n"
+        result (indent-str nested-xml :doctype doctype)
+        offset-dt (.indexOf result "<!DOCTYPE")
+        offset-res (inc (.indexOf result ">" offset-dt))]
+    (is (= expect (subs result offset-res)))))
 
 (defmacro are-serializable [group-description extra-attrs & {:as data-strings}]
   `(testing ~group-description
