@@ -15,12 +15,17 @@
   (try
     (require 'clojure.data.xml.cljs-testsuite)
     (eval '(clojure.data.xml.cljs-testsuite/run-testsuite! "target/cljs-test-nashorn"))
+    (when (not (neg? (compare (System/getProperty "java.runtime.version")
+                              "1.9")))
+      (println "CELEBRATION: CLJS-2377 has been fixed. Hooray! Please add jdk >= 1.9 back to the test matrix"))
     (catch Exception e
       (if (or (neg? (compare ((juxt :major :minor) *clojure-version*)
                              [1 8]))
               (neg? (compare (System/getProperty "java.runtime.version")
-                             "1.8")))
-        (println "WARN: ignoring cljs testsuite error on clojure < 1.8 or jdk < 1.8"
+                             "1.8"))
+              (not (neg? (compare (System/getProperty "java.runtime.version")
+                                  "1.9"))))
+        (println "WARN: ignoring cljs testsuite error on clojure < 1.8 or jdk < 1.8 also on jdk >= 1.9, see CLJS-2377"
                  *clojure-version* (System/getProperty "java.runtime.name")
                  (System/getProperty "java.vm.version") (System/getProperty "java.runtime.version")
                  \newline (str e))
