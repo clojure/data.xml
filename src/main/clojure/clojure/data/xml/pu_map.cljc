@@ -10,7 +10,7 @@
   (:require [clojure.data.xml.name :as name]
             [clojure.string :as str]
             [clojure.core :as core])
-  (:refer-clojure :exclude [assoc! dissoc! transient persistent! get assoc]))
+  (:refer-clojure :exclude [assoc! dissoc! transient persistent! get assoc merge]))
 
 (def prefix-map :p->u)
 (def uri-map    :u->ps)
