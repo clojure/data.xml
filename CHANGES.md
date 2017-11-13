@@ -1,3 +1,7 @@
+From 0.2.0-alpha3 to 0.2.0-alpha4
+- Fix error check for builtin prefixes DXML-49
+- Remove reflection cases DXML-46
+
 From 0.2.0-alpha2 to 0.2.0-alpha3
 - Minimum requirement is now clojure 1.7.0
 - Print newline after preamble when pretty-printing (DXML-35)
