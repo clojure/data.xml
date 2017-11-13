@@ -1,4 +1,4 @@
-From 0.2.0-alpha3 to 0.2.0-alpha4
+From 0.2.0-alpha3 to 0.2.0-alpha5
 - Fix error check for builtin prefixes DXML-49
 - Remove reflection cases DXML-46
 
