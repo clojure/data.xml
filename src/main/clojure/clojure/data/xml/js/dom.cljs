@@ -173,7 +173,7 @@
          :tag (dom-element-tag el)
          :attrs (.-attributes el)
          :content (.-childNodes el)
-         (throw "XML tag has no key" {:key k :el el})))
+         (throw (ex-info "XML tag has no key" {:key k :el el}))))
       ([el k nf]
        #_(println "Element" k "=>" (case k
                                      :tag (dom-element-tag el)

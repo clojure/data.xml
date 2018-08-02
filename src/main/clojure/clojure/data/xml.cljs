@@ -26,7 +26,7 @@
   ;;  see http://stackoverflow.com/questions/11563554/how-do-i-detect-xml-parsing-errors-when-using-javascripts-domparser-in-a-cross
   [s & {:keys [content-type on-error raw]
         :or {content-type "text/xml"
-             on-error #(throw "XML parser error" {:doc % :input s})}}]
+             on-error #(throw (ex-info "XML parser error" {:doc % :input s}))}}]
   (let [dom (. (js/DOMParser.)
                (parseFromString s content-type))
         doc (.-documentElement dom)]
