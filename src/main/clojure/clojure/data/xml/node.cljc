@@ -151,13 +151,13 @@
    [IPrintWithWriter
     (-pr-writer [this writer opts]
                 (-write writer "#xml/element{:tag ")
-                (-pr-writer tag writer opts)
+                (pr-writer tag writer opts)
                 (when-not (empty? attrs)
                   (-write writer ", :attrs ")
-                  (-pr-writer attrs writer opts))
+                  (pr-writer attrs writer opts))
                 (when-not (empty? content)
                   (-write writer ", :content ")
-                  (pr-sequential-writer writer -pr-writer "[" " " "]" opts content))
+                  (pr-sequential-writer writer pr-writer "[" " " "]" opts content))
                 (-write writer "}"))]))
 
 ;; clj printing is a multimethod
