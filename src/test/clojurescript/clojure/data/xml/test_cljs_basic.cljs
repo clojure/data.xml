@@ -19,3 +19,10 @@
                       (is (= dxml (xml/parse-str (xml/emit-str dxml)))))
     (xml/element :foo) "<foo/>"
     (xml/element :xmlns.DAV%3A/foo) "<foo xmlns=\"DAV:\"/>"))
+
+(deftest printing
+  (are [node ps] (is (= ps (pr-str node)))
+    (xml/element :foo) "#xml/element{:tag :foo}"
+    (xml/element :foo {:a "2"}) "#xml/element{:tag :foo, :attrs {:a \"2\"}}"
+    (xml/element :foo {} (xml/element :bar)) "#xml/element{:tag :foo, :content [#xml/element{:tag :bar}]}"
+    (xml/element :foo {} "bar") "#xml/element{:tag :foo, :content [\"bar\"]}"))
