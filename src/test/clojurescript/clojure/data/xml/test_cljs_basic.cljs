@@ -18,7 +18,9 @@
   (are [dxml xml] (do (is (= dxml (xml/parse-str xml)))
                       (is (= dxml (xml/parse-str (xml/emit-str dxml)))))
     (xml/element :foo) "<foo/>"
-    (xml/element :xmlns.DAV%3A/foo) "<foo xmlns=\"DAV:\"/>"))
+    (xml/element :xmlns.DAV%3A/foo) "<foo xmlns=\"DAV:\"/>"
+    (xml/element :foo {} (xml/cdata "<foo")) "<foo><![CDATA[<foo]]></foo>"
+    (xml/element :foo {} (xml/xml-comment " bar> ")) "<foo><!-- bar> --></foo>"))
 
 (deftest printing
   (are [node ps] (is (= ps (pr-str node)))

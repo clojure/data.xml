@@ -79,6 +79,8 @@
 (def NamedNodeMap (type (.-attributes (element :e))))
 (def NodeList (type (node-list [])))
 (def Attr (type (aget (.-attributes (element :e {:a "1"})) 0)))
+(def CData (type (cdata "")))
+(def Comment (type (xml-comment "")))
 
 ;; ## Coercions
 
@@ -89,7 +91,11 @@
   [el]
   (cond
     (string? el) (text-node el)
+    (instance? node/CData el) (cdata (:content el))
+    (instance? node/Comment el) (xml-comment (:content el))
     (instance? Element el) el
+    (instance? CData el) el
+    (instance? Comment el) el
     ;; stupid xmldom, (some? (.-item el))
     #_(instance? NodeList el)
     (some? (.-item el)) el
@@ -141,6 +147,10 @@
   "Coerce xml elements to element maps / content vectors"
   [el]
   (cond
+    (instance? Comment el)
+    (node/xml-comment (.-data el))
+    (instance? CData el)
+    (node/cdata (.-data el))
     (instance? Text el)
     (.-nodeValue el)
     (instance? Element el)
