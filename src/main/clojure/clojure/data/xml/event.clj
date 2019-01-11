@@ -142,21 +142,28 @@
 
 ;; Node Generation for events
 
-(defn event-element [event contents]
-  (when (or (instance? StartElementEvent event)
-            (instance? EmptyElementEvent event))
-    (element* (:tag event) (:attrs event) contents
-              (if-let [loc (:location-info event)]
-                {:clojure.data.xml/location-info loc
-                 :clojure.data.xml/nss (:nss event)}
-                {:clojure.data.xml/nss (:nss event)}))))
+(defn event-element
+  ([event contents]
+   (when (or (instance? StartElementEvent event)
+             (instance? EmptyElementEvent event))
+     (event-element (:tag event)
+                    (:attrs event)
+                    (:nss event)
+                    (:location-info event)
+                    contents)))
+  ([tag attrs nss location-info contents]
+   (element* tag attrs contents
+             (if location-info
+               {:clojure.data.xml/location-info location-info
+                :clojure.data.xml/nss nss}
+               {:clojure.data.xml/nss nss}))))
 
 (defn event-node [event]
   (cond
-    (instance? CharsEvent event) (:str event)
-    (instance? CDataEvent event) (cdata (:str event))
-    (instance? CommentEvent event) (xml-comment (:str event))
+    (instance? CharsEvent event) (:string event)
+    (instance? CDataEvent event) (cdata (:string event))
+    (instance? CommentEvent event) (xml-comment (:string event))
     :else (throw (ex-info "Illegal argument, not an event object" {:event event}))))
 
 (defn event-exit? [event]
-  (identical? end-element-event event))
+  (instance? EndElementEvent event))

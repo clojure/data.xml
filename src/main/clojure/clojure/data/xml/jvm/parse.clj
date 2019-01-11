@@ -17,7 +17,9 @@
             [clojure.data.xml.name :refer
              [qname]]
             [clojure.data.xml.pu-map :as pu]
-            [clojure.data.xml.core :as core])
+            [clojure.data.xml.core :as core]
+            [clojure.data.xml.push-handler :as push-handler]
+            [clojure.data.xml.tree :as tree])
   (:import
    (java.io InputStream Reader)
    (javax.xml.stream
@@ -73,7 +75,8 @@
   (loop [state init
          ns-envs ns-envs]
     (if (reduced? state)
-      (p/end-event push-handler @state)
+      {:state @state
+       :continue #(push push-handler % sreader opts ns-envs)}
       (let [location (when location-info
                        (location-hash sreader))]
         (static-case
@@ -123,60 +126,36 @@
               state)
             ns-envs))
          XMLStreamConstants/END_DOCUMENT
-         (p/end-event push-handler state)
+         {:state (p/end-event push-handler state)}
          ;; Consume and ignore comments, spaces, processing instructions etc
          (recur state ns-envs))))))
 
-; Note, sreader is mutable and mutated here in pull-seq, but it's
-; protected by a lazy-seq so it's thread-safe.
+(defn run-push [sreader opts ns-envs]
+  (first
+   (:state
+    (push tree/push-handler (list (transient []))
+          sreader opts ns-envs))))
+
 (defn pull-seq
-  "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to
-   be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete."
-  [^XMLStreamReader sreader {:keys [include-node? location-info skip-whitespace] :as opts} ns-envs]
+  "Creates a seq of events."
+  [sreader opts ns-envs]
   (lazy-seq
-   (loop []
-     (let [location (when location-info
-                      (location-hash sreader))]
-       (static-case
-         (.next sreader)
-         XMLStreamConstants/START_ELEMENT
-         (if (include-node? :element)
-           (let [ns-env (nss-hash sreader (or (first ns-envs) pu/EMPTY))
-                 tag (qname (.getNamespaceURI sreader)
-                            (.getLocalName sreader)
-                            (.getPrefix sreader))
-                 attrs (attr-hash sreader)
-                 next-events (pull-seq sreader opts (cons ns-env ns-envs))]
-             ;; Can't emit EmptyElementEvent here, since
-             ;; for seq-tree node and exit? are mutually exclusive
-             (cons (->StartElementEvent tag attrs ns-env location)
-                   next-events))
-           (recur))
-         XMLStreamConstants/END_ELEMENT
-         (if (include-node? :element)
-           (do (assert (seq ns-envs) "Balanced end")
-               (cons (->EndElementEvent)
-                     (pull-seq sreader opts (rest ns-envs))))
-           (recur))
-         XMLStreamConstants/CHARACTERS
-         (if-let [text (and (include-node? :characters)
-                            (not (and skip-whitespace
-                                      (.isWhiteSpace sreader)))
-                            (.getText sreader))]
-           (if (zero? (.length ^CharSequence text))
-             (recur)
-             (cons (->CharsEvent text)
-                   (pull-seq sreader opts ns-envs)))
-           (recur))
-         XMLStreamConstants/COMMENT
-         (if (include-node? :comment)
-           (cons (->CommentEvent (.getText sreader))
-                 (pull-seq sreader opts ns-envs))
-           (recur))
-         XMLStreamConstants/END_DOCUMENT
-         nil
-         ;; Consume and ignore comments, spaces, processing instructions etc
-         (recur))))))
+   ((fn C [{:keys [state continue]}]
+      (chunk-cons
+       state
+       (lazy-seq
+        (when continue
+          (C (continue (chunk-buffer 32)))))))
+    (push (push-handler/event-xf-ph
+           (completing
+            (fn [b e]
+              (chunk-append b e)
+              (if (> 32 (count b))
+                b
+                (reduced (chunk b))))
+            chunk))
+          (chunk-buffer 32)
+          sreader opts ns-envs))))
 
 (defn- make-input-factory ^XMLInputFactory [props]
   (let [fac (XMLInputFactory/newInstance)]

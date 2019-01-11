@@ -7,10 +7,11 @@
 ;   You must not remove this notice, or any other, from this software.
 
 (ns clojure.data.xml.tree
-  (:require [clojure.data.xml.protocols :refer
+  (:require [clojure.data.xml.protocols :as p :refer
              [gen-event next-events]]
             [clojure.data.xml.event :refer
-             [event-element event-node event-exit?]]))
+             [event-element event-node event-exit?]]
+            [clojure.data.xml.push-handler :as push-handler]))
 
 (defn seq-tree
   "Takes a seq of events that logically represents
@@ -47,6 +48,41 @@
                      (lazy-seq (rest subtree))))
              (cons (cons (node event) (lazy-seq (first tree)))
                    (lazy-seq (rest tree))))))))))
+
+(defn- content! [[tc & state] e]
+  (cons (conj! tc e) state))
+
+(def push-handler
+  (reify p/PushHandler
+    (start-element-event [_ state tag attrs nss location-info]
+      (list* (transient [])
+             (fn
+               ([content] (event-element tag attrs nss location-info (persistent! content)))
+               ([content el] (conj! content el)))
+             state))
+    (end-element-event [_ [tc fc & state]]
+      (content! state (fc tc)))
+    (empty-element-event [_ state tag attrs nss location-info]
+      (content! state (event-element tag attrs nss location-info ())))
+    (chars-event [_ state string]
+      (content! state string))
+    (c-data-event [_ state string]
+      (content! state string))
+    (comment-event [_ state string]
+      (content! state string))
+    (q-name-event [_ state qname]
+      (content! state qname))
+    (end-event [_ [tc & state]]
+      (assert (empty? state))
+      (persistent! tc))
+    (error-event [_ state error]
+      (throw (ex-info "XML Error" {:error error :state state})))))
+
+(defn push-tree [coll]
+  (let [rf (push-handler/ph-event-xf push-handler)]
+    (first (rf (reduce rf
+                       (list (transient []))
+                       coll)))))
 
 ;; # Break circular dependency of emitter-parser common infrastructure
 

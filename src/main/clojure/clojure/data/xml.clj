@@ -10,7 +10,7 @@
   emit these as text."
       :author "Chris Houser"}
 
-  clojure.data.xml
+    clojure.data.xml
   
   (:require
    (clojure.data.xml
@@ -19,18 +19,19 @@
     [node :as node]
     [prxml :as prxml]
     [name :as name]
-    [event :as event])
+    [event :as event]
+    [push-handler :as push-handler])
    (clojure.data.xml.jvm
     [pprint :refer
      [indent-xml]]
     [parse :refer
-     [pull-seq string-source make-stream-reader]]
+     [pull-seq run-push string-source make-stream-reader]]
     [emit :refer
      [write-document string-writer]])
    
    [clojure.data.xml.tree :refer
-    [event-tree flatten-elements]]))
-
+    [event-tree flatten-elements]]
+   [clojure.data.xml.tree :as tree]))
 (export-api node/element* node/element node/cdata node/xml-comment node/element?
             prxml/sexp-as-element prxml/sexps-as-fragment event/element-nss
             name/alias-uri name/parse-qname name/qname-uri
@@ -72,14 +73,28 @@ for documentation on options:
    :support-dtd                    XMLInputFactory/SUPPORT_DTD}"
   {:arglists (list ['source parser-opts-arg])}
   [source opts]
-  (let [props* (merge {:include-node? #{:element :characters}
-                       :coalescing true
-                       :supporting-external-entities false
-                       :location-info true}
-                      opts)]
-    (pull-seq (make-stream-reader props* source)
-              props*
-              nil)))
+  (let [opts* (merge {:include-node? #{:element :characters}
+                      :coalescing true
+                      :supporting-external-entities false
+                      :location-info true}
+                     opts)]
+    (pull-seq (make-stream-reader opts* source)
+              opts* nil)))
+
+(-> (string-source "<f>c<d/>a<e>b</e><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e></f></f></f>")
+    (event-seq {})
+    (tree/push-tree))
+
+(run-push (make-stream-reader {:include-node? #{:element :characters}
+                               :coalescing true
+                               :supporting-external-entities false
+                               :location-info true}
+                              (string-source "<f>c<d/>a<e>b</e><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e></f><f>c<d/>a<e>b</e></f></f></f>"))
+          {:include-node? #{:element :characters}
+           :coalescing true
+           :supporting-external-entities false
+           :location-info true}
+          nil)
 
 (defn parse
   "Parses an XML input source into a a tree of Element records.
