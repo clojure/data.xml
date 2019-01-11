@@ -27,3 +27,17 @@
 
 (defprotocol AsXmlString
   (xml-str [node] "Serialize atribute value or content node"))
+
+(defprotocol PushHandler
+  (start-element-event [push-handler state tag attrs nss location-info])
+  (end-element-event [push-handler state tag])
+  (empty-element-event [push-handler state tag attrs nss location-info])
+  (chars-event [push-handler state string])
+  (c-data-event [push-handler state string])
+  (comment-event [push-handler state string])
+  (q-name-event [push-handler state qname])
+  (end-event [push-handler state])
+  (error-event [push-handler state error]))
+
+(defprotocol Event
+  (push-event [event push-handler state]))

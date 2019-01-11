@@ -9,8 +9,8 @@
 (ns clojure.data.xml.event
   "Data type for xml pull events"
   {:author "Herwig Hochleitner"}
-  (:require [clojure.data.xml.protocols :refer
-             [EventGeneration gen-event next-events xml-str]]
+  (:require [clojure.data.xml.protocols :as p :refer
+             [Event EventGeneration gen-event next-events xml-str]]
             [clojure.data.xml.name :refer [separate-xmlns]]
             [clojure.data.xml.node :refer [element* cdata xml-comment]]
             [clojure.data.xml.impl :refer [extend-protocol-fns compile-if]]
@@ -31,7 +31,10 @@
    attrs #(pu/merge-prefix-map (element-nss* element) %2)))
 
 ; Represents a parse event.
-(defrecord StartElementEvent [tag attrs nss location-info])
+(defrecord StartElementEvent [tag attrs nss location-info]
+  Event
+  (push-event [_ ph s]
+    (p/start-element-event ph s tag attrs nss location-info)))
 (defrecord EmptyElementEvent [tag attrs nss location-info])
 (defrecord CharsEvent [str])
 (defrecord CDataEvent [str])
