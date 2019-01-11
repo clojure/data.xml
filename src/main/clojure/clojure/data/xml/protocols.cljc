@@ -30,7 +30,7 @@
 
 (defprotocol PushHandler
   (start-element-event [push-handler state tag attrs nss location-info])
-  (end-element-event [push-handler state tag])
+  (end-element-event [push-handler state])
   (empty-element-event [push-handler state tag attrs nss location-info])
   (chars-event [push-handler state string])
   (c-data-event [push-handler state string])
@@ -40,4 +40,4 @@
   (error-event [push-handler state error]))
 
 (defprotocol Event
-  (push-event [event push-handler state]))
+  (push-events [event push-handler state]))

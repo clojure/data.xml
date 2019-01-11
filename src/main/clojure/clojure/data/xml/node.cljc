@@ -9,7 +9,10 @@
 (ns clojure.data.xml.node
   "Data types for xml nodes: Element, CData and Comment"
   {:author "Herwig Hochleitner"}
-  (:require [clojure.data.xml.name :refer [as-qname]])
+  (:require [clojure.data.xml.name :refer [separate-xmlns as-qname]]
+            [clojure.data.xml.protocols :as p]
+            [clojure.data.xml.pu-map :as pu]
+            [clojure.data.xml.core :as core])
   #?(:clj (:import (clojure.lang IHashEq IObj ILookup IKeywordLookup Counted
                                  Associative Seqable IPersistentMap
                                  APersistentMap RT MapEquivalence MapEntry)
@@ -39,8 +42,54 @@
        (set! fields (next fields))
        (MapEntry. f (get el f))))))
 
+'{nil {ICloneable {nil -clone}}
+  Iterable {IIterable {iterator -iterator}}
+  Object {Object {hashCode nil}
+          IEquiv {equals -equiv}}
+  IHashEq {IHash {hasheq -hash}}
+  IObj {IMeta {meta -meta}
+        IWithMeta {withMeta -with-meta}}
+  IPersistentMap {nil {equiv nil}
+                  ILookup {valAt -lookup}
+                  ICounted {count -count}
+                  ICollection {cons -conj}
+                  IAssociative {assoc -assoc}
+                  IMap {without -dissoc}
+                  ISeqable {seq -seq}
+                  IEmptyableCollection {empty -empty}}}
+
+(definline element-nss* [element]
+  `(get (meta ~element) :clojure.data.xml/nss pu/EMPTY))
+
+(defn element-nss
+  "Get xmlns environment from element"
+  [{:keys [attrs] :as element}]
+  (separate-xmlns
+   attrs #(pu/merge-prefix-map (element-nss* element) %2)))
+
+(defn push-content [content push-handler state]
+  (if (and (seq content)
+           (not (reduced? state)))
+    (reduce (fn [s n]
+              (core/wrap-reduced (p/push-events n push-handler s)))
+            state content)
+    state))
+
+(defn push-element [{:keys [tag attrs content] :as element} push-handler state]
+  (if (not (reduced? state))
+    (->> (separate-xmlns
+          attrs #((if (seq content)
+                    p/start-element-event p/empty-element-event)
+                  push-handler state
+                  tag %1 (pu/merge-prefix-map (element-nss* element) %2)
+                  (:clojure.data.xml/location-info (meta element))))
+         (push-content content push-handler))))
+
 (deftype Element [tag attrs content meta]
 
+  p/Event
+  (push-events [this ph s] (push-element this ph s))
+  
   ;; serializing/cloning, hashing, equality, iteration
 
   #?@

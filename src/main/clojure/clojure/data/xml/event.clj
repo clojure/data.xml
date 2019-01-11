@@ -12,9 +12,13 @@
   (:require [clojure.data.xml.protocols :as p :refer
              [Event EventGeneration gen-event next-events xml-str]]
             [clojure.data.xml.name :refer [separate-xmlns]]
-            [clojure.data.xml.node :refer [element* cdata xml-comment]]
+            [clojure.data.xml.node :as node :refer [element* cdata xml-comment]]
             [clojure.data.xml.impl :refer [extend-protocol-fns compile-if]]
-            [clojure.data.xml.pu-map :as pu])
+            [clojure.data.xml.pu-map :as pu]
+            [clojure.data.xml.core :refer [code-gen unwrap-reduced]]
+            [clojure.string :as str]
+            [clojure.set :as set]
+            [clojure.data.xml.core :as core])
   (:import (clojure.data.xml.node Element CData Comment)
            (clojure.lang Sequential IPersistentMap Keyword)
            (java.net URI URL)
@@ -30,21 +34,63 @@
   (separate-xmlns
    attrs #(pu/merge-prefix-map (element-nss* element) %2)))
 
-; Represents a parse event.
-(defrecord StartElementEvent [tag attrs nss location-info]
-  Event
-  (push-event [_ ph s]
-    (p/start-element-event ph s tag attrs nss location-info)))
-(defrecord EmptyElementEvent [tag attrs nss location-info])
-(defrecord CharsEvent [str])
-(defrecord CDataEvent [str])
-(defrecord CommentEvent [str])
-(defrecord QNameEvent [qn])
+(def push-methods
+  '((start-element-event tag attrs nss location-info)
+    (end-element-event)
+    (empty-element-event tag attrs nss location-info)
+    (chars-event string)
+    (c-data-event string)
+    (comment-event string)
+    (q-name-event qname)
+    (error-event error)))
 
-;; EndElementEvent doesn't have any data, so make it a singleton
-(deftype EndElementEvent [])
-(def end-element-event (EndElementEvent.))
-(defn ->EndElementEvent [] end-element-event)
+(def type-name
+  (core/kv-from-coll
+   (core/juxt-xf first
+                 #(-> % first str (str/split #"-")
+                      (->> (map str/capitalize))
+                      str/join symbol))
+   push-methods))
+
+(defn constructor-name [method]
+  (symbol "clojure.data.xml.event"
+          (str "->" (type-name method))))
+
+(defn protocol-name [method]
+  (symbol "clojure.data.xml.protocols"
+          (str method)))
+
+(code-gen
+ [_ push-events] [push-handler state]
+ `(do
+    ~@(eduction
+       (map (fn [[method & args]]
+              `(defrecord ~(type-name method) [~@args]
+                 Event
+                 (~push-events [~_ ~push-handler ~state]
+                  (~(protocol-name method) ~push-handler ~state ~@args)))))
+       push-methods)))
+
+(let [push-string (fn [string push-handler state]
+                    (p/chars-event push-handler state (xml-str string)))
+      push-qname (fn [qname push-handler state]
+                   (p/q-name-event push-handler state qname))]
+  (extend-protocol-fns
+   Event
+   (String Boolean Number (Class/forName "[B") Date URI URL nil)
+   {:push-events push-string}
+   (Keyword QName)
+   {:push-events push-qname}
+   IPersistentMap
+   {:push-events node/push-element}
+   Sequential
+   {:push-events node/push-content})
+  (compile-if
+   (Class/forName "java.time.Instant")
+   (extend java.time.Instant
+     Event
+     {:push-events push-string})
+   nil))
 
 ;; Event Generation for stuff to show up in generated xml
 

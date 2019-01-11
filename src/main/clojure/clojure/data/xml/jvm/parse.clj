@@ -8,6 +8,7 @@
 
 (ns clojure.data.xml.jvm.parse
   (:require [clojure.string :as str]
+            [clojure.data.xml.protocols :as p]
             [clojure.data.xml.event :refer
              [->StartElementEvent ->EmptyElementEvent ->EndElementEvent
               ->CharsEvent ->CDataEvent ->CommentEvent]]
@@ -15,7 +16,8 @@
              [static-case]]
             [clojure.data.xml.name :refer
              [qname]]
-            [clojure.data.xml.pu-map :as pu])
+            [clojure.data.xml.pu-map :as pu]
+            [clojure.data.xml.core :as core])
   (:import
    (java.io InputStream Reader)
    (javax.xml.stream
@@ -63,6 +65,67 @@
     {:character-offset (.getCharacterOffset location)
      :column-number (.getColumnNumber location)
      :line-number (.getLineNumber location)}))
+
+(defn push
+  "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to
+   be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete."
+  [push-handler init ^XMLStreamReader sreader {:keys [include-node? location-info skip-whitespace] :as opts} ns-envs]
+  (loop [state init
+         ns-envs ns-envs]
+    (if (reduced? state)
+      (p/end-event push-handler @state)
+      (let [location (when location-info
+                       (location-hash sreader))]
+        (static-case
+         (.next sreader)
+         XMLStreamConstants/START_ELEMENT
+         (if (include-node? :element)
+           (let [ns-env (nss-hash sreader (or (first ns-envs) pu/EMPTY))
+                 tag (qname (.getNamespaceURI sreader)
+                            (.getLocalName sreader)
+                            (.getPrefix sreader))
+                 attrs (attr-hash sreader)]
+             (recur
+              (p/start-element-event push-handler state tag attrs ns-env location)
+              (cons ns-env ns-envs)))
+           (recur state ns-envs))
+         XMLStreamConstants/END_ELEMENT
+         (if (include-node? :element)
+           (do (assert (seq ns-envs) "Balanced end")
+               (recur (p/end-element-event push-handler state)
+                      (next ns-envs)))
+           (recur state ns-envs))
+         (list XMLStreamConstants/CHARACTERS
+               XMLStreamConstants/SPACE)
+         (let [text (and (include-node? :characters)
+                         (not (and skip-whitespace
+                                   (.isWhiteSpace sreader)))
+                         (.getText sreader))]
+           (recur
+            (if (and text (pos? (.length ^CharSequence text)))
+              (p/chars-event push-handler state text)
+              state)
+            ns-envs))
+         XMLStreamConstants/COMMENT
+         (let [text (and (include-node? :comment)
+                         (.getText sreader))]
+           (recur
+            (if (and text (pos? (.length ^CharSequence text)))
+              (p/chars-event push-handler state text)
+              state)
+            ns-envs))
+         XMLStreamConstants/CDATA
+         (let [text (and (include-node? :cdata)
+                         (.getText sreader))]
+           (recur
+            (if (and text (pos? (.length ^CharSequence text)))
+              (p/c-data-event push-handler state text)
+              state)
+            ns-envs))
+         XMLStreamConstants/END_DOCUMENT
+         (p/end-event push-handler state)
+         ;; Consume and ignore comments, spaces, processing instructions etc
+         (recur state ns-envs))))))
 
 ; Note, sreader is mutable and mutated here in pull-seq, but it's
 ; protected by a lazy-seq so it's thread-safe.

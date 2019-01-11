@@ -12,7 +12,7 @@
   (:require (clojure.data.xml
              [name :refer [qname-uri qname-local separate-xmlns gen-prefix *gen-prefix-counter*]]
              [pu-map :as pu]
-             [protocols :refer [AsXmlString xml-str]]
+             [protocols :as p :refer [AsXmlString xml-str]]
              [impl :refer [extend-protocol-fns b64-encode compile-if]]
              event)
             [clojure.string :as str])
@@ -109,7 +109,7 @@
               tpu)]
     (pu/persistent! tpu)))
 
-(defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer prefix-uri-stack empty]
+(defn- emit-start-tag* [tag attrs nss ^XMLStreamWriter writer prefix-uri-stack empty]
   (let [uri   (qname-uri tag)
         local (qname-local tag)
         parent-pu (first prefix-uri-stack)
@@ -127,6 +127,9 @@
           (emit-ns-attrs writer parent-pu pu)
           (emit-attrs writer pu attrs)
           (cons pu prefix-uri-stack)))))
+
+(defn- emit-start-tag [{:keys [attrs nss tag]} ^XMLStreamWriter writer prefix-uri-stack empty]
+  (emit-start-tag* tag attrs nss writer prefix-uri-stack empty))
 
 (defn- emit-cdata [^String cdata-str ^XMLStreamWriter writer]
   (when-not (str/blank? cdata-str)
@@ -159,6 +162,26 @@
     (.writeCharacters writer ":")
     (.writeCharacters writer (qname-local qn))
     pu-stack))
+
+#_(defn push-handler [^XMLStreamWriter writer]
+  (reify PushHandler
+    (start-element-event [push-handler state tag attrs nss location-info]
+      (emit-start-tag* tag attrs nss writer state false))
+    (empty-element-event [push-handler state tag attrs nss location-info]
+      (emit-start-tag* tag attrs nss writer state true))
+    (end-element-event [push-handler state]
+      (.writeEndElement writer)
+      (next state))
+    (chars-event [push-handler state string]
+      (.writeCharacters ^XMLStreamWriter writer string)
+      state)
+    (c-data-event [push-handler state string]
+      (emit-cdata string writer)
+      state)
+    (comment-event [push-handler state string])
+    (q-name-event [push-handler state qname])
+    (end-event [push-handler state])
+    (error-event [push-handler state error])))
 
 (def ^:private ^ThreadLocal thread-local-utc-date-format
   ;; SimpleDateFormat is not thread-safe, so we use a ThreadLocal proxy for access.
