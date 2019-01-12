@@ -13,20 +13,17 @@
              [Event EventGeneration gen-event next-events xml-str]]
             [clojure.data.xml.name :refer [separate-xmlns]]
             [clojure.data.xml.node :as node :refer [element* cdata xml-comment]]
-            [clojure.data.xml.impl :refer [extend-protocol-fns compile-if]]
             [clojure.data.xml.pu-map :as pu]
             [clojure.data.xml.core :refer [code-gen unwrap-reduced]]
             [clojure.string :as str]
             [clojure.set :as set]
-            [clojure.data.xml.core :as core])
-  (:import (clojure.data.xml.node Element CData Comment)
-           (clojure.lang Sequential IPersistentMap Keyword)
-           (java.net URI URL)
-           (java.util Date)
-           (javax.xml.namespace QName)))
+            [clojure.data.xml.core :as core]
+            #?(:clj clojure.data.xml.jvm.event))
+  #?(:cljs (:require-macros clojure.data.xml.event)))
 
-(definline element-nss* [element]
-  `(get (meta ~element) :clojure.data.xml/nss pu/EMPTY))
+
+(defn element-nss* [element]
+  (get (meta element) :clojure.data.xml/nss pu/EMPTY))
 
 (defn element-nss
   "Get xmlns environment from element"
@@ -35,6 +32,7 @@
    attrs #(pu/merge-prefix-map (element-nss* element) %2)))
 
 (def push-methods
+  ;; TODO move to protocols
   '((start-element-event tag attrs nss location-info)
     (end-element-event)
     (empty-element-event tag attrs nss location-info)
@@ -45,6 +43,7 @@
     (error-event error)))
 
 (def type-name
+  ;; TODO move to protocols
   (core/kv-from-coll
    (core/juxt-xf first
                  #(-> % first str (str/split #"-")
@@ -53,10 +52,12 @@
    push-methods))
 
 (defn constructor-name [method]
+  ;; TODO move to protocols
   (symbol "clojure.data.xml.event"
           (str "->" (type-name method))))
 
 (defn protocol-name [method]
+  ;; TODO move to protocols
   (symbol "clojure.data.xml.protocols"
           (str method)))
 
@@ -70,75 +71,6 @@
                  (~push-events [~_ ~push-handler ~state]
                   (~(protocol-name method) ~push-handler ~state ~@args)))))
        push-methods)))
-
-(let [push-string (fn [string push-handler state]
-                    (p/chars-event push-handler state (xml-str string)))
-      push-qname (fn [qname push-handler state]
-                   (p/q-name-event push-handler state qname))]
-  (extend-protocol-fns
-   Event
-   (String Boolean Number (Class/forName "[B") Date URI URL nil)
-   {:push-events push-string}
-   (Keyword QName)
-   {:push-events push-qname}
-   IPersistentMap
-   {:push-events node/push-element}
-   Sequential
-   {:push-events node/push-content})
-  (compile-if
-   (Class/forName "java.time.Instant")
-   (extend java.time.Instant
-     Event
-     {:push-events push-string})
-   nil))
-
-;; Event Generation for stuff to show up in generated xml
-
-(let [second-arg #(do %2)
-      elem-event-generation
-      {:gen-event (fn elem-gen-event [{:keys [tag attrs content] :as element}]
-                    (separate-xmlns
-                     attrs #((if (seq content)
-                               ->StartElementEvent ->EmptyElementEvent)
-                             tag %1 (pu/merge-prefix-map (element-nss* element) %2) nil)))
-       :next-events (fn elem-next-events [{:keys [tag content]} next-items]
-                      (if (seq content)
-                        (list* content end-element-event next-items)
-                        next-items))}
-      string-event-generation {:gen-event (comp ->CharsEvent #'xml-str)
-                               :next-events second-arg}
-      qname-event-generation {:gen-event ->QNameEvent
-                              :next-events second-arg}]
-  (extend-protocol-fns
-   EventGeneration
-   (StartElementEvent EmptyElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent)
-   {:gen-event identity
-    :next-events second-arg}
-   (String Boolean Number (Class/forName "[B") Date URI URL nil)
-   string-event-generation
-   (Keyword QName) qname-event-generation
-   CData
-   {:gen-event (comp ->CDataEvent :content)
-    :next-events second-arg}
-   Comment
-   {:gen-event (comp ->CommentEvent :content)
-    :next-events second-arg}
-   (IPersistentMap Element) elem-event-generation)
-  (compile-if
-   (Class/forName "java.time.Instant")
-   (extend java.time.Instant
-     EventGeneration
-     string-event-generation)
-   nil))
-
-(extend-protocol EventGeneration
-  Sequential
-  (gen-event   [coll]
-    (gen-event (first coll)))
-  (next-events [coll next-items]
-    (if-let [r (seq (rest coll))]
-      (cons (next-events (first coll) r) next-items)
-      (next-events (first coll) next-items))))
 
 ;; Node Generation for events
 
