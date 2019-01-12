@@ -19,7 +19,8 @@
             [clojure.data.xml.pu-map :as pu]
             [clojure.data.xml.core :as core]
             [clojure.data.xml.push-handler :as push-handler]
-            [clojure.data.xml.tree :as tree])
+            [clojure.data.xml.tree :as tree]
+            [clojure.java.io :as io])
   (:import
    (java.io InputStream Reader)
    (javax.xml.stream
@@ -130,11 +131,14 @@
          ;; Consume and ignore comments, spaces, processing instructions etc
          (recur state ns-envs))))))
 
-(defn run-push [sreader opts ns-envs]
+(defn run-push* [ph sreader opts ns-envs]
   (first
    (:state
-    (push tree/push-handler (list (transient []))
+    (push ph (list (transient []))
           sreader opts ns-envs))))
+
+(defn run-push [sreader opts ns-envs]
+  (run-push* tree/push-handler opts ns-envs))
 
 (defn pull-seq
   "Creates a seq of events."

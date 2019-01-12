@@ -4,6 +4,7 @@
 #?
 (:clj
  (defmacro code-gen [plainsyms gensyms expr]
+   (clojure.core/require (clojure.core/ns-name clojure.core/*ns*))
    (eval `(let ~(-> []
                     (into
                      (mapcat (juxt identity #(list 'quote %)))

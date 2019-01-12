@@ -12,7 +12,7 @@
                                         core/split
                                         (core/map-vals (comp gensym str))
                                         event/push-methods)]
-   `(defn ~'ph-wrapper [~overrides]
+   `(defn ~'ph-wrapper [& {:as ~overrides}]
       (fn [~ph]
         (let [~@(eduction
                  (map first)

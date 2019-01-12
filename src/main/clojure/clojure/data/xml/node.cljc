@@ -58,8 +58,8 @@
                   ISeqable {seq -seq}
                   IEmptyableCollection {empty -empty}}}
 
-(definline element-nss* [element]
-  `(get (meta ~element) :clojure.data.xml/nss pu/EMPTY))
+(defn element-nss* [element]
+  (get (meta element) :clojure.data.xml/nss pu/EMPTY))
 
 (defn element-nss
   "Get xmlns environment from element"

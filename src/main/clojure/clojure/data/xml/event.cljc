@@ -17,8 +17,7 @@
             [clojure.data.xml.core :refer [code-gen unwrap-reduced]]
             [clojure.string :as str]
             [clojure.set :as set]
-            [clojure.data.xml.core :as core]
-            #?(:clj clojure.data.xml.jvm.event))
+            [clojure.data.xml.core :as core])
   #?(:cljs (:require-macros clojure.data.xml.event)))
 
 
@@ -40,7 +39,8 @@
     (c-data-event string)
     (comment-event string)
     (q-name-event qname)
-    (error-event error)))
+    (error-event error)
+    (end-event)))
 
 (def type-name
   ;; TODO move to protocols

@@ -1,6 +1,12 @@
 (ns clojure.data.xml.js.push
   (:require
-   [clojure.data.xml.sax-js :as sax]))
+   [goog.object :as gob]
+   [clojure.data.xml.sax-js :as sax]
+   [clojure.data.xml.protocols :as p]
+   [clojure.data.xml.core :as core]
+   [clojure.data.xml.name :as name]
+   [clojure.data.xml.tree :as tree]
+   [clojure.data.xml.push-handler :as push-handler]))
 
 (defprotocol SaxHandler
   (-open-tag [sh state name attributes])
@@ -77,8 +83,20 @@
        :comment (-comment sh s str)
        :error (-error sh s error)))))
 
-(defn parser [sh init-state
-              {:keys [strict trim normalize
+(defn qname [qn]
+  (name/qname (gob/get qn "uri")
+              (gob/get qn "local")
+              (gob/get qn "prefix")))
+
+(defn attributes [ao cont]
+  (name/separate-xmlns
+   (core/kv-from-coll
+    (map #(gob/get ao %))
+    (core/juxt-xf qname #(gob/get % "value"))
+    (js-keys ao))
+   cont))
+
+(defn parser [{:keys [strict trim normalize
                       lowercase xmlns position
                       strict-entities]
                :or {strict true
@@ -88,70 +106,90 @@
                     position true
                     strict-entities false
                     xmlns true}}]
-  (let [p (sax/parser strict #js {"trim" trim
-                                  "normalize" normalize
-                                  "lowercase" lowercase
-                                  "xmlns" xmlns
-                                  "position" position
-                                  "strictEntities" strict-entities})
-        sh-drive (fn [state action sax-handler & args]
-                   (if (reduced? state)
-                     state
-                     (let [res (apply action sax-handler state args)]
-                       (if (reduced? res)
-                         (do (.close p)
-                             (ensure-reduced (-end sax-handler @res)))
-                         res))))
-        s (volatile! init-state)]
-    ;; OPEN TAG
-    (set! (.-onopentag p)
-          #(vswap! s sh-drive -open-tag sh (.-name %) (.-attributes %)))
+  (sax/parser strict #js {"trim" trim
+                          "normalize" normalize
+                          "lowercase" lowercase
+                          "xmlns" xmlns
+                          "position" position
+                          "strictEntities" strict-entities}))
 
-    ;; CLOSE TAG
-    (set! (.-onclosetag p)
-          #(vswap! s sh-drive -close-tag sh %))
+(defn parser-xf [opts]
+  (fn [push-handler]
+    (let [p (parser opts)
+          actions (volatile! [])
+          ph-drive (fn [state action & args]
+                     (if (reduced? state)
+                       (do (vswap! actions conj
+                                   #(apply action push-handler % args))
+                           state)
+                       (let [res (apply action push-handler state args)]
+                         (if (reduced? res)
+                           (p/end-event push-handler @res)
+                           res))))
+          state (volatile! nil)]
+      ;; OPEN TAG
+      (set! (.-onopentag p)
+            #(attributes
+              (.-attributes %)
+              (fn [attrs nss]
+                (vswap! state ph-drive p/start-element-event (qname %) attrs nss nil))))
 
-    ;; GET TEXT
-    (set! (.-ontext p)
-          #(vswap! s sh-drive -text sh %))
+      ;; CLOSE TAG
+      (set! (.-onclosetag p)
+            #(vswap! state ph-drive p/end-element-event))
 
-    ;; CDATA HANDLING
-    (set! (.-oncdata p)
-          #(vswap! s sh-drive -cdata sh %))
+      ;; GET TEXT
+      (set! (.-ontext p)
+            #(vswap! state ph-drive p/chars-event %))
 
-    ;; COMMENTS
-    (set! (.-oncomment p)
-          #(vswap! s sh-drive -comment sh %))
+      ;; CDATA HANDLING
+      (set! (.-oncdata p)
+            #(vswap! state ph-drive p/c-data-event %))
 
-    ;; END PARSING
-    (set! (.-onend p)
-          #(vswap! s sh-drive -end sh))
+      ;; COMMENTS
+      (set! (.-oncomment p)
+            #(vswap! state ph-drive p/comment-event %))
 
-    ;; ERROR
-    (set! (.-onerror p)
-          #(vswap! s sh-drive -error sh %))
+      ;; END PARSING
+      (set! (.-onend p)
+            #(vswap! state ph-drive p/end-event))
 
-    (fn
-      ([]
-       (.close p)
-       @s)
-      ([source-part]
-       (.write p source-part)))))
+      ;; ERROR
+      (set! (.-onerror p)
+            #(vswap! state ph-drive p/error-event %))
+      (fn
+        ([s]
+         (vreset! state s)
+         (.close p)
+         @state)
+        ([s string]
+         (vreset! state s)
+         (.write p string)
+         @state)))))
 
 (comment
+  (first
+   (transduce
+    (parser-xf {})
+    tree/push-handler
+    (list (transient []))
+    ["<roo"
+     "t xmlns:a=\"GOO:\" foo=\"bar\" "
+     "a:roo=\"ra\">lalala<![CDATA[foo GAARR "
+     "bar]]><a:gaga/><!--  la  la --></root"
+     ">"]))
 
-  (let [p (parser ((comp (sh-wrapper
-                          :text (fn [sh state string]
-                                  (-text sh state (.toUpperCase string))))
-                         (sh-wrapper
-                          :cdata (fn [sh state string]
-                                   (-cdata sh state (.toLowerCase string)))))
-                   (event-xf-sh
-                    conj)) [] {})]
+  (let [p (parser
+           ((push-handler/ph-wrapper
+             :chars-event (fn [ph state string]
+                            (p/chars-event ph state (.toUpperCase string))))
+            tree/push-handler)
+           (list (transient []))
+           {})]
     (p "<roo")
     (p "t xmlns:a=\"GOO:\" foo=\"bar\" ")
     (p "a:roo=\"ra\">lalala<![CDATA[foo GAARR ")
-    (p "bar]]><!--  la  la --></root")
+    (p "bar]]><a:gaga/><!--  la  la --></root")
     (p ">")
     (p))
 
