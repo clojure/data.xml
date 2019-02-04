@@ -60,6 +60,6 @@
 
 (defn ph-event-xf [ph]
   (fn
-    ([s] (p/end-event ph (unwrap-reduced s)))
+    ([s] (p/end-event ph s))
     ([s event]
      (push-events event ph s))))
