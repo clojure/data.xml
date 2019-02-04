@@ -2,7 +2,7 @@
   (:require
    [cljs.repl :as repl]
    [cljs.repl.nashorn :as repl-nh]
-   [cemerick.piggieback :as pback]
+   [cider.piggieback :as pback]
    [cljs.closure :as closure]
    [figwheel-sidecar.repl-api :refer [start-figwheel! stop-figwheel! cljs-repl]]))
 
