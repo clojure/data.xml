@@ -30,47 +30,19 @@
   (separate-xmlns
    attrs #(pu/merge-prefix-map (element-nss* element) %2)))
 
-(def push-methods
-  ;; TODO move to protocols
-  '((start-element-event tag attrs nss location-info)
-    (end-element-event)
-    (empty-element-event tag attrs nss location-info)
-    (chars-event string)
-    (c-data-event string)
-    (comment-event string)
-    (q-name-event qname)
-    (error-event error)
-    (end-event)))
-
-(def type-name
-  ;; TODO move to protocols
-  (core/kv-from-coll
-   (core/juxt-xf first
-                 #(-> % first str (str/split #"-")
-                      (->> (map str/capitalize))
-                      str/join symbol))
-   push-methods))
-
 (defn constructor-name [method]
-  ;; TODO move to protocols
   (symbol "clojure.data.xml.event"
-          (str "->" (type-name method))))
-
-(defn protocol-name [method]
-  ;; TODO move to protocols
-  (symbol "clojure.data.xml.protocols"
-          (str method)))
+          (str "->" (p/push-type-name method))))
 
 (code-gen
  [_ push-events] [push-handler state]
- `(do
-    ~@(eduction
+ (cons 'do
        (map (fn [[method & args]]
-              `(defrecord ~(type-name method) [~@args]
+              `(defrecord ~(p/push-type-name method) [~@args]
                  Event
                  (~push-events [~_ ~push-handler ~state]
-                  (~(protocol-name method) ~push-handler ~state ~@args)))))
-       push-methods)))
+                  (~(p/protocol-name method) ~push-handler ~state ~@args))))
+            p/push-methods)))
 
 ;; Node Generation for events
 

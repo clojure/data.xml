@@ -6,7 +6,9 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 
-(ns clojure.data.xml.protocols)
+(ns clojure.data.xml.protocols
+  (:require [clojure.data.xml.core :as core]
+            [clojure.string :as str]))
 
 ;; XML names can be any data type that has at least a namespace uri and a name slot
 
@@ -28,16 +30,35 @@
 (defprotocol AsXmlString
   (xml-str [node] "Serialize atribute value or content node"))
 
-(defprotocol PushHandler
-  (start-element-event [push-handler state tag attrs nss location-info])
-  (end-element-event [push-handler state])
-  (empty-element-event [push-handler state tag attrs nss location-info])
-  (chars-event [push-handler state string])
-  (c-data-event [push-handler state string])
-  (comment-event [push-handler state string])
-  (q-name-event [push-handler state qname])
-  (end-event [push-handler state])
-  (error-event [push-handler state error]))
+(def push-methods
+  '((start-element-event tag attrs nss location-info)
+    (end-element-event)
+    (empty-element-event tag attrs nss location-info)
+    (chars-event string)
+    (c-data-event string)
+    (comment-event string)
+    (q-name-event qname)
+    (error-event error)
+    (end-event)))
+
+(core/code-gen
+ [push-handler state] []
+ `(defprotocol PushHandler
+    ~@(map (fn [[name & args]]
+             (list name (into [push-handler state] args)))
+        push-methods)))
+
+(def push-type-name
+  (core/kv-from-coll
+   (core/juxt-xf first
+                 #(-> % first str (str/split #"-")
+                      (->> (map str/capitalize))
+                      str/join symbol))
+   push-methods))
+
+(defn protocol-name [method]
+  (symbol "clojure.data.xml.protocols"
+          (str method)))
 
 (defprotocol Event
   (push-events [event push-handler state]))
