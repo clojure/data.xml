@@ -70,13 +70,26 @@
      :line-number (.getLineNumber location)}))
 
 (defn push
-  "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to
-   be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete."
+  "Read events off an XMLStreamReader and push them into a handler stack.
+  In a tight loop.
+
+  Fundamentally, this drives a (push-handler - faced) transducer
+  stack, but it is reconciled with lazy sequences, by supporting a
+  continuation protocol:
+
+  If a push returns a (reduced state), the push loop is terminated, as
+  per reducers protocol. However, the returned state is wrapped into
+
+      {:state transformed-init
+       :continue (fn continue [replacement-state] ...)}
+
+  continue can be called with an updated state that has its reduced?
+  condition cleared."
   [push-handler init ^XMLStreamReader sreader {:keys [include-node? location-info skip-whitespace] :as opts} ns-envs]
   (loop [state init
          ns-envs ns-envs]
     (if (reduced? state)
-      {:state @state
+      {:state (p/end-event push-handler @state)
        :continue #(push push-handler % sreader opts ns-envs)}
       (let [location (when location-info
                        (location-hash sreader))]
@@ -131,7 +144,8 @@
          ;; Consume and ignore comments, spaces, processing instructions etc
          (recur state ns-envs))))))
 
-(defn run-push* [ph sreader opts ns-envs]
+(defn run-push*
+  [ph sreader opts ns-envs]
   (first
    (:state
     (push ph (list (transient []))
@@ -140,26 +154,35 @@
 (defn run-push [sreader opts ns-envs]
   (run-push* tree/push-handler opts ns-envs))
 
+(defn chunk-filler
+  ([]
+   (chunk-buffer 32))
+  ([b]
+   (chunk b))
+  ([b e]
+   (chunk-append b e)
+   (if (>= 32 (count b))
+     b
+     (reduced b))))
+
+(defn pull-seq* [{:keys [state continue]}]
+  (chunk-cons
+   state
+   (when continue
+     (lazy-seq
+      (pull-seq* (continue (chunk-filler)))))))
+
 (defn pull-seq
   "Creates a seq of events."
-  [sreader opts ns-envs]
-  (lazy-seq
-   ((fn C [{:keys [state continue]}]
-      (chunk-cons
-       state
-       (lazy-seq
-        (when continue
-          (C (continue (chunk-buffer 32)))))))
-    (push (push-handler/event-xf-ph
-           (completing
-            (fn [b e]
-              (chunk-append b e)
-              (if (> 32 (count b))
-                b
-                (reduced (chunk b))))
-            chunk))
-          (chunk-buffer 32)
-          sreader opts ns-envs))))
+  ([sreader opts ns-envs] (pull-seq identity sreader opts ns-envs))
+  ([xform sreader opts ns-envs]
+   (lazy-seq
+    (pull-seq*
+     (push (push-handler/event-xf-ph
+            (xform
+             chunk-filler))
+           (chunk-filler)
+           sreader opts ns-envs)))))
 
 (defn- make-input-factory ^XMLInputFactory [props]
   (let [fac (XMLInputFactory/newInstance)]
