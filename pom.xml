@@ -54,6 +54,12 @@
       <version>1.10.439</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>net.arnx</groupId>
+      <artifactId>nashorn-promise</artifactId>
+      <version>0.1.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>

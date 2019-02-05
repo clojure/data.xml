@@ -9,5 +9,6 @@
                  [nrepl "0.5.3"]
                  [org.clojure/test.check "0.9.0"]
                  [figwheel-sidecar "0.5.18"]
-                 [binaryage/devtools "0.9.10"]]
+                 [binaryage/devtools "0.9.10"]
+                 [net.arnx/nashorn-promise "0.1.1"]]
   :plugins [[cider/cider-nrepl "0.20.0"]])

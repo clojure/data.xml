@@ -9,6 +9,7 @@
 (defn nashorn-env []
   (let [{:as env :keys [engine]} (repl-nh/repl-env)]
     (repl-nh/eval-resource engine "dxml-nashorn.generated.js" true)
+    (repl-nh/eval-resource engine "net/arnx/nashorn/lib/promise.js" true)
     env))
 
 (def handle-redirect (constantly {:status 307 :headers {"Location" "/cljs-tests/index.html"}}))
