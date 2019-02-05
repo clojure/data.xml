@@ -1,4 +1,4 @@
-(ns clojure.data.xml.js.push
+(ns clojure.data.xml.js.parse
   (:require
    [goog.object :as gob]
    [clojure.data.xml.sax-js :as sax]
@@ -6,7 +6,9 @@
    [clojure.data.xml.core :as core]
    [clojure.data.xml.name :as name]
    [clojure.data.xml.tree :as tree]
-   [clojure.data.xml.push-handler :as push-handler]))
+   [clojure.data.xml.event :as event]
+   [clojure.data.xml.push-handler :as push-handler]
+   [clojure.string :as str]))
 
 (defn qname [qn]
   (name/qname (gob/get qn "uri")
@@ -92,7 +94,103 @@
          (.write p string)
          @state)))))
 
+(defmulti make-stream-source
+  (fn [{:keys [impl async]} source]
+    [(type source) impl async]))
+
+(defmethod make-stream-source :default
+  [opts source]
+  (throw (ex-info (str "No source method for " (type source))
+                  {:source source :opts opts})))
+
+(defmethod make-stream-source [js/String :xhr true]
+  [opts uri]
+  (js/Promise.
+   (fn [resolve reject]
+     (doto (js/XMLHttpRequest.)
+       (.open "GET" uri)
+       (.send)
+       (.addEventListener "load" (fn [e] (resolve (cons (.. e -target -response) nil))))
+       (.addEventListener "error" (fn [e] (reject e)))
+       (.addEventListener "abort" (fn [e] (reject [:abort e])))
+       (.addEventListener "progress" (fn [e]))))))
+
+(defmethod make-stream-source [js/String :fetch true]
+  [opts uri]
+  (reify IReduce
+    (-reduce [_ rf init]
+      (.. (js/fetch uri)
+          (then (fn [resp]
+                  (let [rdr (.. resp -body getReader)
+                        decoder (js/TextDecoder. "utf-8")]
+                    (.. ((fn read-next [state]
+                           (if (reduced? state)
+                             (rf @state)
+                             (.. rdr read
+                                 (then (fn [chunk]
+                                         (if (.-done chunk)
+                                           (core/unwrap-reduced state)
+                                           (read-next (rf state (.decode decoder (.-value chunk))))))))))
+                         init)
+                        (finally (fn [_] (.releaseLock rdr)))))))))))
+
+(defmethod make-stream-source [js/String :jdk false]
+  [opts uri]
+  (lazy-seq
+   (let [rdr (js/java.io.InputStreamReader.
+              (.openStream (js/java.net.URL. uri))
+              "UTF-8")
+         CharArray (js/Java.type "char[]")
+         arr (new CharArray 1024)]
+     ((fn read-next []
+        (let [cnt (.read rdr arr)]
+          (when-not (neg? cnt)
+            (cons (js/java.lang.String. arr 0 cnt)
+                  (lazy-seq (read-next))))))))))
+
+(defn pthen [p f]
+  (if (instance? js/Promise p)
+    (.then p #(f %))
+    (f p)))
+
+(defn promise-xf [xf]
+  (fn
+    ([] (xf))
+    ([s] (pthen s xf))
+    ([s v] (pthen s (fn [s] (pthen v (fn [v] (xf s v))))))))
+
 (comment
+  (require 'clojure.data.xml.js.parse :reload)
+
+  (.. (js/fetch "https://raw.githubusercontent.com/Ekryd/sortpom/master/pom.xml")
+      (then console.log))
+
+  (-> (transduce
+       (comp promise-xf
+             (parser-xf {})
+             push-handler/event-xf-ph
+             (drop-while #(and (instance? event/CharsEvent %)
+                               (str/blank? (:string x)))))
+       conj []
+       (make-stream-source {:impl :fetch :async true}
+                           "https://raw.githubusercontent.com/Ekryd/sortpom/master/pom.xml"))
+      (pthen tree/event-tree)
+      (pthen js/console.log))
+
+  (-> "https://raw.githubusercontent.com/Ekryd/sortpom/master/pom.xml"
+      (->> (make-stream-source {:impl :fetch :async true})
+           (transduce (comp promise-xf
+                            (parser-xf {}))
+                      tree/push-handler
+                      (list (transient []))))
+      (pthen js/console.log))
+
+  (-> "file:///home/herwig/checkout/data.xml/pom.xml"
+      (->> (make-stream-source {:impl :jdk :async false})
+           (sequence (comp (parser-xf {})
+                           push-handler/event-xf-ph)))
+      tree/event-tree)
+
   (first
    (transduce
     (parser-xf {})
@@ -115,4 +213,3 @@
          ">"])))
 
   )
-
