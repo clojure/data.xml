@@ -1,5 +1,5 @@
 (ns clojure.data.xml.js.node
-  (:require [clojure.data.xml.js.push :as push]
+  (:require [clojure.data.xml.js.parse :as parse]
             [clojure.data.xml.tree :as tree]
             [clojure.data.xml.push-handler :as push-handler]))
 
@@ -110,7 +110,7 @@
      (comp js/console.error pr-str)))
 
 (-> (make-stream-reader {:sync false} "/tmp/foo")
-    (.then #(reduce ((push/parser-xf {})
+    (.then #(reduce ((parse/parser-xf {})
                      tree/push-handler)
                     (list (transient []))
                     %))
@@ -121,6 +121,6 @@
 
 (tree/event-tree
  (sequence
-  (comp (push/parser-xf {})
+  (comp (parse/parser-xf {})
         push-handler/event-xf-ph)
   (make-stream-reader {:sync true} "/tmp/foo")))
