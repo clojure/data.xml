@@ -161,14 +161,16 @@
         :content {:tag tag :attrs attrs}
         this)
       meta))
+  #?(:clj (empty [_] (Element. tag {} [] {})))
   #?@(:cljs
       [ISeqable
        (-seq [this]
              (seq [[:tag tag] [:attrs attrs] [:content content]]))]
       :clj
-      [(seq [this] (iterator-seq (.iterator this)))])
+      [clojure.lang.Seqable
+       (seq [this] (iterator-seq (.iterator this)))])
 
-  #?(:clj (empty [_] (Element. tag {} [] {})))
+
   #?@(:cljs
       [IEmptyableCollection
        (-empty [_] (Element. tag {} [] {}))])
