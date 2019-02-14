@@ -279,7 +279,7 @@
         #?(:clj (if (when-let [v (resolve 'cljs.env/*compiler*)]
                       (and (bound? v)
                            @v))
-                  `(element* ~(:tag el) ~(:attrs el) ~(:content el))
+                  `(element* ~(:tag el) ~(:attrs el) ~(:content el) ~(meta el))
                   (map->Element el))
            :cljs (map->Element el))
         ;; TODO support hiccup syntax
