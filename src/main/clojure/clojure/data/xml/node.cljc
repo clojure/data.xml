@@ -277,7 +277,8 @@
 (defn tagged-element [el]
   (cond (map? el)
         #?(:clj (if (when-let [v (resolve 'cljs.env/*compiler*)]
-                      @v)
+                      (and (bound? v)
+                           @v))
                   `(element* ~(:tag el) ~(:attrs el) ~(:content el))
                   (map->Element el))
            :cljs (map->Element el))
