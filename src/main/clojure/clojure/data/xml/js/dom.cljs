@@ -4,8 +4,11 @@
    [clojure.data.xml.node :as node]))
 
 (def doc
-  (.. (js/DOMParser.)
-      (parseFromString "<d />" "text/xml")))
+  (try
+    (.. (js/DOMParser.)
+        (parseFromString "<d />" "text/xml"))
+    (catch js/Error e
+      (js/console.error e "Could not load DOMParser"))))
 
 (defn text-node
   "Create a Text node"
