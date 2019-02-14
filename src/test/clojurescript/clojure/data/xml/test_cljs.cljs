@@ -6,7 +6,8 @@
             clojure.data.xml.test-equiv
             clojure.data.xml.test-pu
             clojure.data.xml.test-process
-            clojure.data.xml.test-node))
+            clojure.data.xml.test-node
+            clojure.data.xml.test-sax))
 
 (def ^:dynamic *results*)
 
@@ -25,7 +26,8 @@
                     'clojure.data.xml.test-equiv
                     'clojure.data.xml.test-pu
                     'clojure.data.xml.test-process
-                    'clojure.data.xml.test-node)
+                    'clojure.data.xml.test-node
+                    'clojure.data.xml.test-sax)
     (pr-str *results*)))
 
 (defn ^:export -main []

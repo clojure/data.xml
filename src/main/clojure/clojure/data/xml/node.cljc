@@ -236,18 +236,24 @@
 (defn element*
   "Create an xml element from a content collection and optional metadata"
   ([tag attrs content meta]
-   (Element. tag (or attrs {}) (remove nil? content) meta))
+   (Element. tag (or attrs {})
+             (into [] (remove nil?)
+                   content)
+             meta))
   ([tag attrs content]
-   (Element. tag (or attrs {}) (remove nil? content) nil)))
+   (Element. tag (or attrs {})
+             (into [] (remove nil?)
+                   content)
+             nil)))
 
 #?(:clj
    ;; Compiler macro for inlining the two constructors
    (alter-meta! #'element* assoc :inline
                 (fn
                   ([tag attrs content meta]
-                   `(Element. ~tag (or ~attrs {}) (remove nil? ~content) ~meta))
+                   `(Element. ~tag (or ~attrs {}) (into [] (remove nil?) ~content) ~meta))
                   ([tag attrs content]
-                   `(Element. ~tag (or ~attrs {}) (remove nil? ~content) nil)))))
+                   `(Element. ~tag (or ~attrs {}) (into [] (remove nil?) ~content) nil)))))
 
 (defn element
   "Create an xml Element from content varargs"
@@ -269,7 +275,12 @@
   (element* tag attrs content (meta el)))
 
 (defn tagged-element [el]
-  (cond (map? el) (map->Element el)
+  (cond (map? el)
+        #?(:clj (if (when-let [v (resolve 'cljs.env/*compiler*)]
+                      @v)
+                  `(element* ~(:tag el) ~(:attrs el) ~(:content el))
+                  (map->Element el))
+           :cljs (map->Element el))
         ;; TODO support hiccup syntax
         :else (throw (ex-info "Unsupported element representation"
                               {:element el}))))
