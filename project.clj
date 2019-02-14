@@ -4,6 +4,7 @@
   :resource-paths ["src/main/resources" "src/test/resources" "target/gen-resources"]
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/data.codec "0.1.1"]
+                 [cljsjs/sax "1.2.4-0"]
                  [org.clojure/clojurescript "1.10.516"]
                  [cider/piggieback "0.3.10"]
                  [nrepl "0.5.3"]

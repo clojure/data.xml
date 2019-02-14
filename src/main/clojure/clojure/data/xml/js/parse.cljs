@@ -1,7 +1,7 @@
 (ns clojure.data.xml.js.parse
   (:require
    [goog.object :as gob]
-   [clojure.data.xml.sax-js :as sax]
+   [sax :as sax]
    [clojure.data.xml.protocols :as p]
    [clojure.data.xml.core :as core]
    [clojure.data.xml.name :as name]
