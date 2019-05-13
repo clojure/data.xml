@@ -239,6 +239,8 @@
   (is (= (emit-str {:tag :el :attrs {:xmlns/xmlns "http://www.w3.org/2000/xmlns/"}})
          "<?xml version=\"1.0\" encoding=\"UTF-8\"?><el/>"))
   (is (= (emit-str {:tag :el :attrs {:xmlns/xml "http://www.w3.org/XML/1998/namespace" ::xml/lang "en"}})
+         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><el xml:lang=\"en\"/>"))
+  (is (= (emit-str {:tag :el :attrs {:xml/lang "en"}})
          "<?xml version=\"1.0\" encoding=\"UTF-8\"?><el xml:lang=\"en\"/>")))
 
 (deftest test-empty-elements

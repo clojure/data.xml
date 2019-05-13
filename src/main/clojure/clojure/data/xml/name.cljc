@@ -74,8 +74,9 @@
     (if-let [ns (namespace kw)]
       (if (.startsWith ns "xmlns.")
         (decode-uri (subs ns 6))
-        (if (= "xmlns" ns)
-          xmlns-uri
+        (case ns
+          "xmlns" xmlns-uri
+          "xml" xml-uri
           (throw (ex-info "Keyword ns is not an xmlns. Needs to be in the form :xmlns.<encoded-uri>/<local>"
                           {:kw kw}))))
       "")))
