@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Index - Lazy XML parsing 0.2.0 API documentation</title>
+    <title>Index - data.xml 0.2.0-SNAPSHOT API documentation</title>
     <link rel="icon" href="static/favicon.png" />
     <link rel="shortcut icon" href="static/favicon.png" />
     <link rel="stylesheet" href="static/clojure.css" type="text/css" media="all" />
@@ -25,14 +25,14 @@ namespace.
       <div id="leftcolumn"><div style="text-align: center;"></div>
 <div class="menu">
   <div class="WikiCustomNav WikiElement wiki">
-    <span class="toc-header"><span id="project-name">Lazy XML parsing</span> <span id="version">0.2.0</span> API</span><br />
+    <span class="toc-header"><span id="project-name">data.xml</span> <span id="version">0.2.0-SNAPSHOT</span> API</span><br />
     <ul>
       <li><a href="index.html" class="wiki_link">Overview</a></li>
       <li><a href="api-index.html" class="wiki_link">API Index</a></li>
     </ul>
     
     
-    <a class="wiki_link" href="http://clojure.org">Clojure Home</a>
+    <a class="wiki_link" href="https://clojure.org">Clojure Home</a>
   </div>
 </div>
 </div>
@@ -41,9 +41,9 @@ namespace.
 	  <div class="contentBox"><div class="innerContentBox">
               <div class="wiki wikiPage" id="content_view">
                 <div id="right-sidebar"></div>
-                <div id="content-tag"><h1 id="overview">Index of Public Functions and Variables - <span id="header-project">Lazy XML parsing</span> <span id="header-version">0.2.0</span><span id="header-status-block"> (<span id="header-status">in development</span>)</span></h1>
+                <div id="content-tag"><h1 id="overview">Index of Public Functions and Variables - <span id="header-project">data.xml</span> <span id="header-version">0.2.0-SNAPSHOT</span><span id="header-status-block"> (<span id="header-status">in development</span>)</span></h1>
 This page has an alphabetical index of all the documented functions and variables
-in <span class="project-name-span">Lazy XML parsing</span>.
+in <span class="project-name-span">data.xml</span>.
 
 <!-- TODO: enable this functionality on github?
 
@@ -126,7 +126,7 @@ Shortcuts:<br />
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml/emit-str">emit-str</a><span id="line-content">                     function      clojure.data.xml   Emits the Element to String and returns it. Option...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/EmptyElementEvent">EmptyElementEvent</a><span id="line-content">            record        clojure.data.xml.event 
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/EndElementEvent">EndElementEvent</a><span id="line-content">              type          clojure.data.xml.event 
-</span></span><span id="section-content"> <a href="index.html#clojure.data.xml/event-seq">event-seq</a><span id="line-content">                    function      clojure.data.xml   Parses the XML InputSource source using a pull-par...
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml/event-seq">event-seq</a><span id="line-content">                    function      clojure.data.xml   Parses an XML input source into a lazy sequence of...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.tree/event-tree">event-tree</a><span id="line-content">                   function      clojure.data.xml.tree Returns a lazy tree of Element objects for the ...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.protocols/EventGeneration">EventGeneration</a><span id="line-content">              protocol      clojure.data.xml.protocols Protocol for generating new events based o...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.impl/export-api">export-api</a><span id="line-content">                   macro         clojure.data.xml.impl This creates vars, that take their (local) name...
@@ -187,7 +187,8 @@ Shortcuts:<br />
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/map-&gt;EmptyElementEvent">map-&gt;EmptyElementEvent</a><span id="line-content">       function      clojure.data.xml.event Factory function for class clojure.data.xml.ev...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/map-&gt;QNameEvent">map-&gt;QNameEvent</a><span id="line-content">              function      clojure.data.xml.event Factory function for class clojure.data.xml.ev...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.event/map-&gt;StartElementEvent">map-&gt;StartElementEvent</a><span id="line-content">       function      clojure.data.xml.event Factory function for class clojure.data.xml.ev...
-</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.name/merge-nss">merge-nss</a><span id="line-content">                    function      clojure.data.xml.name Merge two attribute sets, deleting assignments ...
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.pu-map/merge">merge</a><span id="line-content">                        function      clojure.data.xml.pu-map Merge two pu-maps, left to right.
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml.pu-map/merge-prefix-map">merge-prefix-map</a><span id="line-content">             function      clojure.data.xml.pu-map Merge a prefix map into pu-map.
 </span></span>
   </pre>
 </div><div id="index-body">
@@ -204,8 +205,8 @@ Shortcuts:<br />
 </div><div id="index-body">
   <h2 id="P"><span id="section-head">P</span></h2>
   <pre>
-<span id="section-content"> <a href="index.html#clojure.data.xml/parse">parse</a><span id="line-content">                        function      clojure.data.xml   Parses the source, which can be an InputStream or ...
-</span></span><span id="section-content"> <a href="index.html#clojure.data.xml/parse-str">parse-str</a><span id="line-content">                    function      clojure.data.xml   Parses the passed in string to Clojure data struct...
+<span id="section-content"> <a href="index.html#clojure.data.xml/parse">parse</a><span id="line-content">                        function      clojure.data.xml   Parses an XML input source into a a tree of Elemen...
+</span></span><span id="section-content"> <a href="index.html#clojure.data.xml/parse-str">parse-str</a><span id="line-content">                    function      clojure.data.xml   Parses an XML String into a a tree of Element reco...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml/print-uri-file-command!">print-uri-file-command!</a><span id="line-content">      function      clojure.data.xml   Shell command to create a dummy file for xmlns. Ex...
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.name/print-uri-file-command!">print-uri-file-command!</a><span id="line-content">      function      clojure.data.xml.name Shell command to create a dummy file for xmlns....
 </span></span><span id="section-content"> <a href="index.html#clojure.data.xml.jvm.parse/pull-seq">pull-seq</a><span id="line-content">                     function      clojure.data.xml.jvm.parse Creates a seq of events.  The XMLStreamCon...
@@ -301,7 +302,7 @@ Shortcuts:<br />
           </div>
 	</div>
 	<div id="foot">
-	  <div id="copyright" style="text-align: center;">Copyright 2007-2017 by Rich Hickey and the various contributors</div>
+	  <div id="copyright" style="text-align: center;">Copyright 2007-2019 by Rich Hickey and the various contributors</div>
 	</div>
       </div>
       <div id="DesignedBy">Logo &amp; site design by <a href="http://www.tomhickey.com" title="Visit Tom Hickey's website.">Tom Hickey</a>.<br />
