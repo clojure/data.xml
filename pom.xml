@@ -38,12 +38,6 @@
   <dependencies>
     <dependency>
       <groupId>org.clojure</groupId>
-      <artifactId>data.codec</artifactId>
-      <version>0.1.1</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.clojure</groupId>
       <artifactId>test.check</artifactId>
       <version>0.9.0</version>
       <scope>test</scope>

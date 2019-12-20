@@ -3,7 +3,6 @@
   :test-paths ["src/test/clojure" "src/test/clojurescript"]
   :resource-paths ["src/main/resources" "src/test/resources" "target/gen-resources"]
   :dependencies [[org.clojure/clojure "1.10.0-beta8"]
-                 [org.clojure/data.codec "0.1.1"]
                  [org.clojure/clojurescript "1.10.439"]
                  [com.cemerick/piggieback "0.2.2"]
                  [org.clojure/tools.nrepl "0.2.13"]

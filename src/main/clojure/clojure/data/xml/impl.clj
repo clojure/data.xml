@@ -9,7 +9,9 @@
 (ns clojure.data.xml.impl
   "Shared private code for data.xml namespaces"
   {:author "Herwig Hochleitner"}
-  (:require [clojure.data.codec.base64 :as b64]))
+  (:import
+    [java.util Base64]
+    [java.nio.charset StandardCharsets]))
 
 (defn- var-form? [form]
   (and (seq? form) (= 'var (first form))))
@@ -62,5 +64,6 @@
     `(do ~then)
     `(do ~else)))
 
-(defn b64-encode [ba]
-  (String. ^bytes (b64/encode ba)))
+(defn b64-encode [^bytes ba]
+  (let [encoder (Base64/getEncoder)]
+    (String. (.encode encoder ba) StandardCharsets/ISO_8859_1)))
