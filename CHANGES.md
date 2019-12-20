@@ -1,3 +1,6 @@
+From 0.2.0-alpha6 to ???
+- Replace data.codec with using Base64, now in the JDK
+
 From 0.2.0-alpha5 to 0.2.0-alpha6
 - ClojureScript implementation fixes and tests
 
