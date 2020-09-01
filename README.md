@@ -65,6 +65,17 @@ Add the following to the `project.clj` dependencies:
 
     [org.clojure/data.xml "0.2.0-alpha6"]
 
+### [CLI/`deps.edn`](https://clojure.org/reference/deps_and_cli)
+
+Add the following to the `deps.edn` dependencies:
+```clojure
+;; for stable version:
+org.clojure/data.xml {:mvn/version "0.0.8"}
+
+;; for preview version:
+org.clojure/data.xml {:mvn/version "0.2.0-alpha6"}
+```
+
 ## Examples
 
 The examples below assume you have added a `:refer :all` for data.xml:
