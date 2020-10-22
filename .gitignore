@@ -8,3 +8,5 @@ modules/xml.pull-parser/target/
 /figwheel_server.log
 /.nrepl-port
 /.cljs_nashorn_repl/
+.idea/
+*.iml
