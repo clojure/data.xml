@@ -90,21 +90,22 @@ Input source can be a java.io.InputStream or java.io.Reader
 
 Options:
 
-  :include-node? can be a subset of #{:element :characters :comment} default #{:element :characters}
-  :location-info pass false to skip generating location meta data
+  :include-node? subset of #{:element :characters :comment}, default #{:element :characters}
+  :location-info pass false to skip generating location meta data, default true
 
-See http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
-for documentation on options:
+See https://docs.oracle.com/javase/8/docs/api/javax/xml/stream/XMLInputFactory.html
+for documentation on xml options. These are the defaults:
 
-  {:allocator                      XMLInputFactory/ALLOCATOR
-   :coalescing                     XMLInputFactory/IS_COALESCING
-   :namespace-aware                XMLInputFactory/IS_NAMESPACE_AWARE
-   :replacing-entity-references    XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
-   :supporting-external-entities   XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
-   :validating                     XMLInputFactory/IS_VALIDATING
-   :reporter                       XMLInputFactory/REPORTER
-   :resolver                       XMLInputFactory/RESOLVER
-   :support-dtd                    XMLInputFactory/SUPPORT_DTD}"
+  {:allocator                    nil      ; XMLInputFactory/ALLOCATOR
+   :coalescing                   true     ; XMLInputFactory/IS_COALESCING
+   :namespace-aware              true     ; XMLInputFactory/IS_NAMESPACE_AWARE
+   :replacing-entity-references  true     ; XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
+   :supporting-external-entities false    ; XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
+   :validating                   false    ; XMLInputFactory/IS_VALIDATING
+   :reporter                     nil      ; XMLInputFactory/REPORTER
+   :resolver                     nil      ; XMLInputFactory/RESOLVER
+   :support-dtd                  true     ; XMLInputFactory/SUPPORT_DTD
+   }"
   {:arglists (list ['source '& parser-opts-arg])}
   [source & {:as opts}]
   (event-tree (event-seq source opts)))
@@ -114,21 +115,22 @@ for documentation on options:
 
 Options:
 
-  :include-node? can be a subset of #{:element :characters :comment} default #{:element :characters}
-  :location-info pass false to skip generating location meta data
+  :include-node? subset of #{:element :characters :comment}, default #{:element :characters}
+  :location-info pass false to skip generating location meta data, default true
 
-See http://docs.oracle.com/javase/6/docs/api/javax/xml/stream/XMLInputFactory.html
-for documentation on options:
+See https://docs.oracle.com/javase/8/docs/api/javax/xml/stream/XMLInputFactory.html
+for documentation on xml options. These are the defaults:
 
-  {:allocator                      XMLInputFactory/ALLOCATOR
-   :coalescing                     XMLInputFactory/IS_COALESCING
-   :namespace-aware                XMLInputFactory/IS_NAMESPACE_AWARE
-   :replacing-entity-references    XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
-   :supporting-external-entities   XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
-   :validating                     XMLInputFactory/IS_VALIDATING
-   :reporter                       XMLInputFactory/REPORTER
-   :resolver                       XMLInputFactory/RESOLVER
-   :support-dtd                    XMLInputFactory/SUPPORT_DTD}"
+  {:allocator                    nil      ; XMLInputFactory/ALLOCATOR
+   :coalescing                   true     ; XMLInputFactory/IS_COALESCING
+   :namespace-aware              true     ; XMLInputFactory/IS_NAMESPACE_AWARE
+   :replacing-entity-references  true     ; XMLInputFactory/IS_REPLACING_ENTITY_REFERENCES
+   :supporting-external-entities false    ; XMLInputFactory/IS_SUPPORTING_EXTERNAL_ENTITIES
+   :validating                   false    ; XMLInputFactory/IS_VALIDATING
+   :reporter                     nil      ; XMLInputFactory/REPORTER
+   :resolver                     nil      ; XMLInputFactory/RESOLVER
+   :support-dtd                  true     ; XMLInputFactory/SUPPORT_DTD
+   }"
   {:arglists (list ['string '& parser-opts-arg])}
   [s & opts]
   (apply parse (string-source s) opts))
