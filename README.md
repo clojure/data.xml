@@ -2,7 +2,7 @@
 
 [data.xml](https://github.com/clojure/data.xml) is a Clojure library for reading and writing XML data. This
 library is the successor to
-[lazy-xml](http://clojure.github.com/clojure-contrib/lazy-xml-api.html).
+[lazy-xml](https://clojure.github.io/clojure-contrib/lazy-xml-api.html).
 data.xml has the following features:
 
 * Parses XML documents into Clojure data structures
@@ -13,11 +13,11 @@ data.xml has the following features:
 
 ## API Reference
 
-Generated API docs for data.xml are available [here](http://clojure.github.com/data.xml).
+Generated API docs for data.xml are available [here](https://clojure.github.io/data.xml).
 
 ## Bugs
 
-Please report bugs using JIRA [here](http://dev.clojure.org/jira/browse/DXML).
+Please report bugs using JIRA [here](https://clojure.atlassian.net/browse/DXML).
 
 ## Installation
 
@@ -27,7 +27,7 @@ Latest preview release: `0.2.0-alpha6`
 
 (The main features of the `0.2.0` series are XML Namespace support and Clojurescript support)
 
-* [All Released Versions](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.xml%22)
+* [All Released Versions](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.xml%22)
 
 * [Development Snapshot Versions](https://oss.sonatype.org/index.html#nexus-search;gav~org.clojure~data.xml~~~)
 
@@ -84,9 +84,9 @@ The examples below assume you have added a `:refer :all` for data.xml:
 
 data.xml supports parsing and emitting XML. The parsing functions will
 read XML from a
-[Reader](http://docs.oracle.com/javase/6/docs/api/java/io/Reader.html)
+[Reader](https://docs.oracle.com/javase/8/docs/api/java/io/Reader.html)
 or
-[InputStream](http://docs.oracle.com/javase/6/docs/api/java/io/InputStream.html).
+[InputStream](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html).
 
     (let [input-xml (java.io.StringReader. "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                                             <foo><bar><baz>The baz value</baz></bar></foo>")]
@@ -109,7 +109,7 @@ can be passed via key pairs:
 
 XML elements can be created using the typical defrecord constructor
 functions or the element function used below or just a plain map with :tag :attrs :content keys, and written using a
-[java.io.Writer](http://docs.oracle.com/javase/6/docs/api/java/io/Writer.html).:
+[java.io.Writer](https://docs.oracle.com/javase/8/docs/api/java/io/Writer.html).:
 
     (let [tags (element :foo {:foo-attr "foo value"}
                  (element :bar {:bar-attr "bar value"}
@@ -331,7 +331,7 @@ Some utilities, like `process/*-xmlns`, `prxml/sexp-as-*`, `indent` aren't yet i
 
 Make `extend-dom-as-data!` also support assoc, ... on dom nodes.
 
-#### Feel free to pick a [ticket](http://dev.clojure.org/jira/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+DXML+AND+status+in+%28Open%2C+%22In+Progress%22%2C+Reopened%29) to work on
+#### Feel free to pick a [ticket](https://clojure.atlassian.net/browse/DXML) to work on
 
 ## License
 
@@ -340,16 +340,13 @@ Licensed under the [Eclipse Public License](http://www.opensource.org/licenses/e
 ## Developer Information
 
 * [GitHub project](https://github.com/clojure/data.xml)
-
-* [Bug Tracker](http://dev.clojure.org/jira/browse/DXML)
-
+* [Bug Tracker](https://clojure.atlassian.net/browse/DXML)
 * [Continuous Integration](http://build.clojure.org/job/data.xml/)
-
 * [Compatibility Test Matrix](http://build.clojure.org/job/data.xml-test-matrix/)
 
 ## Contributing
 
 All contributions need to be made via patches attached to tickets in
-[JIRA](http://dev.clojure.org/jira/browse/DXML). Check the
-[Contributing to Clojure](http://clojure.org/contributing) page for
+[JIRA](http://clojure.atlassian.net/browse/DXML). Check the
+[Contributing to Clojure](https://clojure.org/community/contributing) page for
 more information.

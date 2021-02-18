@@ -23,11 +23,11 @@
 ;; it is similar to (defrecord Element [tag attrs content])
 ;; but we override its hash and equality to be compatible with
 ;; clojure's hash-maps
-;; see http://dev.clojure.org/jira/browse/CLJ-2084
+;; see https://clojure.atlassian.net/browse/CLJ-2084
 ;; also, elements don't have an extmap and degrade to hash-maps also
 ;; when assoc'ing unknown keys
 
-;; FIXME hash caching cannot be used: http://dev.clojure.org/jira/browse/CLJ-2092
+;; FIXME hash caching cannot be used: https://clojure.atlassian.net/browse/CLJ-2092
 
 #?
 (:clj
