@@ -121,7 +121,6 @@
      [& ans]
      (loop [[a n & rst :as ans] ans]
        (when (seq ans)
-         (assert (<= (count ans)) (pr-str ans))
          (let [xn (uri-symbol n)
                al (symbol (clj-ns-name a))]
            (create-ns xn)
