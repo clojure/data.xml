@@ -18,6 +18,7 @@
     (.setOutputProperty OutputKeys/METHOD "xml")
     (.setOutputProperty "{http://xml.apache.org/xslt}indent-amount" "2")
     ;; print newline after preamble
+    (.setOutputProperty OutputKeys/STANDALONE "yes")
     (.setOutputProperty OutputKeys/DOCTYPE_PUBLIC "yes")))
 
 (defn indent-xml
