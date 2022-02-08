@@ -10,6 +10,7 @@
       :author "Chris Houser"}
     clojure.data.xml.test-emit
   (:require
+   [clojure.string :as str]
    [clojure.test :refer :all]
    [clojure.data.xml :refer :all]
    [clojure.data.xml.test-utils :refer [test-stream lazy-parse*]]
@@ -137,7 +138,8 @@
 
 (deftest test-indent
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
-        expect (str "<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
+        expect (-> "<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n"
+                   (str/replace  #"\n" (System/lineSeparator)))
         sw (java.io.StringWriter.)
         _ (indent nested-xml sw)
         result (.toString sw)]
@@ -146,14 +148,16 @@
 
 (deftest test-indent-str
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
-        expect (str "<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n")
+        expect (-> "<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n"
+                   (str/replace  #"\n" (System/lineSeparator)))
         result (indent-str nested-xml)]
     (is (= expect (subs result (.indexOf result "<a>"))))))
 
 (deftest test-indent-str-with-doctype
   (let [nested-xml (lazy-parse* (str "<a><b><c><d>foo</d></c></b></a>"))
         doctype "<!DOCTYPE html>"
-        expect "\n<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n"
+        expect (-> "\n<a>\n  <b>\n    <c>\n      <d>foo</d>\n    </c>\n  </b>\n</a>\n"
+                   (str/replace  #"\n" (System/lineSeparator)))
         result (indent-str nested-xml :doctype doctype)
         offset-dt (.indexOf result "<!DOCTYPE")
         offset-res (inc (.indexOf result ">" offset-dt))]

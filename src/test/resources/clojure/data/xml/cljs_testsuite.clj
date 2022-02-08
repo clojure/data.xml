@@ -2,7 +2,7 @@
   (:require
    [clojure.test :refer :all]
    [cljs.repl :as repl]
-   [cljs.repl.nashorn :as repl-nh]
+   [clojure.data.xml.cljs-repl-nashorn :as repl-nh]
    [cljs.closure :as closure]
    [cljs.build.api :as bapi]
    [clojure.string :as str]

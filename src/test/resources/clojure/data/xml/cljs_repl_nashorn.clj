@@ -6,7 +6,13 @@
 ;; the terms of this license.
 ;; You must not remove this notice, or any other, from this software.
 
-(ns cljs.repl.nashorn
+;; cljs repl nashorn update to support the openjdk nashorn package in
+;; JDK versions greater than 15.
+;;
+;; Adapted from
+;; https://raw.githubusercontent.com/clojure/clojurescript/r1.10.439/src/main/clojure/cljs/repl/nashorn.clj.
+
+(ns clojure.data.xml.cljs-repl-nashorn
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
             [clojure.stacktrace]
@@ -21,9 +27,17 @@
             [cljs.stacktrace :as st])
   (:import [javax.script ScriptEngine ScriptEngineManager ScriptException ScriptEngineFactory]))
 
-(util/compile-if (Class/forName "jdk.nashorn.api.scripting.NashornException")
+(def engine-name
+  (util/compile-if (Class/forName "org.openjdk.nashorn.api.scripting.NashornException")
+                   (do
+                     (import 'org.openjdk.nashorn.api.scripting.NashornException)
+                     "OpenJDK Nashorn")
+                   (do
+                     (import 'jdk.nashorn.api.scripting.NashornException)
+                     "Oracle Nashorn")))
+
+(do
   (do
-    (import 'jdk.nashorn.api.scripting.NashornException)
     ;; Implementation
 
     (defn create-engine
@@ -31,7 +45,7 @@
       ([{:keys [code-cache] :or {code-cache true}}]
        (let [args (when code-cache ["-pcc"])
              factories (.getEngineFactories (ScriptEngineManager.))
-             factory (get (zipmap (map #(.getEngineName %) factories) factories) "Oracle Nashorn")]
+             factory (get (zipmap (map #(.getEngineName %) factories) factories) engine-name)]
          (if-let [engine (if-not (empty? args)
                            (.getScriptEngine ^ScriptEngineFactory factory (into-array args))
                            (.getScriptEngine ^ScriptEngineFactory factory))]
@@ -180,14 +194,4 @@
     (defn -main [& args]
       (apply cli/main repl-env args)))
 
-  (do
-    (defn repl-env* [{:keys [debug] :as opts}]
-      (throw (ex-info "Nashorn not supported" {:type :repl-error})))
-
-    (defn repl-env
-      "Create a Nashorn repl-env for use with the repl/repl* method in Clojurescript."
-      [& {:as opts}]
-      (throw (ex-info "Nashorn not available under this Java runtime" {:type :repl-error})))
-
-    (defn -main []
-      (throw (ex-info "Nashorn not available under this Java runtime" {:type :repl-error})))))
+)

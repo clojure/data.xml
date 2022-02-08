@@ -10,6 +10,7 @@
       :author "Herwig Hochleitner"}
   clojure.data.xml.test-pprint
   (:require
+   [clojure.string :as str]
    [clojure.test :refer :all]
    [clojure.data.xml :refer :all]))
 
@@ -26,5 +27,6 @@
 "))
 
 (deftest test-indent
-  (is (= indented-xml (indent-str (parse-str xml)))))
+  (is (= (str/replace indented-xml #"\n" (System/lineSeparator))
+         (indent-str (parse-str xml)))))
 
