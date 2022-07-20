@@ -51,7 +51,7 @@
   ([uri local] (keyword (when-not (str/blank? uri)
                           (encode-uri (str "xmlns." uri)))
                         local))
-  ([uri local prefix] (qname uri local)))
+  ([uri local _prefix] (qname uri local)))
 
 ;; The empty string shall be equal to nil for xml names
 (defn namespaced? [qn]

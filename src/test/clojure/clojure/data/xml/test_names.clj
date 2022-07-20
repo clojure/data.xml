@@ -16,7 +16,7 @@
     ["uri-u:" "name"]     [::U/name "{uri-u:}name" (parse-qname "{uri-u:}name") (as-qname "{uri-u:}name")]
     ["uri-v:" "vname"]    [::V/vname "{uri-v:}vname" (parse-qname "{uri-v:}vname")]
     ["uri-w:" "wname"]    [::W/wname "{uri-w:}wname" (parse-qname "{uri-w:}wname")]
-    ;; ["http://www.w3.org/XML/1998/namespace" "name"] [:xml/name]
+    ["http://www.w3.org/XML/1998/namespace" "name"] [:xml/name]
     ["http://www.w3.org/2000/xmlns/" "name"]        [:xmlns/name]))
 
 
@@ -27,10 +27,15 @@
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><D:limit xmlns:D=\"DAV:\"><D:nresults>100</D:nresults></D:limit>"))
 
 (deftest test-parse-raw
-  (are [xml result] (= (parse-str xml) result)
-    "<D:limit xmlns:D=\"DAV:\"><D:nresults>100</D:nresults></D:limit>"
-    (element ::D/limit {}
-             (element ::D/nresults nil "100"))))
+  (testing "includes namespace in tags when namespace-aware is true"
+    (is (= (element ::D/limit {}
+                    (element ::D/nresults nil "100"))
+           (parse-str "<D:limit xmlns:D=\"DAV:\"><D:nresults>100</D:nresults></D:limit>"))))
+  (testing "leaves namespace off tags when namespace-aware is false"
+    (is (= (element :limit {:xmlns.http%3A%2F%2Fwww.w3.org%2F2000%2Fxmlns%2F/D "DAV:"}
+                    (element :nresults nil "100"))
+           (parse-str "<limit xmlns:D=\"DAV:\"><nresults>100</nresults></limit>"
+                      :namespace-aware false)))))
 
 (deftest qnames
   (is (= (qname "foo") (as-qname :foo))))

@@ -79,7 +79,7 @@
          XMLStreamConstants/START_ELEMENT
          (if (include-node? :element)
            (let [ns-env (nss-hash sreader (or (first ns-envs) pu/EMPTY))
-                 tag (qname (when-not namespace-aware (.getNamespaceURI sreader))
+                 tag (qname (when namespace-aware (.getNamespaceURI sreader))
                             (.getLocalName sreader)
                             (.getPrefix sreader))
                  attrs (attr-hash sreader)

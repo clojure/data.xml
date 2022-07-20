@@ -76,7 +76,8 @@ for documentation on xml options. These are the defaults:
   (let [props* (merge {:include-node? #{:element :characters}
                        :coalescing true
                        :supporting-external-entities false
-                       :location-info true}
+                       :location-info true
+                       :namespace-aware true}
                       opts)]
     (pull-seq (make-stream-reader props* source)
               props*
