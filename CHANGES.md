@@ -1,6 +1,8 @@
-From 0.2.0-alpha6 to ???
+From 0.2.0-alpha7 to ???
+- 
+From 0.2.0-alpha6 to 0.2.0-alpha7
 - Replace data.codec with using Base64, now in the JDK
-
+- Opt out of namespace awareness in the event-seq function by passing :namespace-aware mapped to a truthy value in the opts map
 From 0.2.0-alpha5 to 0.2.0-alpha6
 - ClojureScript implementation fixes and tests
 
