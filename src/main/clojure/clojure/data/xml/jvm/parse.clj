@@ -69,7 +69,7 @@
 (defn pull-seq
   "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to
    be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete."
-  [^XMLStreamReader sreader {:keys [include-node? location-info skip-whitespace] :as opts} ns-envs]
+  [^XMLStreamReader sreader {:keys [include-node? location-info skip-whitespace namespace-aware] :as opts} ns-envs]
   (lazy-seq
    (loop []
      (let [location (when location-info
@@ -79,7 +79,7 @@
          XMLStreamConstants/START_ELEMENT
          (if (include-node? :element)
            (let [ns-env (nss-hash sreader (or (first ns-envs) pu/EMPTY))
-                 tag (qname (.getNamespaceURI sreader)
+                 tag (qname (when-not namespace-aware (.getNamespaceURI sreader))
                             (.getLocalName sreader)
                             (.getPrefix sreader))
                  attrs (attr-hash sreader)
