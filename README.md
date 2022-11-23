@@ -253,7 +253,8 @@ To emit namespaced tags without prefixes, you can also set the default xmlns at 
 
     ;; newlines and indents added for readability, not in actual output
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-     <html xmlns=\"http://www.w3.org/1999/xhtml\"><head/>
+     <html xmlns=\"http://www.w3.org/1999/xhtml\">
+       <head/>
        <body>DOCUMENT</body>
      </html>"
 
