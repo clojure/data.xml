@@ -266,8 +266,8 @@ Same example, but using the more concise hiccup style (same output):
     (xml/emit-str
       (xml/sexp-as-element
         [::xh/html {:xmlns "http://www.w3.org/1999/xhtml"}
-        [::xh/head]
-        [::xh/body "DOCUMENT"]]))
+         [::xh/head]
+         [::xh/body "DOCUMENT"]]))
 
 It is also allowable to use `javax.xml.namespace.QName` instances, as well as strings with the informal `{ns}n` encoding.
 
