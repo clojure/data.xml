@@ -92,20 +92,17 @@ or
                                             <foo><bar><baz>The baz value</baz></bar></foo>")]
       (xml/parse input-xml))
 
-    #clojure.data.xml.Element{:tag :foo,
-                              :attrs {},
-                              :content (#clojure.data.xml.Element{:tag :bar,
-                                                                  :attrs {},
-                                                                  :content (#clojure.data.xml.Element{:tag :baz,
-                                                                                                      :attrs {},
-                                                                                                      :content ("The baz value")})})}
+    #xml/element{:tag :foo,
+                 :content [#xml/element{:tag :bar,
+                                        :content [#xml/element{:tag :baz,
+                                                               :content ["The baz value"]}]}]}
 
 The data is returned as defrecords and can be manipulated using the
 normal clojure data structure functions. Additional parsing options
 can be passed via key pairs:
 
     (xml/parse-str "<a><![CDATA[\nfoo bar\n]]><![CDATA[\nbaz\n]]></a>" :coalescing false)
-    #clojure.data.xml.Element{:tag :a, :attrs {}, :content ("\nfoo bar\n" "\nbaz\n")}
+    #xml/element{:tag :a, :content ["\nfoo bar\n" "\nbaz\n"]}
 
 XML elements can be created using the typical defrecord constructor
 functions or the element function used below or just a plain map with :tag :attrs :content keys, and written using a
@@ -134,7 +131,7 @@ Comments and CDATA can also be emitted as an S-expression with the special tag n
 
     (= (xml/element :tag {:attr "value"}
          (xml/element :body {} (xml/cdata "not parsed <stuff")))
-       (xml/sexp-as-element [:tag {:attr "value"} [:body {} [:-cdata "not parsed <stuff"]]]
+       (xml/sexp-as-element [:tag {:attr "value"} [:body {} [:-cdata "not parsed <stuff"]]]))
     ;;-> true
 
 XML can be "round tripped" through the library:
@@ -147,7 +144,7 @@ XML can be "round tripped" through the library:
       (with-open [input (java.io.FileInputStream. "/tmp/foo.xml")]
         (xml/parse input)))
 
-    #clojure.data.xml.Element{:tag :foo, :attrs {:foo-attr "foo value"}...}
+    #xml/element{:tag :foo, :attrs {:foo-attr "foo value"}...}
 
 There are also some string based functions that are useful for
 debugging.
@@ -186,10 +183,10 @@ CDATA can be emitted:
 
 But will be read as regular character data:
 
-    (xml/parse-str (xml/emit-str (element :foo {}
+    (xml/parse-str (xml/emit-str (xml/element :foo {}
                      (xml/cdata "<non><escaped><info><here>"))))
 
-    #clojure.data.xml.Element{:tag :foo, :attrs {}, :content ("<non><escaped><info><here>")}
+    #xml/element{:tag :foo, :content ["<non><escaped><info><here>"]}
 
 Comments can also be emitted:
 
@@ -219,9 +216,7 @@ Below is an example of parsing an XHTML document:
     (xml/parse-str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                     <foo:html xmlns:foo=\"http://www.w3.org/1999/xhtml\"/>")
 
-    #...Element{:tag :xmlns.http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml/html,
-                :attrs {},
-                :content ()}
+    #xml/element{:tag :xmlns.http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml/html}
 
 Emitting namespaced XML is usually done by using `alias-uri` in combination with clojure's built-in `::kw-ns/shorthands`:
 
@@ -238,7 +233,7 @@ Emitting namespaced XML is usually done by using `alias-uri` in combination with
 
 It is also allowable to use `javax.xml.namespace.QName` instances, as well as strings with the informal `{ns}n` encoding.
 
-    (xml/emit-str {:tag (qname "http://www.w3.org/1999/xhtml" "html")})
+    (xml/emit-str {:tag (xml/qname "http://www.w3.org/1999/xhtml" "html")})
     (xml/emit-str {:tag "{http://www.w3.org/1999/xhtml}html"})
 
     <?xml version=\"1.0\" encoding=\"UTF-8\"?><a:html xmlns:a=\"http://www.w3.org/1999/xhtml\"></a:html>
@@ -297,7 +292,7 @@ By default the parser attaches location information as element meta,
     (deftest test-location-meta
       (let [input "<a><b/>\n<b/></a>"
             location-meta (comp :clojure.data.xml/location-info meta)]
-        (is (= 1 (-> input xml/parse-str location-meta :line-number)))
+        (is (= 1 (-> input xml/parse-str location-meta :line-number)))))
 
 To elide location information, pass `:location-info false` to the parser:
 
