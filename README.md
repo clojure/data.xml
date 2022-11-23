@@ -78,9 +78,9 @@ org.clojure/data.xml {:mvn/version "0.2.0-alpha8"}
 
 ## Examples
 
-The examples below assume you have added a `:refer :all` for data.xml:
+The examples below assume you have added a `:refer` for data.xml:
 
-    (require '[clojure.data.xml :refer :all])
+    (require '[clojure.data.xml :as xml])
 
 data.xml supports parsing and emitting XML. The parsing functions will
 read XML from a
@@ -90,7 +90,7 @@ or
 
     (let [input-xml (java.io.StringReader. "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                                             <foo><bar><baz>The baz value</baz></bar></foo>")]
-      (parse input-xml))
+      (xml/parse input-xml))
 
     #clojure.data.xml.Element{:tag :foo,
                               :attrs {},
@@ -104,27 +104,27 @@ The data is returned as defrecords and can be manipulated using the
 normal clojure data structure functions. Additional parsing options
 can be passed via key pairs:
 
-    (parse-str "<a><![CDATA[\nfoo bar\n]]><![CDATA[\nbaz\n]]></a>" :coalescing false)
+    (xml/parse-str "<a><![CDATA[\nfoo bar\n]]><![CDATA[\nbaz\n]]></a>" :coalescing false)
     #clojure.data.xml.Element{:tag :a, :attrs {}, :content ("\nfoo bar\n" "\nbaz\n")}
 
 XML elements can be created using the typical defrecord constructor
 functions or the element function used below or just a plain map with :tag :attrs :content keys, and written using a
 [java.io.Writer](https://docs.oracle.com/javase/8/docs/api/java/io/Writer.html).:
 
-    (let [tags (element :foo {:foo-attr "foo value"}
-                 (element :bar {:bar-attr "bar value"}
-                   (element :baz {} "The baz value")))]
+    (let [tags (xml/element :foo {:foo-attr "foo value"}
+                 (xml/element :bar {:bar-attr "bar value"}
+                   (xml/element :baz {} "The baz value")))]
       (with-open [out-file (java.io.FileWriter. "/tmp/foo.xml")]
-        (emit tags out-file)))
+        (xml/emit tags out-file)))
 
     ;;-> Writes XML to /tmp/foo.xml
 
 The same can also be expressed using a more Hiccup-like style of defining the elements using sexp-as-element:
 
-    (= (element :foo {:foo-attr "foo value"}
-         (element :bar {:bar-attr "bar value"}
-           (element :baz {} "The baz value")))
-       (sexp-as-element
+    (= (xml/element :foo {:foo-attr "foo value"}
+         (xml/element :bar {:bar-attr "bar value"}
+           (xml/element :baz {} "The baz value")))
+       (xml/sexp-as-element
           [:foo {:foo-attr "foo value"}
            [:bar {:bar-attr "bar value"}
             [:baz {} "The baz value"]]]))
@@ -132,41 +132,41 @@ The same can also be expressed using a more Hiccup-like style of defining the el
 
 Comments and CDATA can also be emitted as an S-expression with the special tag names :-cdata and :-comment:
 
-    (= (element :tag {:attr "value"}
-         (element :body {} (cdata "not parsed <stuff")))
-       (sexp-as-element [:tag {:attr "value"} [:body {} [:-cdata "not parsed <stuff"]]]
+    (= (xml/element :tag {:attr "value"}
+         (xml/element :body {} (xml/cdata "not parsed <stuff")))
+       (xml/sexp-as-element [:tag {:attr "value"} [:body {} [:-cdata "not parsed <stuff"]]]
     ;;-> true
 
 XML can be "round tripped" through the library:
 
-    (let [tags (element :foo {:foo-attr "foo value"}
-                 (element :bar {:bar-attr "bar value"}
-                   (element :baz {} "The baz value")))]
+    (let [tags (xml/element :foo {:foo-attr "foo value"}
+                 (xml/element :bar {:bar-attr "bar value"}
+                   (xml/element :baz {} "The baz value")))]
       (with-open [out-file (java.io.FileWriter. "/tmp/foo.xml")]
-        (emit tags out-file))
+        (xml/emit tags out-file))
       (with-open [input (java.io.FileInputStream. "/tmp/foo.xml")]
-        (parse input)))
+        (xml/parse input)))
 
     #clojure.data.xml.Element{:tag :foo, :attrs {:foo-attr "foo value"}...}
 
 There are also some string based functions that are useful for
 debugging.
 
-    (let [tags (element :foo {:foo-attr "foo value"}
-                 (element :bar {:bar-attr "bar value"}
-                   (element :baz {} "The baz value")))]
-      (= tags (parse-str (emit-str tags))))
+    (let [tags (xml/element :foo {:foo-attr "foo value"}
+                 (xml/element :bar {:bar-attr "bar value"}
+                   (xml/element :baz {} "The baz value")))]
+      (= tags (xml/parse-str (xml/emit-str tags))))
 
     true
 
 Indentation is supported, but should be treated as a debugging feature
 as it's likely to be pretty slow:
 
-    (print (indent-str (element :foo {:foo-attr "foo value"}
-                         (element :bar {:bar-attr "bar value"}
-                           (element :baz {} "The baz value1")
-                           (element :baz {} "The baz value2")
-                           (element :baz {} "The baz value3")))))
+    (print (xml/indent-str (xml/element :foo {:foo-attr "foo value"}
+                             (xml/element :bar {:bar-attr "bar value"}
+                               (xml/element :baz {} "The baz value1")
+                               (xml/element :baz {} "The baz value2")
+                               (xml/element :baz {} "The baz value3")))))
 
     <?xml version="1.0" encoding="UTF-8"?>
     <foo foo-attr="foo value">
@@ -179,33 +179,34 @@ as it's likely to be pretty slow:
 
 CDATA can be emitted:
 
-    (emit-str (element :foo {}
-                (cdata "<non><escaped><info><here>")))
+    (xml/emit-str (xml/element :foo {}
+                    (xml/cdata "<non><escaped><info><here>")))
 
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><![CDATA[<non><escaped><info><here>]]></foo>"
 
 But will be read as regular character data:
 
-    (parse-str (emit-str (element :foo {}
-                 (cdata "<non><escaped><info><here>"))))
+    (xml/parse-str (xml/emit-str (element :foo {}
+                     (xml/cdata "<non><escaped><info><here>"))))
 
     #clojure.data.xml.Element{:tag :foo, :attrs {}, :content ("<non><escaped><info><here>")}
 
 Comments can also be emitted:
 
-    (emit-str (element :foo {}
-                (xml-comment "Just a <comment> goes here")
-                (element :bar {} "and another element")))
+    (xml/emit-str
+      (xml/element :foo {}
+        (xml/xml-comment "Just a <comment> goes here")
+        (xml/element :bar {} "and another element")))
 
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><!--Just a <comment> goes here--><bar>and another element</bar></foo>"
 
 But are ignored when read:
 
-    (emit-str
-      (parse-str
-        (emit-str (element :foo {}
-                    (xml-comment "Just a <comment> goes here")
-                    (element :bar {} "and another element")))))
+    (xml/emit-str
+      (xml/parse-str
+        (xml/emit-str (xml/element :foo {}
+                        (xml/xml-comment "Just a <comment> goes here")
+                        (xml/element :bar {} "and another element")))))
 
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><bar>and another element</bar></foo>"
 
@@ -215,8 +216,8 @@ XML Namespaced names (QNames) are encoded into clojure keywords, by percent-enco
 
 Below is an example of parsing an XHTML document:
 
-    (parse-str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-                <foo:html xmlns:foo=\"http://www.w3.org/1999/xhtml\"/>")
+    (xml/parse-str "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+                    <foo:html xmlns:foo=\"http://www.w3.org/1999/xhtml\"/>")
 
     #...Element{:tag :xmlns.http%3A%2F%2Fwww.w3.org%2F1999%2Fxhtml/html,
                 :attrs {},
@@ -224,10 +225,10 @@ Below is an example of parsing an XHTML document:
 
 Emitting namespaced XML is usually done by using `alias-uri` in combination with clojure's built-in `::kw-ns/shorthands`:
 
-    (alias-uri 'xh "http://www.w3.org/1999/xhtml")
+    (xml/alias-uri 'xh "http://www.w3.org/1999/xhtml")
 
-    (emit-str {:tag ::xh/html
-               :content [{:tag ::xh/head} {:tag ::xh/body :content ["DOCUMENT"]}]})
+    (xml/emit-str {:tag ::xh/html
+                   :content [{:tag ::xh/head} {:tag ::xh/body :content ["DOCUMENT"]}]})
 
     <?xml version="1.0" encoding="UTF-8"?>
     <a:html xmlns:a="http://www.w3.org/1999/xhtml">
@@ -237,8 +238,8 @@ Emitting namespaced XML is usually done by using `alias-uri` in combination with
 
 It is also allowable to use `javax.xml.namespace.QName` instances, as well as strings with the informal `{ns}n` encoding.
 
-    (emit-str {:tag (qname "http://www.w3.org/1999/xhtml" "html")})
-    (emit-str {:tag "{http://www.w3.org/1999/xhtml}html"})
+    (xml/emit-str {:tag (qname "http://www.w3.org/1999/xhtml" "html")})
+    (xml/emit-str {:tag "{http://www.w3.org/1999/xhtml}html"})
 
     <?xml version=\"1.0\" encoding=\"UTF-8\"?><a:html xmlns:a=\"http://www.w3.org/1999/xhtml\"></a:html>
 
@@ -248,16 +249,18 @@ Prefixes are mostly an artifact of xml serialisation. They can be
 customized by explicitly declaring them as attributes in the `xmlns`
 kw-namespace:
 
-    (emit-str (element (qname "http://www.w3.org/1999/xhtml" "title")
-                       {:xmlns/foo "http://www.w3.org/1999/xhtml"}
-                       "Example title"))
+    (xml/emit-str
+      (xml/element (xml/qname "http://www.w3.org/1999/xhtml" "title")
+                   {:xmlns/foo "http://www.w3.org/1999/xhtml"}
+                   "Example title"))
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo:title xmlns:foo=\"http://www.w3.org/1999/xhtml\">Example title</foo:title>"
 
 Not specifying a namespace prefix will results in a prefix being generated:
 
-    (emit-str (element ::xh/title
-                       {}
-                       "Example title"))
+    (xml/emit-str
+      (xml/element ::xh/title
+               {}
+               "Example title"))
 
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a:title xmlns:a=\"http://www.w3.org/1999/xhtml\">Example title</a:title>"
 
@@ -265,24 +268,25 @@ The above example auto assigns prefixes for the namespaces used. In
 this case it was named `a` by the emitter. Emitting several nested
 tags with the same namespace will use one prefix:
 
-    (emit-str (element ::xh/html
-                       {}
-                       (element ::xh/head
+    (xml/emit-str
+      (xml/element ::xh/html
+                   {}
+                   (xml/element ::xh/head
                                 {}
-                                (element ::xh/title
-                                         {}
-                                         "Example title"))))
+                                (xml/element ::xh/title
+                                             {}
+                                             "Example title"))))
 
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a:html xmlns:a=\"http://www.w3.org/1999/xhtml\"><a:head><a:title>Example title</a:title></a:head></a:html>"
 
 Note that the jdk QName ignores namespace prefixes for equality, but allows to preserve them for emitting.
 
-    (= (parse-str "<foo:title xmlns:foo=\"http://www.w3.org/1999/xhtml2\">Example title</foo:title>")
-       (parse-str "<bar:title xmlns:bar=\"http://www.w3.org/1999/xhtml2\">Example title</bar:title>"))
+    (= (xml/parse-str "<foo:title xmlns:foo=\"http://www.w3.org/1999/xhtml2\">Example title</foo:title>")
+       (xml/parse-str "<bar:title xmlns:bar=\"http://www.w3.org/1999/xhtml2\">Example title</bar:title>"))
 
 In data.xml prefix mappings are (by default) retained in metadata on a tag record. If there is no metadata, new prefixes will be generated when emitting.
 
-    (emit-str (parse-str "<foo:element xmlns:foo=\"FOO:\" />"))
+    (xml/emit-str (xml/parse-str "<foo:element xmlns:foo=\"FOO:\" />"))
 
 ## Location information as meta
 
@@ -293,11 +297,11 @@ By default the parser attaches location information as element meta,
     (deftest test-location-meta
       (let [input "<a><b/>\n<b/></a>"
             location-meta (comp :clojure.data.xml/location-info meta)]
-        (is (= 1 (-> input parse-str location-meta :line-number)))
+        (is (= 1 (-> input xml/parse-str location-meta :line-number)))
 
 To elide location information, pass `:location-info false` to the parser:
 
-    (parse-str your-input :location-info false)
+    (xml/parse-str your-input :location-info false)
 
 ## Clojurescript support
 
