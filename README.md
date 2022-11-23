@@ -179,7 +179,9 @@ CDATA can be emitted:
     (xml/emit-str (xml/element :foo {}
                     (xml/cdata "<non><escaped><info><here>")))
 
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><![CDATA[<non><escaped><info><here>]]></foo>"
+    ;; newlines added for readability, not in actual output
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+     <foo><![CDATA[<non><escaped><info><here>]]></foo>"
 
 But will be read as regular character data:
 
@@ -195,7 +197,9 @@ Comments can also be emitted:
         (xml/xml-comment "Just a <comment> goes here")
         (xml/element :bar {} "and another element")))
 
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><!--Just a <comment> goes here--><bar>and another element</bar></foo>"
+    ;; newlines added for readability, not in actual output
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+     <foo><!--Just a <comment> goes here--><bar>and another element</bar></foo>"
 
 But are ignored when read:
 
@@ -205,7 +209,9 @@ But are ignored when read:
                         (xml/xml-comment "Just a <comment> goes here")
                         (xml/element :bar {} "and another element")))))
 
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo><bar>and another element</bar></foo>"
+    ;; newlines added for readability, not in actual output
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+     <foo><bar>and another element</bar></foo>"
 
 ## Namespace Support
 
@@ -236,7 +242,9 @@ It is also allowable to use `javax.xml.namespace.QName` instances, as well as st
     (xml/emit-str {:tag (xml/qname "http://www.w3.org/1999/xhtml" "html")})
     (xml/emit-str {:tag "{http://www.w3.org/1999/xhtml}html"})
 
-    <?xml version=\"1.0\" encoding=\"UTF-8\"?><a:html xmlns:a=\"http://www.w3.org/1999/xhtml\"></a:html>
+    ;; newlines added for readability, not in actual output
+    <?xml version=\"1.0\" encoding=\"UTF-8\"?>
+    <a:html xmlns:a=\"http://www.w3.org/1999/xhtml\"></a:html>
 
 ### Namespace Prefixes
 
@@ -248,7 +256,10 @@ kw-namespace:
       (xml/element (xml/qname "http://www.w3.org/1999/xhtml" "title")
                    {:xmlns/foo "http://www.w3.org/1999/xhtml"}
                    "Example title"))
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><foo:title xmlns:foo=\"http://www.w3.org/1999/xhtml\">Example title</foo:title>"
+
+	;; newlines added for readability, not in actual output
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+     <foo:title xmlns:foo=\"http://www.w3.org/1999/xhtml\">Example title</foo:title>"
 
 Not specifying a namespace prefix will results in a prefix being generated:
 
@@ -257,7 +268,9 @@ Not specifying a namespace prefix will results in a prefix being generated:
                {}
                "Example title"))
 
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a:title xmlns:a=\"http://www.w3.org/1999/xhtml\">Example title</a:title>"
+    ;; newlines added for readability, not in actual output
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+     <a:title xmlns:a=\"http://www.w3.org/1999/xhtml\">Example title</a:title>"
 
 The above example auto assigns prefixes for the namespaces used. In
 this case it was named `a` by the emitter. Emitting several nested
@@ -272,7 +285,11 @@ tags with the same namespace will use one prefix:
                                              {}
                                              "Example title"))))
 
-    "<?xml version=\"1.0\" encoding=\"UTF-8\"?><a:html xmlns:a=\"http://www.w3.org/1999/xhtml\"><a:head><a:title>Example title</a:title></a:head></a:html>"
+    ;; newlines and indents added for readability, not in actual output
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+     <a:html xmlns:a=\"http://www.w3.org/1999/xhtml\">
+       <a:head>
+         <a:title>Example title</a:title></a:head></a:html>"
 
 Note that the jdk QName ignores namespace prefixes for equality, but allows to preserve them for emitting.
 
