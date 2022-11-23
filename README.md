@@ -226,6 +226,8 @@ Below is an example of parsing an XHTML document:
 
 Emitting namespaced XML is usually done by using `alias-uri` in combination with clojure's built-in `::kw-ns/shorthands`:
 
+    ;; this needs to be at the top level of your code (parallel to defns)
+    ;; or subsequent ::xh/ ... will throw "Invalid token"
     (xml/alias-uri 'xh "http://www.w3.org/1999/xhtml")
 
     (xml/emit-str {:tag ::xh/html
@@ -236,6 +238,35 @@ Emitting namespaced XML is usually done by using `alias-uri` in combination with
       <a:head/>
       <a:body>DOCUMENT</a:body>
     </a:html>
+
+To emit namespaced tags without prefixes, you can also set the default xmlns at the root (it's important that the uris match!!):
+
+    ;; at top level
+    (xml/alias-uri 'xh "http://www.w3.org/1999/xhtml")
+
+    ;; top-level element should set xmlns that matches
+    (xml/emit-str
+      (xml/element ::xh/html
+                   {:xmlns "http://www.w3.org/1999/xhtml"}
+				   (xml/element ::xh/head)
+				   (xml/element ::xh/body {} "DOCUMENT")))
+
+    ;; newlines and indents added for readability, not in actual output
+    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+     <html xmlns=\"http://www.w3.org/1999/xhtml\"><head/>
+       <body>DOCUMENT</body>
+     </html>"
+
+Same example, but using the more concise hiccup style (same output):
+
+    ;; at top level
+    (xml/alias-uri 'xh "http://www.w3.org/1999/xhtml")
+
+    (xml/emit-str
+      (xml/sexp-as-element
+        [::xh/html {:xmlns "http://www.w3.org/1999/xhtml"}
+        [::xh/head]
+        [::xh/body "DOCUMENT"]]))
 
 It is also allowable to use `javax.xml.namespace.QName` instances, as well as strings with the informal `{ns}n` encoding.
 
