@@ -389,8 +389,7 @@ Licensed under the [Eclipse Public License](http://www.opensource.org/licenses/e
 
 * [GitHub project](https://github.com/clojure/data.xml)
 * [Bug Tracker](https://clojure.atlassian.net/browse/DXML)
-* [Continuous Integration](http://build.clojure.org/job/data.xml/)
-* [Compatibility Test Matrix](http://build.clojure.org/job/data.xml-test-matrix/)
+* [Continuous Integration](https://github.com/clojure/data.xml/actions/workflows/test.yml)
 
 ## Contributing
 
