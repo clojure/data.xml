@@ -383,7 +383,7 @@ Make `extend-dom-as-data!` also support assoc, ... on dom nodes.
 
 ## License
 
-Licensed under the [Eclipse Public License](http://www.opensource.org/licenses/eclipse-1.0.php).
+Licensed under the [Eclipse Public License](https://opensource.org/license/epl-1-0/).
 
 ## Developer Information
 
