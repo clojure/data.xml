@@ -77,7 +77,8 @@ for documentation on xml options. These are the defaults:
                        :coalescing true
                        :supporting-external-entities false
                        :location-info true
-                       :namespace-aware true}
+                       :namespace-aware true
+                       :support-dtd false}
                       opts)]
     (pull-seq (make-stream-reader props* source)
               props*
