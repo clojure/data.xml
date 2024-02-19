@@ -9,7 +9,7 @@
     <developer>
       <name>Chouser</name>
       <email>chouser@n01se.net</email>
-      <url>http://chouser.n01se.net</url>
+      <url>https://chouser.n01se.net</url>
       <timezone>-5</timezone>
     </developer>
     <developer>
@@ -32,7 +32,7 @@
   <parent>
     <groupId>org.clojure</groupId>
     <artifactId>pom.contrib</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
   </parent>
 
   <profiles>
@@ -79,9 +79,9 @@
   </build>
 
   <properties>
-    <!-- set clojure.version to >= 1.8.0 to run cljs test suite
+    <!-- set clojure.version to >= 1.9.0 to run cljs test suite
          (and make sure to run on jdk >= 1.8 for nashorn support) -->
-    <clojure.version>1.8.0</clojure.version>
+    <clojure.version>1.9.0</clojure.version>
   </properties>
 
   <pluginRepositories>
