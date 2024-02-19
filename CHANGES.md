@@ -1,3 +1,7 @@
+## 0.2.0-alpha9
+
+- Update parent pom, depend on Clojure 1.9.0
+
 ## 0.2.0-alpha8
 
 - When parsing, only include namespace in tags when :namespace-aware is true
