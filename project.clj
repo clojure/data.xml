@@ -10,7 +10,4 @@
                  [figwheel-sidecar "0.5.17"]
                  [binaryage/devtools "0.9.10"]
                  [org.openjdk.nashorn/nashorn-core "15.3"]]
-  :repl-options {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
-  :profiles {:dev {:dependencies [[com.github.nubank/morse "v2023.10.06.02"]]
-                   :repositories [["jitpack" "https://jitpack.io"]]}}
-  )
+  :repl-options {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]})
