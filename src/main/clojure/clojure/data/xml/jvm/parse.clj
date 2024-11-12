@@ -89,12 +89,17 @@
              (cons (->StartElementEvent tag attrs ns-env location)
                    next-events))
            (recur))
-         XMLStreamConstants/END_ELEMENT
-         (if (include-node? :element)
-           (do (assert (seq ns-envs) "Balanced end")
-               (cons (->EndElementEvent)
-                     (pull-seq sreader opts (rest ns-envs))))
-           (recur))
+        XMLStreamConstants/END_ELEMENT
+        (if (include-node? :element)
+          (do (assert (seq ns-envs) "Balanced end")
+              (let [ns-env (nss-hash sreader (or (first ns-envs) pu/EMPTY))
+                    tag (qname (when namespace-aware (.getNamespaceURI sreader))
+                               (.getLocalName sreader)
+                               (.getPrefix sreader))
+                    next-events (pull-seq sreader opts (rest ns-envs))]
+                (cons (->EndElementEvent tag ns-env location)
+                      next-events)))
+          (recur))
          XMLStreamConstants/CHARACTERS
          (if-let [text (and (include-node? :characters)
                             (not (and skip-whitespace

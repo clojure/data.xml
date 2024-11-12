@@ -33,15 +33,11 @@
 ; Represents a parse event.
 (defrecord StartElementEvent [tag attrs nss location-info])
 (defrecord EmptyElementEvent [tag attrs nss location-info])
+(defrecord EndElementEvent [tag nss location-info])
 (defrecord CharsEvent [str])
 (defrecord CDataEvent [str])
 (defrecord CommentEvent [str])
 (defrecord QNameEvent [qn])
-
-;; EndElementEvent doesn't have any data, so make it a singleton
-(deftype EndElementEvent [])
-(def end-element-event (EndElementEvent.))
-(defn ->EndElementEvent [] end-element-event)
 
 ;; Event Generation for stuff to show up in generated xml
 
@@ -52,9 +48,11 @@
                      attrs #((if (seq content)
                                ->StartElementEvent ->EmptyElementEvent)
                              tag %1 (pu/merge-prefix-map (element-nss* element) %2) nil)))
-       :next-events (fn elem-next-events [{:keys [tag content]} next-items]
+       :next-events (fn elem-next-events [{:keys [tag content] :as element} next-items]
                       (if (seq content)
-                        (list* content end-element-event next-items)
+                        (list* content
+                               (->EndElementEvent tag (element-nss* element) nil)
+                               next-items)
                         next-items))}
       string-event-generation {:gen-event (comp ->CharsEvent #'xml-str)
                                :next-events second-arg}
@@ -110,4 +108,4 @@
     :else (throw (ex-info "Illegal argument, not an event object" {:event event}))))
 
 (defn event-exit? [event]
-  (identical? end-element-event event))
+  (instance? EndElementEvent event))
