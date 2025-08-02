@@ -8,11 +8,9 @@
 
 (ns clojure.data.xml.jvm.name
   (:require (clojure.data.xml
-             [protocols :refer [AsQName qname-uri qname-local]])
-            [clojure.string :as str])
-  (:import java.io.Writer
-           (javax.xml.namespace NamespaceContext QName)
-           (java.net URLEncoder URLDecoder)))
+              [protocols :refer [AsQName]]))
+  (:import (java.net URLDecoder URLEncoder)
+           (javax.xml.namespace QName)))
 
 (extend-protocol AsQName
   QName
@@ -32,8 +30,8 @@
   (qname-uri [s]
     (.getNamespaceURI (parse-qname s))))
 
-(definline decode-uri [ns]
+(definline decode-uri [^String ns]
   `(URLDecoder/decode ~ns "UTF-8"))
 
-(definline encode-uri [uri]
+(definline encode-uri [^String uri]
   `(URLEncoder/encode ~uri "UTF-8"))

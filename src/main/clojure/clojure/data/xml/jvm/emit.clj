@@ -10,24 +10,22 @@
   "JVM implementation of the emitter details"
   {:author "Herwig Hochleitner"}
   (:require (clojure.data.xml
-             [name :refer [qname-uri qname-local separate-xmlns gen-prefix *gen-prefix-counter*]]
-             [pu-map :as pu]
-             [protocols :refer [AsXmlString xml-str]]
-             [impl :refer [extend-protocol-fns b64-encode compile-if]]
-             event)
+              [event]
+              [impl :refer [b64-encode compile-if extend-protocol-fns]]
+              [name :refer [*gen-prefix-counter* gen-prefix qname-local qname-uri]]
+              [protocols :refer [AsXmlString xml-str]]
+              [pu-map :as pu])
             [clojure.string :as str])
-  (:import (java.io OutputStreamWriter Writer StringWriter)
-           (java.nio.charset Charset)
-           (java.util.logging Logger Level)
-           (javax.xml.namespace NamespaceContext QName)
-           (javax.xml.stream XMLStreamWriter XMLOutputFactory)
-           (javax.xml.transform OutputKeys Transformer
-                                TransformerFactory)
-           (clojure.data.xml.event StartElementEvent EmptyElementEvent EndElementEvent CharsEvent CDataEvent CommentEvent QNameEvent)
+  (:import (clojure.data.xml.event CDataEvent CharsEvent CommentEvent EmptyElementEvent EndElementEvent QNameEvent StartElementEvent)
            (clojure.lang BigInt)
+           (java.io OutputStreamWriter StringWriter Writer)
            (java.net URI URL)
+           (java.nio.charset Charset)
+           (java.text DateFormat SimpleDateFormat)
            (java.util Date)
-           (java.text DateFormat SimpleDateFormat)))
+           (java.util.logging Level Logger)
+           (javax.xml.namespace QName)
+           (javax.xml.stream XMLOutputFactory XMLStreamWriter)))
 
 (def logger (Logger/getLogger "clojure.data.xml"))
 

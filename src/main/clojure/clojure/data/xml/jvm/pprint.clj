@@ -8,9 +8,9 @@
 
 (ns clojure.data.xml.jvm.pprint
   (:import
-   (javax.xml.transform Transformer OutputKeys TransformerFactory)
-   (java.io Writer StringReader StringWriter)
-   (javax.xml.transform.stream StreamSource StreamResult)))
+    (java.io StringReader Writer)
+    (javax.xml.transform OutputKeys Transformer TransformerFactory)
+    (javax.xml.transform.stream StreamResult StreamSource)))
 
 (defn ^Transformer indenting-transformer []
   (doto (-> (TransformerFactory/newInstance) .newTransformer)
