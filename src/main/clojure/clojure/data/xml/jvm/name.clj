@@ -14,6 +14,8 @@
            (javax.xml.namespace NamespaceContext QName)
            (java.net URLEncoder URLDecoder)))
 
+(set! *warn-on-reflection* true)
+
 (extend-protocol AsQName
   QName
   (qname-local [qname] (.getLocalPart qname))
@@ -32,8 +34,8 @@
   (qname-uri [s]
     (.getNamespaceURI (parse-qname s))))
 
-(definline decode-uri [ns]
+(definline decode-uri [^String ns]
   `(URLDecoder/decode ~ns "UTF-8"))
 
-(definline encode-uri [uri]
+(definline encode-uri [^String uri]
   `(URLEncoder/encode ~uri "UTF-8"))
