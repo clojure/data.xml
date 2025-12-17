@@ -118,6 +118,7 @@ Options:
 
   :include-node? subset of #{:element :characters :comment}, default #{:element :characters}
   :location-info pass false to skip generating location meta data, default true
+  :skip-whitespace trim out blank space in nodes
 
 See https://docs.oracle.com/javase/8/docs/api/javax/xml/stream/XMLInputFactory.html
 for documentation on xml options. These are the defaults:
