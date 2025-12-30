@@ -23,7 +23,7 @@ Please report bugs using JIRA [here](https://clojure.atlassian.net/browse/DXML).
 
 Latest stable release: `0.0.8`
 
-Latest preview release: `0.2.0-alpha9`
+Latest preview release: `0.2.0-alpha10`
 
 (The main features of the `0.2.0` series are XML Namespace support and Clojurescript support)
 
@@ -49,7 +49,7 @@ For Maven projects, add the following XML in your `pom.xml`'s `<dependencies>` s
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>data.xml</artifactId>
-      <version>0.2.0-alpha9</version>
+      <version>0.2.0-alpha10</version>
      </dependency>
 
 ### Leiningen
@@ -63,7 +63,7 @@ Add the following to the `project.clj` dependencies:
 
     For preview:
 
-    [org.clojure/data.xml "0.2.0-alpha9"]
+    [org.clojure/data.xml "0.2.0-alpha10"]
 
 ### [CLI/`deps.edn`](https://clojure.org/reference/deps_and_cli)
 
@@ -73,7 +73,7 @@ Add the following to the `deps.edn` dependencies:
 org.clojure/data.xml {:mvn/version "0.0.8"}
 
 ;; for preview version:
-org.clojure/data.xml {:mvn/version "0.2.0-alpha9"}
+org.clojure/data.xml {:mvn/version "0.2.0-alpha10"}
 ```
 
 ## Examples

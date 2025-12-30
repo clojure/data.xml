@@ -1,6 +1,7 @@
 ## 0.2.0-alpha10
 
 - Fix reflection warnings in clojure.data.xml.name (DXML-66)
+- Update parent pom, depend on Clojure 1.11.4
 
 ## 0.2.0-alpha9
 
