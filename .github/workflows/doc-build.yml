@@ -1,6 +1,9 @@
 
 name: Build API Docs
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
 
