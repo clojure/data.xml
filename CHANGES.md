@@ -1,3 +1,7 @@
+## 0.2.0-alpha11
+
+- DXML-75 EndElementEvent enriched with common information
+
 ## 0.2.0-alpha10
 
 - Fix reflection warnings in clojure.data.xml.name (DXML-66)
