@@ -39,6 +39,18 @@
 (defrecord CommentEvent [str])
 (defrecord QNameEvent [qn])
 
+; For backwards compatibility only.
+; See: https://clojure.atlassian.net/browse/DXML-75?focusedCommentId=57959
+(defn ->EndElementEvent
+  ([] ;; Deprecated
+   (EndElementEvent. nil nil nil))
+
+  ([tag nss location-info]
+   (EndElementEvent. tag nss location-info)))
+
+(def ^{:deprecated "0.2.0-alpha11"} end-element-event
+  (->EndElementEvent nil nil nil))
+
 ;; Event Generation for stuff to show up in generated xml
 
 (let [second-arg #(do %2)
